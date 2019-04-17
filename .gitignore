@@ -1,0 +1,8 @@
+# Wildcard files section
+*.javac
+*.iml
+*.sw[op]
+
+# Specific folders section
+out/
+.idea/
