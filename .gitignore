@@ -2,6 +2,7 @@
 *.javac
 *.iml
 *.sw[op]
+*.zip
 
 # Specific folders section
 out/

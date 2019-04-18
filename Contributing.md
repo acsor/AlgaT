@@ -35,8 +35,8 @@ automatic threshold wrapper
 	```
 * Use the `UpperCamelCase` convention for class and interface names, and
 `lowerCamelCase` for function and variable names
-* Mark code that needs further reviews, refinement or editing with a `TO-DO`, as
-in:
+* Mark code that needs further reviews, refinement or editing with a `TO-DO`
+comment, as in:
 
 	```
 	public void g () {
@@ -44,3 +44,20 @@ in:
 		return h();
 	}
 	```
+
+## Useful resources
+
+* The publicly free [Java Tutorials](https://docs.oracle.com/javase/tutorial/).
+Take those with a grain of salt, as they refer to JDK 8 and previous releases
+* Concerning JavaFX:
+	* [The JavaFX
+	Tutorial](https://docs.oracle.com/javase/8/javase-clienttechnologies.htm)
+	(see also the [PDF
+	form](https://docs.oracle.com/javase/8/javafx/JFXST.pdf))
+	* [Introduction to
+	FXML](https://docs.oracle.com/javase/8/javafx/api/javafx/fxml/doc-files/introduction_to_fxml.html).
+	I warmly recommend reading Chapter 6 of the PDF form of the above resource
+	(only ten pages) before moving on to this
+	* [openjfx.io](https://openjfx.io/), for up-to-date info on JavaFX setup
+	and usage
+* [Pro Git](https://git-scm.com/book/en/v2), for your Git literacy
