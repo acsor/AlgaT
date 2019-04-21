@@ -1,4 +1,4 @@
-package unibo.barzolo.algat;
+package unibo.algat;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
