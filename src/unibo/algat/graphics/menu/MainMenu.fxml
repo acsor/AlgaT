@@ -8,15 +8,15 @@
         xmlns:fx="http://javafx.com/fxml"
         fx:controller="unibo.algat.graphics.menu.MainMenuController"
         >
-    <Menu text="File">
-        <MenuItem text="Exit" onAction="#onExit" />
+    <Menu text="_File">
+        <MenuItem text="E_xit" onAction="#onExit" accelerator="Ctrl+Q" />
     </Menu>
-    <Menu text="Edit">
-        <MenuItem text="Preferences" />
+    <Menu text="_Edit">
+        <MenuItem text="_Preferences" accelerator="Ctrl+P" disable="true" />
     </Menu>
-    <Menu text="Help">
-        <MenuItem text="Usage" />
-        <MenuItem text="Credits" />
+    <Menu text="_Help">
+        <MenuItem text="_Usage" disable="true" />
+        <MenuItem text="_Credits" disable="true" />
     </Menu>
 
 </MenuBar>
