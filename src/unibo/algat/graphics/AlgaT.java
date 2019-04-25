@@ -9,7 +9,9 @@ import javafx.stage.Stage;
 public class AlgaT extends Application {
 	@Override
 	public void start (Stage stage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("AlgaT.fxml"));
+		Parent root = FXMLLoader.load(
+				getClass().getResource("/res/AlgaT.fxml")
+		);
 		Scene s = new Scene(root, 500, 500);
 
 		stage.setScene(s);

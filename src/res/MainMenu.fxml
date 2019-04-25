@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+
+<?import javafx.scene.control.*?>
 <MenuBar
         xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
-        fx:controller="unibo.algat.graphics.menu.MainMenuController"
+        fx:controller="unibo.algat.graphics.MainMenuController"
         >
     <Menu text="_File">
         <MenuItem text="E_xit" onAction="#onExit" accelerator="Ctrl+Q" />
@@ -16,7 +15,6 @@
     </Menu>
     <Menu text="_Help">
         <MenuItem text="_Usage" disable="true" />
-        <MenuItem text="_Credits" disable="true" />
+        <MenuItem text="_Credits" onAction="#onShowCredits" />
     </Menu>
-
 </MenuBar>

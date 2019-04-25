@@ -5,6 +5,6 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="unibo.algat.graphics.AlgaTController"
 >
-    <fx:include source="menu/MainMenu.fxml" />
+    <fx:include source="MainMenu.fxml" />
 
 </VBox>
