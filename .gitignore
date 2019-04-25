@@ -5,5 +5,5 @@
 *.zip
 
 # Specific folders section
-out/
-.idea/
+/*
+!src/
