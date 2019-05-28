@@ -55,7 +55,7 @@ fits the purposes for this project.
 
 The AlgaT workflow scheme is composed of these guidelines:
 * So called integration branches are `master`, `testing` and `exchange`.
-  `master` tracks content that has been used for longand proved stable;
+  `master` tracks content that has been used for long and proved stable;
   `testing` code that needs further verification before integration into
   `master`; `exchange` is a pseudo-temporary branch where content between
   several topic branches (see below) is merged into
@@ -63,11 +63,14 @@ The AlgaT workflow scheme is composed of these guidelines:
   called "topic branches". Once work on a topic branch is deemed secure, it can
   be merged into `testing`, but in no occasion can a direct merge from a topic
   branch to `master` be performed
+* Integration branches `master`, `testing` and `exchange` are the only online
+  branches. Topic branches are to be handled locally, without remote
+  counterparts
 * If a topic branch `t1` needs content from another topic branch `t2`, merging
-  `t2` into `t1` is ***not*** encouraged; instead:
+  `t2` directly into `t1` is ***not*** encouraged; instead:
   1. `exchange` should be updated with the latest content from `testing`
   2. `t2` be merged into `exchange`
-  3. `t1` draw content from `exchange`
+  3. `t1` draw content from `exchange` (a `git rebase` is highly recommended)
 * Perform a `git rebase` only on branches that haven't yet been pushed
   remotely. See the very end of [3.6 Git Branching -
   Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
