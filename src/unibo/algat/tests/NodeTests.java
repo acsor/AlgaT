@@ -20,6 +20,7 @@ class NodeTests {
         assertEquals(expOutput2, n.getData());
     }
 
+    @Test
     void testEquals () {
         Node<Integer> n1 = new Node<>(10), n2 = new Node<>(10),
                 n3 = new Node<>(20);

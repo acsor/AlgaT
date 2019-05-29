@@ -7,12 +7,10 @@ public class Node<T> {
     private T mData;
 
     public Node() {
-
         mData = null;
     }
 
     public Node (T data) {
-
         mData = data;
     }
 
@@ -34,10 +32,13 @@ public class Node<T> {
     @Override
     public boolean equals (Object other) {
         Node<T> casted;
+
         if(other instanceof Node){
-            casted = (Node<T>)other;
-            return mData.equals(other);
+            casted = (Node<T>) other;
+
+            return mData.equals(casted.mData);
         }
+
         else return false;
     }
 
