@@ -26,9 +26,11 @@ public interface Graph<T> {
      */
     Set<Node<T>> vertices();
     /**
-     * @return A set of nodes adjacent (e.g. reachable) from node.
+     * @return A set of nodes v such that, if u is the current node, then the
+     * (u, v) edge belongs to the graph. Alternatively, all nodes reachable
+     * from the input one.
      */
-    Set<Node<T>> adj(Node<T> node);
+    Set<Node<T>> adjacents(Node<T> node);
 
     /**
      * Inserts an edge (a, b) into the graph.
