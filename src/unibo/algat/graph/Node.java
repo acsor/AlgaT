@@ -7,18 +7,20 @@ public class Node<T> {
     private T mData;
 
     public Node() {
-        throw new UnsupportedOperationException("Not implemented");
+
+        mData = null;
     }
 
     public Node (T data) {
-        throw new UnsupportedOperationException("Not implemented");
+
+        mData = data;
     }
 
     /**
      * Sets the data associated with this node.
      */
     public void setData (T data) {
-        throw new UnsupportedOperationException("Not implemented");
+        mData = data;
     }
 
     /**
@@ -26,16 +28,21 @@ public class Node<T> {
      * contained.
      */
     public T getData () {
-        throw new UnsupportedOperationException("Not implemented");
+        return mData;
     }
 
     @Override
     public boolean equals (Object other) {
-        throw new UnsupportedOperationException("Not implemented");
+        Node<T> casted;
+        if(other instanceof Node){
+            casted = (Node<T>)other;
+            return mData.equals(other);
+        }
+        else return false;
     }
 
     @Override
     public String toString () {
-        throw new UnsupportedOperationException("Not implemented");
+        return mData.toString();
     }
 }
