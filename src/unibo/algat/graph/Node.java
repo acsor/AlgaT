@@ -39,7 +39,7 @@ public class Node<T> {
             return mData.equals(casted.mData);
         }
 
-        else return false;
+        return false;
     }
 
     @Override
