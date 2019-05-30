@@ -1,6 +1,6 @@
 package unibo.algat.graph;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * An adjacency list implementation of a generic Graph.
@@ -22,7 +22,19 @@ public class ListGraph<T> implements Graph<T> {
     }
 
     @Override
+    public SortedSet<Node<T>> vertices(Comparator<Node<T>> order) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
     public Set<Node<T>> adjacents(Node<T> node) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public SortedSet<Node<T>> adjacents(
+            Node<T> node, Comparator<Node<T>> order
+    ) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
