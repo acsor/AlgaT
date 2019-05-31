@@ -22,6 +22,13 @@ public interface Graph<T> {
      * {@code null}.
      */
     void deleteNode(Node<T> node);
+    /**
+     * @return {@code true} if {@code needle} is a node of this graph,
+     * {@code false} otherwise.
+     * @throws java.lang.IllegalArgumentException if {@code needle} happens to
+     * be {@code null}.
+     */
+    boolean containsNode(Node<T> needle);
 
     /**
      * @return The set of vertices contained in the graph, empty if none are
@@ -57,6 +64,13 @@ public interface Graph<T> {
      * {@code b} was {@code null}.
      */
     void deleteEdge(Node<T> a, Node<T> b);
+    /**
+     * @return {@code true} if {@code (a, b)} is an edge of this graph,
+     * {@code false} otherwise.
+     * @throws java.lang.IllegalArgumentException if either {@code a} or
+     * {@code b} was {@code null}.
+     */
+    boolean containsEdge(Node<T> a, Node<T> b);
 
     /**
      * @return The {@code Comparator<Node<T>>} instance used to order the
