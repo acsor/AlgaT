@@ -5,18 +5,18 @@ import java.util.*;
 /**
  * An adjacency list implementation of a generic Graph.
  */
-public class ListGraph<T> implements Graph<T> {
+public class AListGraph<T> implements Graph<T> {
     private SortedMap<Node<T>, SortedSet<Node<T>>> mEntries;
     /**
      * The criteria by which nodes in vertices() and adjacents() are ordered
      */
     private Comparator<Node<T>> mNodesOrder;
 
-    public ListGraph () {
+    public AListGraph() {
         mEntries = new TreeMap<>(new InsertionOrderComparator());
     }
 
-    public ListGraph (Comparator<Node<T>> nodesOrder) {
+    public AListGraph(Comparator<Node<T>> nodesOrder) {
         mEntries = new TreeMap<>(nodesOrder);
     }
 
@@ -28,6 +28,11 @@ public class ListGraph<T> implements Graph<T> {
     @Override
     public void deleteNode(Node<T> node) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public boolean containsNode(Node<T> needle) {
+        return false;
     }
 
     @Override
@@ -48,6 +53,11 @@ public class ListGraph<T> implements Graph<T> {
     @Override
     public void deleteEdge(Node<T> a, Node<T> b) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public boolean containsEdge(Node<T> a, Node<T> b) {
+        return false;
     }
 
     @Override
