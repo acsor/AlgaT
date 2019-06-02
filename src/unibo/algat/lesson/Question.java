@@ -1,4 +1,4 @@
-package unibo.algat;
+package unibo.algat.lesson;
 
 import java.util.HashSet;
 import java.util.Set;
