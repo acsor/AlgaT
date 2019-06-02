@@ -47,7 +47,7 @@ public class Question {
     }
 
     /**
-     * @param choice Choice value to check whether is the correct one
+     * @param choice Choice value to check whether is the correct one.
      * @return {@code true} if {@code choice} was the correct answer, {@code
      * false} otherwise.
      * @throws IllegalStateException If no correct choice has been marked yet
@@ -68,5 +68,15 @@ public class Question {
      */
     public Set<String> choices () {
         return mChoices;
+    }
+
+    @Override
+    public boolean equals (Object other) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public String toString () {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }
