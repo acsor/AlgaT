@@ -7,11 +7,13 @@ import java.util.Set;
  * Class encapsulating data about a question related to a specific lesson.
  */
 public class Question {
+    private int mId;
     private String mText;
     private Set<String> mChoices;
     private String mCorrectChoice;
 
-    public Question(String questionText) {
+    public Question(int id, String questionText) {
+        mId = id;
         mText = questionText;
         mChoices = new HashSet<>();
     }
@@ -72,11 +74,19 @@ public class Question {
 
     @Override
     public boolean equals (Object other) {
-        throw new UnsupportedOperationException("Not implemented");
+        Question casted;
+
+        if (other instanceof Question) {
+            casted = (Question) other;
+
+            return mId == casted.mId;
+        }
+
+        return false;
     }
 
     @Override
     public String toString () {
-        throw new UnsupportedOperationException("Not implemented");
+        return String.format("%.10s, %d questions", mText, mChoices.size());
     }
 }
