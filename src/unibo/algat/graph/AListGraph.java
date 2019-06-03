@@ -22,42 +22,73 @@ public class AListGraph<T> implements Graph<T> {
 
     @Override
     public void insertNode(Node<T> node) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (node != null)
+            mEntries.putIfAbsent(node, new TreeSet<>(mNodesOrder));
+        else
+            throw new IllegalArgumentException();
     }
 
     @Override
     public void deleteNode(Node<T> node) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (node != null)
+            mEntries.remove(node);
+        else
+            throw new IllegalArgumentException();
     }
 
     @Override
     public boolean containsNode(Node<T> needle) {
-        return false;
+        if (needle != null)
+            return (mEntries.containsKey(needle));
+        else
+            throw new IllegalArgumentException();
     }
 
     @Override
     public SortedSet<Node<T>> vertices() {
+        // TODO: keySet returns Set, required SortedSet;
+        // return mEntries.keySet();
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public SortedSet<Node<T>> adjacents(Node<T> node) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (node != null) {
+            if (mEntries.containsKey(node))
+                return mEntries.get(node);
+            else
+                throw new NoSuchElementException("");
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
     public void insertEdge(Node<T> a, Node<T> b) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (a != null && b != null) {
+            if (mEntries.containsKey(a) && mEntries.containsKey(b))
+                mEntries.get(a).add(b);
+            else
+                throw new NoSuchElementException("a or b were absent");
+        } else {
+            throw new IllegalArgumentException("a or b were null");
+        }
     }
 
     @Override
     public void deleteEdge(Node<T> a, Node<T> b) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (a != null && b != null)
+            mEntries.get(a).remove(b);
+        else
+            throw new IllegalArgumentException();
     }
 
     @Override
     public boolean containsEdge(Node<T> a, Node<T> b) {
-        return false;
+        if (a != null && b != null)
+            return mEntries.get(a).contains(b);
+        else
+            throw new IllegalArgumentException();
     }
 
     @Override
