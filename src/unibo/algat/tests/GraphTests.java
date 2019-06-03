@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import unibo.algat.graph.AListGraph;
+import unibo.algat.graph.ALGraph;
 import unibo.algat.graph.Graph;
 import unibo.algat.graph.Node;
 
@@ -87,6 +87,6 @@ class GraphTests {
      * cases.
      */
     static Stream<Graph<Integer>> graphFactory () {
-        return Stream.of(new AListGraph<>());
+        return Stream.of(new ALGraph<>());
     }
 }

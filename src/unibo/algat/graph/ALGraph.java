@@ -5,18 +5,18 @@ import java.util.*;
 /**
  * An adjacency list implementation of a generic Graph.
  */
-public class AListGraph<T> implements Graph<T> {
+public class ALGraph<T> implements Graph<T> {
     private SortedMap<Node<T>, SortedSet<Node<T>>> mEntries;
     /**
      * The criteria by which nodes in vertices() and adjacents() are ordered
      */
     private Comparator<Node<T>> mNodesOrder;
 
-    public AListGraph() {
+    public ALGraph() {
         mEntries = new TreeMap<>(new InsertionOrderComparator());
     }
 
-    public AListGraph(Comparator<Node<T>> nodesOrder) {
+    public ALGraph(Comparator<Node<T>> nodesOrder) {
         mEntries = new TreeMap<>(nodesOrder);
     }
 
