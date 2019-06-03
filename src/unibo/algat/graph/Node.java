@@ -30,6 +30,11 @@ public class Node<T> {
     }
 
     @Override
+    public int hashCode () {
+        return mData.hashCode();
+    }
+
+    @Override
     public boolean equals (Object other) {
         Node<T> casted;
 
