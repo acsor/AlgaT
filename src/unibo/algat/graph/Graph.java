@@ -1,7 +1,6 @@
 package unibo.algat.graph;
 
-import java.util.Comparator;
-import java.util.SortedSet;
+import java.util.Set;
 
 /**
  * A Graph interface, designed to provide a baseline contract for concrete
@@ -34,7 +33,7 @@ public interface Graph<T> {
      * @return The set of vertices contained in the graph, empty if none are
      * present.
      */
-    SortedSet<Node<T>> vertices();
+    Set<Node<T>> vertices();
     /**
      * @param node Node value of which a list of adjacent nodes is queried for.
      * @return A set of nodes v such that, if u is the current node, then the
@@ -45,7 +44,7 @@ public interface Graph<T> {
      * @throws java.lang.NullPointerException if {@code node} is {@code
      * null}.
      */
-    SortedSet<Node<T>> adjacents(Node<T> node);
+    Set<Node<T>> adjacents(Node<T> node);
 
     /**
      * Inserts an {@code (a, b)} edge into the graph. Produces no change if
@@ -74,10 +73,4 @@ public interface Graph<T> {
      * {@code b} was {@code null}.
      */
     boolean containsEdge(Node<T> a, Node<T> b);
-
-    /**
-     * @return The {@code Comparator<Node<T>>} instance used to order the
-     * vertices in this graph.
-     */
-    Comparator<Node<T>> comparator();
 }

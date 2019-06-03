@@ -6,24 +6,17 @@ import java.util.*;
  * An adjacency list implementation of a generic Graph.
  */
 public class ALGraph<T> implements Graph<T> {
-    private SortedMap<Node<T>, SortedSet<Node<T>>> mEntries;
-    /**
-     * The criteria by which nodes in vertices() and adjacents() are ordered
-     */
-    private Comparator<Node<T>> mNodesOrder;
+    private Map<Node<T>, Set<Node<T>>> mEntries;
 
     public ALGraph() {
-        mEntries = new TreeMap<>(new InsertionOrderComparator());
-    }
-
-    public ALGraph(Comparator<Node<T>> nodesOrder) {
-        mEntries = new TreeMap<>(nodesOrder);
+        // TODO Refine the choice of the backing data structure for the graph
+        mEntries = new Hashtable<>();
     }
 
     @Override
     public void insertNode(Node<T> node) {
         if (node != null)
-            mEntries.putIfAbsent(node, new TreeSet<>(mNodesOrder));
+            mEntries.putIfAbsent(node, new HashSet<>());
         else
             throw new NullPointerException("node argument was null");
     }
@@ -45,14 +38,12 @@ public class ALGraph<T> implements Graph<T> {
     }
 
     @Override
-    public SortedSet<Node<T>> vertices() {
-        // TODO: keySet returns Set, required SortedSet;
-        // return mEntries.keySet();
-        throw new UnsupportedOperationException("Not implemented");
+    public Set<Node<T>> vertices() {
+         return mEntries.keySet();
     }
 
     @Override
-    public SortedSet<Node<T>> adjacents(Node<T> node) {
+    public Set<Node<T>> adjacents(Node<T> node) {
         if (node != null) {
             if (mEntries.containsKey(node))
                 return mEntries.get(node);
@@ -98,16 +89,4 @@ public class ALGraph<T> implements Graph<T> {
             throw new NullPointerException("Either a or b was null");
         }
     }
-
-    @Override
-    public Comparator<Node<T>> comparator() {
-        return mNodesOrder;
-    }
-
-    class InsertionOrderComparator implements Comparator<Node<T>> {
-        @Override
-        public int compare(Node<T> a, Node<T> b) {
-            throw new UnsupportedOperationException("Not implemented");
-        }
-    };
 }
