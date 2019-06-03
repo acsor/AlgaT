@@ -15,25 +15,25 @@ public abstract class Lesson {
     /* TODO The localization support, which I strive for, might change this. */
     protected String mName;
     /**
-     * The nested subject categories this lesson belongs to.<br>
+     * The nested topic categories this lesson belongs to.<br>
      * As an example, if the current lesson is "Topological sorting", it may be
      * classified as {@code Sorting > Graph}. In that case, {@code
-     * mNestedSubjects} will contain the values {@code "Graphs" > "Sorting"} in
+     * mNestedTopics} will contain the values {@code "Graphs" > "Sorting"} in
      * a nested fashion.
      */
-    protected Stack<String> mNestedSubjects;
+    protected Stack<String> mNestedTopics;
 
-    public Lesson(String name, String ... arguments) {
+    public Lesson(String name, String ... topics) {
         if (name != null) {
             mName = name;
         } else {
             throw new NullPointerException("name argument was null");
         }
 
-        mNestedSubjects = new Stack<>();
+        mNestedTopics = new Stack<>();
 
-        for (int i = 0; i < arguments.length; i++) {
-            mNestedSubjects.push(arguments[i]);
+        for (int i = 0; i < topics.length; i++) {
+            mNestedTopics.push(topics[i]);
         }
     }
 
@@ -45,9 +45,9 @@ public abstract class Lesson {
     }
 
     /**
-     * @return A nested "list" of subjects this lesson belongs to.
+     * @return A nested "list" of topics this lesson belongs to.
      */
-    public Stack<String> subjects () {
-        return mNestedSubjects;
+    public Stack<String> topics() {
+        return mNestedTopics;
     }
 }
