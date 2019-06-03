@@ -11,9 +11,9 @@ import java.util.Stack;
  * provided as arguments to such calls as
  * {@code Preferences.user/systemNodeForPackage()}.
  */
-public abstract class Lesson {
-    /* TODO The localization support, which I strive for, might change this. */
-    protected String mName;
+public class Lesson {
+    private int mId;
+    private String mName;
     /**
      * The nested topic categories this lesson belongs to.<br>
      * As an example, if the current lesson is "Topological sorting", it may be
@@ -21,33 +21,56 @@ public abstract class Lesson {
      * mNestedTopics} will contain the values {@code "Graphs" > "Sorting"} in
      * a nested fashion.
      */
-    protected Stack<String> mNestedTopics;
+    private Stack<String> mNestedTopics;
 
-    public Lesson(String name, String ... topics) {
-        if (name != null) {
+    Lesson(int id, String name, String ... topics) {
+        mId = id;
+
+        if (name != null)
             mName = name;
-        } else {
+        else
             throw new NullPointerException("name argument was null");
-        }
 
         mNestedTopics = new Stack<>();
 
-        for (int i = 0; i < topics.length; i++) {
-            mNestedTopics.push(topics[i]);
+        for (String topic: topics) {
+            mNestedTopics.push(topic);
         }
+    }
+
+    public int getId () {
+        return mId;
     }
 
     /**
      * @return This lesson name.
      */
-    public String name () {
+    public String getName() {
         return mName;
     }
 
     /**
      * @return A nested "list" of topics this lesson belongs to.
      */
-    public Stack<String> topics() {
+    public Stack<String> getTopics () {
         return mNestedTopics;
+    }
+
+    @Override
+    public boolean equals (Object other) {
+        Lesson o;
+
+        if (other instanceof Lesson) {
+            o = (Lesson) other;
+
+            return mId == o.mId;
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString () {
+        return mName;
     }
 }
