@@ -25,7 +25,7 @@ public class ALGraph<T> implements Graph<T> {
         if (node != null)
             mEntries.putIfAbsent(node, new TreeSet<>(mNodesOrder));
         else
-            throw new IllegalArgumentException();
+            throw new NullPointerException("node argument was null");
     }
 
     @Override
@@ -33,15 +33,15 @@ public class ALGraph<T> implements Graph<T> {
         if (node != null)
             mEntries.remove(node);
         else
-            throw new IllegalArgumentException();
+            throw new NullPointerException("node argument was null");
     }
 
     @Override
     public boolean containsNode(Node<T> needle) {
         if (needle != null)
-            return (mEntries.containsKey(needle));
+            return mEntries.containsKey(needle);
         else
-            throw new IllegalArgumentException();
+            throw new NullPointerException("needle argument was null");
     }
 
     @Override
@@ -57,9 +57,9 @@ public class ALGraph<T> implements Graph<T> {
             if (mEntries.containsKey(node))
                 return mEntries.get(node);
             else
-                throw new NoSuchElementException("");
+                throw new NoSuchElementException("node argument not in graph");
         } else {
-            throw new IllegalArgumentException();
+            throw new NullPointerException("node argument was null");
         }
     }
 
@@ -69,26 +69,34 @@ public class ALGraph<T> implements Graph<T> {
             if (mEntries.containsKey(a) && mEntries.containsKey(b))
                 mEntries.get(a).add(b);
             else
-                throw new NoSuchElementException("a or b were absent");
+                throw new NoSuchElementException("Either a or b was absent");
         } else {
-            throw new IllegalArgumentException("a or b were null");
+            throw new NullPointerException("Either a or b was null");
         }
     }
 
     @Override
     public void deleteEdge(Node<T> a, Node<T> b) {
-        if (a != null && b != null)
-            mEntries.get(a).remove(b);
-        else
-            throw new IllegalArgumentException();
+        if (a != null && b != null) {
+            if (mEntries.containsKey(a) && mEntries.containsKey(b))
+                mEntries.get(a).remove(b);
+            else
+                throw new NoSuchElementException("Either a or b was absent");
+        } else {
+            throw new NullPointerException("Either a or b was null");
+        }
     }
 
     @Override
     public boolean containsEdge(Node<T> a, Node<T> b) {
-        if (a != null && b != null)
-            return mEntries.get(a).contains(b);
-        else
-            throw new IllegalArgumentException();
+        if (a != null && b != null) {
+            if (mEntries.containsKey(a) && mEntries.containsKey(b))
+                return mEntries.get(a).contains(b);
+            else
+                throw new NoSuchElementException("Either a or b was absent");
+        } else {
+            throw new NullPointerException("Either a or b was null");
+        }
     }
 
     @Override
