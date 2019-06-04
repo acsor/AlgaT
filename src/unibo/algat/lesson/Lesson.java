@@ -92,6 +92,6 @@ public class Lesson {
 
     @Override
     public String toString () {
-        return mName;
+        return String.format("[%d] %s", mId, mName);
     }
 }
