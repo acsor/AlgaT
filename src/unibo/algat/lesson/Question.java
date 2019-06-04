@@ -85,6 +85,11 @@ public class Question {
     }
 
     @Override
+    public int hashCode () {
+        return mId;
+    }
+
+    @Override
     public boolean equals (Object other) {
         Question casted;
 
