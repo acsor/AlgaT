@@ -8,11 +8,13 @@ import java.util.Set;
  */
 public class Question {
     private int mId;
+    private int mLessonId;
     private String mText;
     private Set<Choice> mChoices;
     private Choice mCorrectChoice;
 
-    public Question(int id, String questionText) {
+    Question(int lessonId, int id, String text) {
+        mLessonId = lessonId;
         mId = id;
         mText = text;
         mChoices = new HashSet<>();
@@ -21,6 +23,10 @@ public class Question {
 
     public int getId () {
         return mId;
+    }
+
+    public int getLessonId () {
+        return mLessonId;
     }
 
     /**
