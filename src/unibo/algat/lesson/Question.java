@@ -21,10 +21,16 @@ public class Question {
         mCorrectChoice = null;
     }
 
+    /**
+     * @return This question id.
+     */
     public int getId () {
         return mId;
     }
 
+    /**
+     * @return The lesson id this question is associated to.
+     */
     public int getLessonId () {
         return mLessonId;
     }
@@ -109,6 +115,10 @@ public class Question {
         );
     }
 
+    /**
+     * A nested class of {@code Question}, encapsulating data about a possible
+     * answer.
+     */
     public static class Choice {
         private int mId;
         private String mText;

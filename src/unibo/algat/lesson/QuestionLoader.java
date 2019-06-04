@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 /**
  * The {@code QuestionLoader} takes care of loading question-related data from
  * {@code .properties} files. Such files are stored in the {@code res/questions}
- * path and their file name follows the format
- * {@code Question<LessonId>:<QuestionId>_<locale spec>.properties}.
+ * path and their file name follows the
+ * {@code Question<LessonId>:<QuestionId>_<locale spec>.properties} format.
  */
 public class QuestionLoader {
 	static final String KEY_TEXT = "Text";
@@ -61,7 +61,7 @@ public class QuestionLoader {
 	 * @param lessonId Id of the lesson the question is associated to
 	 * @param questionId Id of the question
 	 * @return A {@link Question} instance identified by the two id integers,
-	 * with localized values by {@code .properties} files (if available).
+	 * with localized values from {@code .properties} files (if available).
 	 */
 	public static Question loadFromLocale (int lessonId, int questionId) {
 		final ResourceBundle r = ResourceBundle.getBundle(

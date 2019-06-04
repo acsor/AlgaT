@@ -45,6 +45,9 @@ public class Lesson {
         mQuestions = new HashSet<>();
     }
 
+    /**
+     * @return This lesson id.
+     */
     public int getId () {
         return mId;
     }
@@ -63,6 +66,10 @@ public class Lesson {
         return mNestedTopics;
     }
 
+    /**
+     * @param q Question instance to associate to this lesson
+	 * @throws NullPointerException if q is {@code null}
+     */
     public void addQuestion(Question q) {
     	if (q != null)
             mQuestions.add(q);
