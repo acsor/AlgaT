@@ -8,20 +8,38 @@ import java.util.Set;
  */
 public class Question {
     private int mId;
+    private int mLessonId;
     private String mText;
-    private Set<String> mChoices;
-    private String mCorrectChoice;
+    private Set<Choice> mChoices;
+    private Choice mCorrectChoice;
 
-    public Question(int id, String questionText) {
+    Question(int lessonId, int id, String text) {
+        mLessonId = lessonId;
         mId = id;
-        mText = questionText;
+        mText = text;
         mChoices = new HashSet<>();
+        mCorrectChoice = null;
+    }
+
+    /**
+     * @return This question id.
+     */
+    public int getId () {
+        return mId;
+    }
+
+    /**
+     * @return The lesson id this question is associated to.
+     */
+    public int getLessonId () {
+        return mLessonId;
     }
 
     /**
      * @param choice Choice value to set as one of the available ones.
+     * @throws NullPointerException if {@code choice} is {@code null}.
      */
-    public void addChoice (String choice) {
+    public void addChoice (Choice choice) {
         if (choice != null)
             mChoices.add(choice);
         else
@@ -34,7 +52,7 @@ public class Question {
      * @throws IllegalStateException if {@code choice} hadn't yet been
      * inserted into the available list of choices.
      */
-    public void setCorrectChoice (String choice) {
+    public void setCorrectChoice (Choice choice) {
         if (choice != null) {
             if (mChoices.contains(choice))
                 mCorrectChoice = choice;
@@ -55,7 +73,7 @@ public class Question {
      * @throws IllegalStateException If no correct choice has been marked yet
      * by {@code Question.setCorrectChoice()}.
      */
-    public boolean isCorrect (String choice) {
+    public boolean isCorrect (Choice choice) {
         if (mCorrectChoice != null) {
             return mCorrectChoice.equals(choice);
         } else {
@@ -68,8 +86,13 @@ public class Question {
     /**
      * @return The list of available choices for the current question.
      */
-    public Set<String> choices () {
+    public Set<Choice> choices () {
         return mChoices;
+    }
+
+    @Override
+    public int hashCode () {
+        return mId;
     }
 
     @Override
@@ -87,6 +110,53 @@ public class Question {
 
     @Override
     public String toString () {
-        return String.format("%.10s, %d questions", mText, mChoices.size());
+        return String.format(
+                "[%d] \"%.10s\", %d choices", mId, mText, mChoices.size()
+        );
+    }
+
+    /**
+     * A nested class of {@code Question}, encapsulating data about a possible
+     * answer.
+     */
+    public static class Choice {
+        private int mId;
+        private String mText;
+
+        public Choice(int id, String text) {
+            this.mId = id;
+            this.mText = text;
+        }
+
+        public int getId() {
+            return mId;
+        }
+
+        public String getText() {
+            return mText;
+        }
+
+        @Override
+        public int hashCode () {
+            return mId;
+        }
+
+        @Override
+        public boolean equals (Object other) {
+            Choice o;
+
+            if (other instanceof Choice) {
+                o = (Choice) other;
+
+                return mId == o.mId;
+            }
+
+            return false;
+        }
+
+        @Override
+        public String toString () {
+            return String.format("[%d] %.10s", mId, mText);
+        }
     }
 }
