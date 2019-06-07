@@ -92,12 +92,18 @@ public class ALGraph<T> implements Graph<T> {
 
     @Override
     public String toString(){
-        StringBuilder s = new StringBuilder();
+    	// TODO Test
+        final StringBuilder s = new StringBuilder();
+
+        s.append(
+            String.format("%s [nodes=%d] [edges=%d]\n", getClass().getName(),
+            mEntries.keySet().size(), mEntries.values().size())
+        );
+
         for (Node<T> a : mEntries.keySet()) {
-            s.append(a.toString()).append(" -> ").append(mEntries.get(a).toString()).append('\n');
+            s.append(a).append(" -> ").append(mEntries.get(a)).append("\n");
         }
-        return String.format(
-                "%s [nodes=%d] [edges=%d]\n", getClass().getName(), mEntries.keySet().size(), mEntries.values().size()
-        ) + s.toString() ;
+
+        return s.toString();
     }
 }
