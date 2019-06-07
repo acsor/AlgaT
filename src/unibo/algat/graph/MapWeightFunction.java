@@ -17,6 +17,9 @@ public class MapWeightFunction<T, W extends Number> implements
 	private Map<Pair<Node<T>, Node<T>>, W> mWeights;
 	private W mDefault;
 
+	/**
+	 * Constructs a {@code MapWeightFunction} with default value {@code null}.
+	 */
 	public MapWeightFunction() {
         this(null);
 	}
@@ -35,7 +38,7 @@ public class MapWeightFunction<T, W extends Number> implements
 			return (mWeights.containsKey(key)) ? mWeights.get(key): mDefault;
 		else
 			throw new NoSuchElementException(
-				"The (a, b) edge was not in the graph"
+				"The (a, b) edge is not in the graph"
 			);
 	}
 
