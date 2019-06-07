@@ -16,7 +16,7 @@ public class MapWeightFunction<T, W extends Number> implements
 
 	@Override
 	public W weight(Node<T> a, Node<T> b) {
-		throw new UnsupportedOperationException("Not implemented");
+		return mWeights.get(new Pair<>(a,b));
 	}
 
 	/**
@@ -25,6 +25,8 @@ public class MapWeightFunction<T, W extends Number> implements
 	 * } was null.
 	 */
 	public void assign(Node<T> a, Node<T> b, W weight) {
-		throw new UnsupportedOperationException("Not implemented");
+		if (a != null && b != null)
+		    mWeights.put(new Pair<>(a,b), weight);
+		else throw new NullPointerException("either a or b were null");
 	}
 }
