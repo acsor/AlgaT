@@ -3,8 +3,8 @@ package unibo.algat.graph;
 import unibo.algat.util.Pair;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * A memory-based weight function, assigning weight to a graph based on stored
@@ -27,8 +27,16 @@ public class MapWeightFunction<T, W extends Number> implements
 	}
 
 	@Override
-	public W weight(Node<T> a, Node<T> b) {
-		return mWeights.get(new Pair<>(a,b));
+	public W weight(Graph<T> g, Node<T> a, Node<T> b) {
+		// TODO Test this method, and the whole class by that matter
+		final Pair<Node<T>, Node<T>> key = new Pair<>(a, b);
+
+		if (g.containsEdge(a, b))
+			return (mWeights.containsKey(key)) ? mWeights.get(key): mDefault;
+		else
+			throw new NoSuchElementException(
+				"The (a, b) edge was not in the graph"
+			);
 	}
 
 	/**

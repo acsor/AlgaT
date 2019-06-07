@@ -8,9 +8,10 @@ package unibo.algat.graph;
  */
 public interface WeightFunction<T, W extends Number> {
 	/**
+	 * @param g The graph to which assign weights.
 	 * @return The weight associated to the {@code (a, b)} edge.
 	 * @throws java.util.NoSuchElementException if the {@code (a, b)} edge
-	 * could not be located in the graph.
+	 * could not be located within the graph.
 	 */
-	W weight(Node<T> a, Node<T> b);
+	W weight(Graph<T> g, Node<T> a, Node<T> b);
 }
