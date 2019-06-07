@@ -89,4 +89,15 @@ public class ALGraph<T> implements Graph<T> {
             throw new NullPointerException("Either a or b was null");
         }
     }
+
+    @Override
+    public String toString(){
+        StringBuilder s = new StringBuilder();
+        for (Node<T> a : mEntries.keySet()) {
+            s.append(a.toString()).append(" -> ").append(mEntries.get(a).toString()).append('\n');
+        }
+        return String.format(
+                "%s [nodes=%d] [edges=%d]\n", getClass().getName(), mEntries.keySet().size(), mEntries.values().size()
+        ) + s.toString() ;
+    }
 }
