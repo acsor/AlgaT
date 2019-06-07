@@ -7,8 +7,8 @@ import java.util.Set;
  * Class encapsulating data about a question related to a specific lesson.
  */
 public class Question {
-    private int mId;
     private int mLessonId;
+    private int mId;
     private String mText;
     private Set<Choice> mChoices;
     private Choice mCorrectChoice;
@@ -59,7 +59,7 @@ public class Question {
             else
                 throw new IllegalStateException(
                     "The given choice argument is not contained by the " +
-                    "list of available choices"
+                        "list of available choices"
                 );
         } else {
             throw new NullPointerException("choice param was null");
@@ -102,7 +102,7 @@ public class Question {
         if (other instanceof Question) {
             casted = (Question) other;
 
-            return mId == casted.mId;
+            return mLessonId == casted.mLessonId && mId == casted.mId;
         }
 
         return false;
@@ -111,7 +111,8 @@ public class Question {
     @Override
     public String toString () {
         return String.format(
-                "[%d] \"%.10s\", %d choices", mId, mText, mChoices.size()
+            "[%d:%d] \"%.10s\", %d choices", mLessonId, mId, mText,
+            mChoices.size()
         );
     }
 
