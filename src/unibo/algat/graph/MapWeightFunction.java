@@ -15,9 +15,15 @@ import java.util.Map;
 public class MapWeightFunction<T, W extends Number> implements
 	WeightFunction<T, W> {
 	private Map<Pair<Node<T>, Node<T>>, W> mWeights;
+	private W mDefault;
 
-	public MapWeightFunction(){
+	public MapWeightFunction() {
+        this(null);
+	}
+
+	public MapWeightFunction(W defaultValue) {
 		mWeights = new HashMap<>();
+		mDefault = defaultValue;
 	}
 
 	@Override
@@ -34,5 +40,17 @@ public class MapWeightFunction<T, W extends Number> implements
 		if (a != null && b != null)
 		    mWeights.put(new Pair<>(a,b), weight);
 		else throw new NullPointerException("either a or b were null");
+	}
+
+	/**
+	 * <p>Sets a default value to return from {@code weight()} when a given
+	 * {@code (a, b)} edge is associated no weight.</p>
+	 *
+	 * <p>The default can also be unset by calling {@code setDefault(null)}.</p>
+	 *
+	 * @param value Default value to set for unspecified edges.
+	 */
+	public void setDefault(W value) {
+        mDefault = value;
 	}
 }
