@@ -1,5 +1,7 @@
 package unibo.algat.lesson;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -22,9 +24,13 @@ public class Lesson {
      * a nested fashion.
      */
     private Stack<String> mNestedTopics;
+    private Set<Question> mQuestions;
 
     Lesson(int id, String name, String ... topics) {
-        mId = id;
+        if (id >= 0)
+            mId = id;
+        else
+            throw new IllegalArgumentException("Negative ids not allowed");
 
         if (name != null)
             mName = name;
@@ -33,11 +39,15 @@ public class Lesson {
 
         mNestedTopics = new Stack<>();
 
-        for (String topic: topics) {
+        for (String topic: topics)
             mNestedTopics.push(topic);
-        }
+
+        mQuestions = new HashSet<>();
     }
 
+    /**
+     * @return This lesson id.
+     */
     public int getId () {
         return mId;
     }
@@ -56,6 +66,24 @@ public class Lesson {
         return mNestedTopics;
     }
 
+    /**
+     * @param q Question instance to associate to this lesson
+	 * @throws NullPointerException if q is {@code null}
+     */
+    public void addQuestion(Question q) {
+    	if (q != null)
+            mQuestions.add(q);
+        else
+    	    throw new NullPointerException("Question argument was null");
+	}
+
+    /**
+     * @return All the available questions associated to this lesson.
+     */
+    public Set<Question> questions () {
+        return mQuestions;
+    }
+
     @Override
     public boolean equals (Object other) {
         Lesson o;
@@ -71,6 +99,6 @@ public class Lesson {
 
     @Override
     public String toString () {
-        return mName;
+        return String.format("[%d] %s", mId, mName);
     }
 }

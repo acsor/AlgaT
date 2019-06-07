@@ -19,24 +19,22 @@ public class LessonLoader {
     private static final String KEY_NAME = "Name";
     private static final String KEY_TOPICS = "Topics";
 
-    static Pattern LESSON_ID_PATTERN = Pattern.compile("^Lesson([1-9]\\d*).Id");
+    static Pattern LESSON_ID_FILTER = Pattern.compile("^Lesson(\\d+).Id");
 
     /**
      * @return The "list" of available lessons for the program.
      */
     public static Set<Lesson> lessons () throws IOException {
-        // TODO Base the lesson database on a more locale-independent data
-        // source
         Properties p = new Properties();
         Set<Lesson> lessons = new HashSet<>();
         Matcher m;
 
         p.load(LessonLoader.class.getResourceAsStream(
-                "/res/locale/Lessons.properties"
+                "/res/lessons/Lessons.properties"
         ));
 
         for (String key: p.stringPropertyNames()) {
-            m = LESSON_ID_PATTERN.matcher(key);
+            m = LESSON_ID_FILTER.matcher(key);
 
             if (m.matches()) {
                 lessons.add(loadFromLocale(Integer.valueOf(m.group(1))));
@@ -46,8 +44,13 @@ public class LessonLoader {
         return lessons;
     }
 
+    /**
+     * @param key Key of the lesson to fetch.
+     * @return A {@code Lesson} instance. The values will be set according to
+     * the default lessons.
+     */
     public static Lesson loadFromLocale (int key) {
-        final ResourceBundle r = ResourceBundle.getBundle("res.locale.Lessons");
+        final ResourceBundle r = ResourceBundle.getBundle("res.lessons.Lessons");
 
         return new Lesson(
                 key,
