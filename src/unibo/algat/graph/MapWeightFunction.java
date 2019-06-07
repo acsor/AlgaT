@@ -2,6 +2,8 @@ package unibo.algat.graph;
 
 import unibo.algat.util.Pair;
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -13,6 +15,10 @@ import java.util.Map;
 public class MapWeightFunction<T, W extends Number> implements
 	WeightFunction<T, W> {
 	private Map<Pair<Node<T>, Node<T>>, W> mWeights;
+
+	public MapWeightFunction(){
+		mWeights = new HashMap<>();
+	}
 
 	@Override
 	public W weight(Node<T> a, Node<T> b) {
