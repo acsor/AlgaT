@@ -40,14 +40,21 @@ public class MapWeightFunction<T, W extends Number> implements
 	}
 
 	/**
-	 * Assigns a weight to the {@code (a, b)} edge.
+	 * <p>Assigns a weight to the {@code (a, b)} edge. If {@code weight} is
+	 * {@code null}, then any previously associated value is unset from the
+	 * {@code (a, b)} edge.</p>
 	 * @throws java.lang.NullPointerException if either {@code a} or {@code b
 	 * } was null.
 	 */
 	public void assign(Node<T> a, Node<T> b, W weight) {
-		if (a != null && b != null)
-		    mWeights.put(new Pair<>(a,b), weight);
-		else throw new NullPointerException("either a or b were null");
+		if (a != null && b != null) {
+			if (weight != null)
+				mWeights.put(new Pair<>(a, b), weight);
+			else
+				mWeights.remove(new Pair<>(a, b));
+		} else {
+			throw new NullPointerException("Either a or b were null");
+		}
 	}
 
 	/**
