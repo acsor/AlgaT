@@ -27,7 +27,7 @@ public class QuestionLoader {
 	);
 
 	static final Pattern CHOICE_PATTERN = Pattern.compile(
-        "^Choice.(\\d+)"
+		"^Choice.(\\d+)"
 	);
 
 	/**
