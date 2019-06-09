@@ -1,8 +1,6 @@
 package unibo.algat.lesson;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Basic abstract class encapsulating data about a generic lesson, to be
@@ -17,15 +15,23 @@ public class Lesson {
     private int mId;
     private String mName;
     /**
-     * The nested topic categories this lesson belongs to.<br>
-     * As an example, if the current lesson is "Topological sorting", it may be
-     * classified as {@code Sorting > Graph}. In that case, {@code
-     * mNestedTopics} will contain the values {@code "Graphs" > "Sorting"} in
-     * a nested fashion.
+     * <p>The nested topic categories this lesson belongs to.</p>
+     *
+     * <p>As an example, if the current lesson is "Topological sorting", it may
+     * be classified as {@code Sorting > Graph}. In that case, {@code
+     * mTopics} will contain the values {@code "Graphs" > "Sorting"} in
+     * a nested fashion.</p>
      */
-    private Stack<String> mNestedTopics;
+    private final Queue<String> mTopics;
     private Set<Question> mQuestions;
 
+    /**
+     * @param id Id of the lesson
+     * @param name Name of the lesson
+     * @param topics <b>Ordered</b> array of topics this lesson belongs to.
+     *               Any {@code topics} string will be stripped of her
+     *               leading and trailing whitespaces.
+     */
     Lesson(int id, String name, String ... topics) {
         if (id >= 0)
             mId = id;
@@ -37,10 +43,10 @@ public class Lesson {
         else
             throw new NullPointerException("name argument was null");
 
-        mNestedTopics = new Stack<>();
+        mTopics = new ArrayDeque<>(topics.length);
 
         for (String topic: topics)
-            mNestedTopics.push(topic);
+            mTopics.add(topic.strip());
 
         mQuestions = new HashSet<>();
     }
@@ -60,10 +66,12 @@ public class Lesson {
     }
 
     /**
-     * @return A nested "list" of topics this lesson belongs to.
+     * @return A copy of the queued topics this lesson belongs to, ordered
+     * from most general to the most specific, as in {@code Ordering >
+     * In-place algorithms > Quicksort}.
      */
-    public Stack<String> getTopics () {
-        return mNestedTopics;
+    public Queue<String> getTopics () {
+        return new ArrayDeque<>(mTopics);
     }
 
     /**
