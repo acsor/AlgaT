@@ -116,4 +116,34 @@ public class AMGraph<T> implements Graph<T> {
             throw new NullPointerException("either a or b were null");
         }
     }
+    /*
+        I believe it is impossible to create a toString in the format
+            node -> adj1, adj2, adj3
+        because i would need a two-directional map. this is made possible
+        by a google library, or by implementing a class which extends Collection
+        in order to be able to use those methods (that's how it works right?)
+
+
+    @Override
+    public String toString(){
+        int i = 0, j = 0;
+        final StringBuilder s = new StringBuilder();
+        final StringBuilder d = new StringBuilder();
+        int edgeNumber;
+        s.append(
+                String.format("%s [capacity=%d] [nodes=%d]", getClass().getName(),
+                       mCapacity, fillLevel)
+        );
+        for(; i <= mCapacity; i++){
+            if(nodeToInt.contains) {
+                d.append(mEntries[i][j]).append("->");
+                for (j = 0; j <= mCapacity; j++) {
+                    if(mEntries[i][j])
+                }
+            }
+            i++;
+        }
+    }
+
+ */
 }
