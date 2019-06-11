@@ -128,7 +128,18 @@ public class AMGraph<T> implements Graph<T> {
 
         for (int row = 0; row < mEntries.length; row++) {
             if (mEntries[row][row] != null) {
-                // Burnout, can't continue it any longer
+                b.append(
+                	String.format("[%d] %s -> [", row, mEntries[row][row])
+				);
+
+                for (int col = 0; col < mEntries[row].length; col++) {
+                	// TODO Remove the last trailing comma
+                	if (col != row && mEntries[row][col] != null) {
+                		b.append(mEntries[row][col]).append(", ");
+					}
+				}
+
+                b.append("]\n");
 			}
 		}
 
