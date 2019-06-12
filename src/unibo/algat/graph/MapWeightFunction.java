@@ -31,7 +31,6 @@ public class MapWeightFunction<T, W extends Number> implements
 
 	@Override
 	public W weight(Graph<T> g, Node<T> a, Node<T> b) {
-		// TODO Test this method, and the whole class by that matter
 		final Pair<Node<T>, Node<T>> key = new Pair<>(a, b);
 
 		if (g.containsEdge(a, b))
