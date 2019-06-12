@@ -1,54 +1,63 @@
 package unibo.algat.graph;
 
 /**
- * A node class, to be handled by Graph<T>.
+ * <p>A node class, to be handled by {@code Graph<T>}. Note that {@code Node}
+ * instances within a graph are identified by their id only (which needs to be
+ * specified by the user) and that any associated data is irrelevant in
+ * determining whether a node is equal to another.</p>
  */
 public class Node<T> {
-    private T mData;
+	private int mId;
+	private T mData;
 
-    public Node() {
-        mData = null;
-    }
+	public Node(int id) {
+		this(id, null);
+	}
 
-    public Node (T data) {
-        mData = data;
-    }
+	public Node(int id, T data) {
+		mId = id;
+		mData = data;
+	}
 
-    /**
-     * Sets the data associated with this node.
-     */
-    public void setData (T data) {
-        mData = data;
-    }
+	public int getId() {
+		return mId;
+	}
 
-    /**
-     * @return The data associated with this node, possibly null if none is
-     * contained.
-     */
-    public T getData () {
-        return mData;
-    }
+	/**
+	 * Sets the data associated with this node.
+	 */
+	public void setData(T data) {
+		mData = data;
+	}
 
-    @Override
-    public int hashCode () {
-        return mData.hashCode();
-    }
+	/**
+	 * @return The data associated with this node, possibly null if none is
+	 * contained.
+	 */
+	public T getData() {
+		return mData;
+	}
 
-    @Override
-    public boolean equals (Object other) {
-        Node<T> casted;
+	@Override
+	public int hashCode() {
+		return mId;
+	}
 
-        if(other instanceof Node){
-            casted = (Node<T>) other;
+	@Override
+	public boolean equals(Object other) {
+		Node<T> casted;
 
-            return mData.equals(casted.mData);
-        }
+		if (other instanceof Node) {
+			casted = (Node<T>) other;
 
-        return false;
-    }
+			return mId == casted.mId;
+		}
 
-    @Override
-    public String toString () {
-        return mData.toString();
-    }
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[%d] %s", mId, mData);
+	}
 }
