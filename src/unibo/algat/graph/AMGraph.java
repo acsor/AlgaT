@@ -1,19 +1,21 @@
 package unibo.algat.graph;
 
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class AMGraph<T> implements Graph<T> {
+	/**
+	 * <p>The adjacency matrix storing data about vertices and edges. The
+	 * convention here is that if {@code mEntries[row] == null}, then the
+	 * node with id equal to {@code row} does not exist within the graph.</p>
+	 */
 	private Node<T>[][] mEntries;
-	private HashMap<Node<T>, Integer> nodeToInt;
-	// TODO Eliminate the mCapacity field substituting with mEntries.length
-	private Integer mCapacity, fillLevel;
 
-	public AMGraph(int capacity) {
+	public AMGraph (int capacity) {
 		if (capacity > 0) {
 			mEntries = (Node<T>[][]) new Object[capacity][capacity];
-			Arrays.fill(mEntries, null);
-			mCapacity = capacity;
 		} else {
 			throw new IllegalArgumentException("capacity needs to be positive");
 		}
@@ -21,18 +23,19 @@ public class AMGraph<T> implements Graph<T> {
 
 	@Override
 	public void insertNode(Node<T> node) {
+		int id;
+
 		if (node != null) {
-			if (fillLevel < mCapacity) {
-				nodeToInt.putIfAbsent(node, fillLevel + 1);
-				fillLevel++;
-				for (int i = 0; i <= mCapacity; i++) {
-					mEntries[fillLevel][i] = null;
-					mEntries[i][fillLevel] = null;
-				}
+			id = node.getId();
+
+			if (0 <= id && id < mEntries.length) {
+                // If not already present
+				if (mEntries[id] == null)
+					mEntries[id] = (Node<T>[]) new Object[mEntries.length];
 			} else {
-				// TODO Substitute with an appropriate overflow exception,
-				//  possibly created in this project
-				throw new RuntimeException("size limit exceeded");
+				throw new IllegalArgumentException(
+                    "The given node had an inappropriate id: " + id
+				);
 			}
 		} else {
 			throw new NullPointerException("node was null");
@@ -41,14 +44,33 @@ public class AMGraph<T> implements Graph<T> {
 
 	@Override
 	public void deleteNode(Node<T> node) {
+		int id;
+
 		if (node != null) {
-			if (nodeToInt.containsKey(node)) {
-				int tmp = nodeToInt.remove(node);
-				for (int i = 0; i <= mCapacity; i++) {
-					mEntries[tmp][i] = null;
-					mEntries[i][tmp] = null;
+            id = node.getId();
+
+            if (0 <= id && id < mEntries.length) {
+            	if (mEntries[id] != null) {
+					// Deletes associated edges going out from the deleted
+					// node -- plausibly more useful for avoiding memory leaks
+					// and circular references
+					for (int col = 0; col < mEntries.length; col++) {
+						if (mEntries[id][col] != null)
+							mEntries[id][col] = null;
+					}
+
+					mEntries[id] = null;
+
+					// Deletes associated edges going into the deleted node
+					for (int row = 0; row < mEntries.length; row++) {
+						if (mEntries[row] != null)
+							mEntries[row][id] = null;
+					}
 				}
-				fillLevel--;
+			} else {
+				throw new IllegalArgumentException(
+					"The given node had an inappropriate id: " + id
+				);
 			}
 		} else {
 			throw new NullPointerException("node was null");
@@ -58,7 +80,10 @@ public class AMGraph<T> implements Graph<T> {
 	@Override
 	public boolean containsNode(Node<T> needle) {
 		if (needle != null) {
-			return nodeToInt.containsKey(needle);
+			// TODO Implement -- you basically need to check that the node id
+			//  is valid and that the associated matrix row is not null.
+			//  Nothing more, nothing less
+			throw new UnsupportedOperationException("Not implemented");
 		} else {
 			throw new NullPointerException("needle was null");
 		}
@@ -66,33 +91,38 @@ public class AMGraph<T> implements Graph<T> {
 
 	@Override
 	public Set<Node<T>> vertices() {
-		return nodeToInt.keySet();
+		throw new UnsupportedOperationException("Not implemented");
 	}
 
 	@Override
 	public Set<Node<T>> adjacents(Node<T> node) {
+		int id;
 		HashSet<Node<T>> a = new HashSet<>();
+
 		if (node != null) {
-			if (nodeToInt.containsKey(node)) {
-				int tmp = nodeToInt.get(node);
-				for (int i = 0; i <= tmp; i++)
-					a.add(mEntries[tmp][i]);
+			id = node.getId();
+
+            if (containsNode(node)) {
+				throw new UnsupportedOperationException("Not implemented");
 			} else {
 				throw new NoSuchElementException("node is not in this graph");
 			}
 		} else {
 			throw new NullPointerException("node was null");
 		}
+
 		return a;
 	}
 
 	@Override
 	public void insertEdge(Node<T> a, Node<T> b) {
 		if (a != null && b != null) {
-			if (nodeToInt.containsKey(a) && nodeToInt.containsKey(b))
-				mEntries[nodeToInt.get(a)][nodeToInt.get(b)] = b;
+			if (containsNode(a) && containsNode(b))
+				throw new UnsupportedOperationException("Not implemented");
 			else
-				throw new NoSuchElementException("either a or b are not in graph");
+				throw new NoSuchElementException(
+					"either a or b are not in graph"
+				);
 		} else {
 			throw new NullPointerException("either a or b are null");
 		}
@@ -101,10 +131,12 @@ public class AMGraph<T> implements Graph<T> {
 	@Override
 	public void deleteEdge(Node<T> a, Node<T> b) {
 		if (a != null && b != null) {
-			if (nodeToInt.containsKey(a) && nodeToInt.containsKey(b))
-				mEntries[nodeToInt.get(a)][nodeToInt.get(b)] = null;
+			if (containsNode(a) && containsNode(b))
+				throw new UnsupportedOperationException("Not implemented");
 			else
-				throw new NoSuchElementException("either a or b are not in graph");
+				throw new NoSuchElementException(
+					"either a or b are not in graph"
+				);
 		} else {
 			throw new NullPointerException("either a or b are null");
 		}
@@ -113,10 +145,12 @@ public class AMGraph<T> implements Graph<T> {
 	@Override
 	public boolean containsEdge(Node<T> a, Node<T> b) {
 		if (a != null && b != null) {
-			if (nodeToInt.containsKey(a) && nodeToInt.containsKey(b))
-				return mEntries[nodeToInt.get(a)][nodeToInt.get(b)] != null;
+			if (containsNode(a) && containsNode(b))
+				throw new UnsupportedOperationException("Not implemented");
 			else
-				throw new NoSuchElementException("either a or b are not in graph");
+				throw new NoSuchElementException(
+					"either a or b are not in graph"
+				);
 		} else {
 			throw new NullPointerException("either a or b were null");
 		}
