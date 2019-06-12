@@ -6,16 +6,13 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class AMGraph<T> implements Graph<T> {
-	/**
-	 * <p>The adjacency matrix storing data about vertices and edges. The
-	 * convention here is that if {@code mEntries[row] == null}, then the
-	 * node with id equal to {@code row} does not exist within the graph.</p>
-	 */
-	private Node<T>[][] mEntries;
+	private Node<T>[] mNodes;
+	private short[][] mEdges;
 
 	public AMGraph (int capacity) {
 		if (capacity > 0) {
-			mEntries = (Node<T>[][]) new Object[capacity][capacity];
+			mNodes = (Node<T>[]) new Object[capacity];
+			mEdges = new short[capacity][capacity];
 		} else {
 			throw new IllegalArgumentException("capacity needs to be positive");
 		}
@@ -28,10 +25,10 @@ public class AMGraph<T> implements Graph<T> {
 		if (node != null) {
 			id = node.getId();
 
-			if (0 <= id && id < mEntries.length) {
+			if (0 <= id && id < mEdges.length) {
                 // If not already present
-				if (mEntries[id] == null)
-					mEntries[id] = (Node<T>[]) new Object[mEntries.length];
+				if (mEdges[id] == null)
+					mEdges[id] = new short[mEdges.length];
 			} else {
 				throw new IllegalArgumentException(
                     "The given node had an inappropriate id: " + id
@@ -49,22 +46,22 @@ public class AMGraph<T> implements Graph<T> {
 		if (node != null) {
             id = node.getId();
 
-            if (0 <= id && id < mEntries.length) {
-            	if (mEntries[id] != null) {
+            if (0 <= id && id < mEdges.length) {
+            	if (mEdges[id] != null) {
 					// Deletes associated edges going out from the deleted
 					// node -- plausibly more useful for avoiding memory leaks
 					// and circular references
-					for (int col = 0; col < mEntries.length; col++) {
-						if (mEntries[id][col] != null)
-							mEntries[id][col] = null;
+					for (int col = 0; col < mEdges.length; col++) {
+						if (mEdges[id][col] != null)
+							mEdges[id][col] = null;
 					}
 
-					mEntries[id] = null;
+					mEdges[id] = null;
 
 					// Deletes associated edges going into the deleted node
-					for (int row = 0; row < mEntries.length; row++) {
-						if (mEntries[row] != null)
-							mEntries[row][id] = null;
+					for (int row = 0; row < mEdges.length; row++) {
+						if (mEdges[row] != null)
+							mEdges[row][id] = null;
 					}
 				}
 			} else {
@@ -160,16 +157,16 @@ public class AMGraph<T> implements Graph<T> {
     public String toString() {
         final StringBuilder b = new StringBuilder();
 
-        for (int row = 0; row < mEntries.length; row++) {
-            if (mEntries[row][row] != null) {
+        for (int row = 0; row < mEdges.length; row++) {
+            if (mEdges[row][row] != null) {
                 b.append(
-                	String.format("[%d] %s -> [", row, mEntries[row][row])
+                	String.format("[%d] %s -> [", row, mEdges[row][row])
 				);
 
-                for (int col = 0; col < mEntries[row].length; col++) {
+                for (int col = 0; col < mEdges[row].length; col++) {
                 	// TODO Remove the last trailing comma
-                	if (col != row && mEntries[row][col] != null) {
-                		b.append(mEntries[row][col]).append(", ");
+                	if (col != row && mEdges[row][col] != null) {
+                		b.append(mEdges[row][col]).append(", ");
 					}
 				}
 
