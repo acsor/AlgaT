@@ -26,8 +26,8 @@ class ALGraphTests {
      */
     @ParameterizedTest
     @NullSource
-    void testInsertDeleteNodeNull(Node<Integer> n) {
-        final Graph<Integer> g = new ALGraph<>();
+    void testInsertDeleteNodeNull(Node<Void> n) {
+        final Graph<Void> g = new ALGraph<>();
 
         Executable insertNull = () -> g.insertNode(n);
         Executable deleteNull = () -> g.deleteNode(n);
@@ -38,15 +38,15 @@ class ALGraphTests {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 31415, -31415})
-    void testInsertDeleteNode(Integer v) {
-        final Graph<Integer> g = new ALGraph<>();
+    void testInsertDeleteNode(Integer id) {
+        final Graph<Void> g = new ALGraph<>();
 
-        g.insertNode(new Node<>(v));
-        assertTrue(g.containsNode(new Node<>(v)));
+        g.insertNode(new Node<>(id));
+        assertTrue(g.containsNode(new Node<>(id)));
         assertEquals(1, g.vertices().size());
 
-        g.deleteNode(new Node<>(v));
-        assertFalse(g.containsNode(new Node<>(v)));
+        g.deleteNode(new Node<>(id));
+        assertFalse(g.containsNode(new Node<>(id)));
         assertEquals(0, g.vertices().size());
     }
 
@@ -56,8 +56,8 @@ class ALGraphTests {
      */
     @ParameterizedTest
     @NullSource
-    void testContainsNull(Node<Integer> n) {
-        final Graph<Integer> g = new ALGraph<>();
+    void testContainsNull(Node<Void> n) {
+        final Graph<Void> g = new ALGraph<>();
 
         Executable containsNull = () -> g.containsNode(n);
 
@@ -66,8 +66,8 @@ class ALGraphTests {
 
     @Test
     void testAdjacents() {
-        final Graph<Integer> g = new ALGraph<>();
-        final Set<Node<Integer>> expectedAdjList = new HashSet<>();
+        final Graph<Void> g = new ALGraph<>();
+        final Set<Node<Void>> expectedAdjList = new HashSet<>();
 
         Executable adjacentsNull = () -> g.adjacents(null);
         Executable adjacentsNoSuchElement = () -> g.adjacents(new Node<>(6));
@@ -96,7 +96,7 @@ class ALGraphTests {
 
     @Test
     void testInsertDeleteEdgeNull() {
-        final Graph<Integer> g = new ALGraph<>();
+        final Graph<Void> g = new ALGraph<>();
 
         Executable insertNull = () -> g.insertEdge(null, new Node<>(3));
         Executable deleteNull = () -> g.deleteEdge(null, new Node<>(3));
@@ -107,8 +107,8 @@ class ALGraphTests {
 
     @Test
     void testInsertDeleteEdge() {
-        final Graph<Integer> g = new ALGraph<>();
-        Node<Integer> n1 = new Node<>(10), n2 = new Node<>(1010);
+        final Graph<Void> g = new ALGraph<>();
+        Node<Void> n1 = new Node<>(0), n2 = new Node<>(1);
         Executable insertNoNodes = () -> g.insertEdge(n1, n2);
         Executable deleteNoNodes = () -> g.deleteEdge(n1, n2);
 
