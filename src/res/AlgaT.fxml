@@ -10,7 +10,7 @@
 <?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx/8.0.999-ea"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="unibo.algat.graphics.AlgaTController"
+      fx:controller="unibo.algat.view.AlgaTController"
 >
     <fx:include source="MainMenu.fxml" />
     <TabPane

@@ -1,4 +1,4 @@
-package unibo.algat.graphics;
+package unibo.algat.view;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -67,7 +67,6 @@ public class LessonsViewController {
 					);
 					curr = children.get(children.size() - 1);
 				}
-
 			}
 
         	// Add the leaf node

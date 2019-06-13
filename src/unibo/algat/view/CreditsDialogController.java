@@ -1,4 +1,4 @@
-package unibo.algat.graphics;
+package unibo.algat.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.web.WebView;
