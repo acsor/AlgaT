@@ -1,8 +1,9 @@
 # AlgaT
 AlgaT is an interactive environment whereby apprentice students can familiarize
-themselves with common algorithmic solutions. This is a project mandated by
-[University of Bologna](https://www.unibo.it/en/), CS course on a.y. 2019/2020,
-asking to pick a few, selected areas on which to specialize the program.
+themselves with common algorithmic solutions. This project was developed as an
+assignment at [University of Bologna](https://www.unibo.it/en/), CS course on
+a.y. 2018/2019 asking to pick a few, selected areas on which to specialize the
+program.
 
 
 ## Usage
