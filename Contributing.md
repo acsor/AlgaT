@@ -35,7 +35,7 @@ automatic threshold wrapper
 	```
 * Use the `UpperCamelCase` convention for class and interface names, and
 `lowerCamelCase` for function and variable names
-* Mark code that needs further reviews, refinement or editing with a `TO-DO`
+* Mark code that needs further reviews, refinement or editing with a `TODO`
 comment, as in:
 
 	```
