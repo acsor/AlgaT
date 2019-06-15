@@ -7,14 +7,16 @@
         xmlns:fx="http://javafx.com/fxml"
         fx:controller="unibo.algat.view.MainMenuController"
         >
-    <Menu text="_File">
-        <MenuItem text="E_xit" onAction="#onExit" accelerator="Ctrl+Q" />
+    <Menu text="%gui.menu.file">
+        <MenuItem text="%gui.menu.file.exit" onAction="#onExit"
+                  accelerator="Ctrl+Q" />
     </Menu>
-    <Menu text="_Edit">
-        <MenuItem text="_Preferences" accelerator="Ctrl+P" disable="true" />
+    <Menu text="%gui.menu.edit">
+        <MenuItem text="%gui.menu.edit.pref" accelerator="Ctrl+P"
+                  disable="true" />
     </Menu>
-    <Menu text="_Help">
-        <MenuItem text="_Usage" disable="true" />
-        <MenuItem text="_Credits" onAction="#onShowCredits" />
+    <Menu text="%gui.menu.help">
+        <MenuItem text="%gui.menu.help.usage" disable="true" />
+        <MenuItem text="%gui.menu.help.credits" onAction="#onShowCredits" />
     </Menu>
 </MenuBar>

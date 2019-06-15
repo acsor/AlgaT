@@ -22,4 +22,8 @@ public class AlgaT extends Application {
 		stage.setTitle("AlgaT");
 		stage.show();
 	}
+
+	public static void main (String[] args) {
+		launch(args);
+	}
 }
