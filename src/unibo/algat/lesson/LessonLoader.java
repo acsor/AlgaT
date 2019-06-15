@@ -2,6 +2,7 @@ package unibo.algat.lesson;
 
 import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,27 +16,33 @@ import java.util.regex.Pattern;
  * and the associated {@link java.util.ResourceBundle} class.</p>
  */
 public class LessonLoader {
-    private static final String KEY_PREFIX = "Lesson";
-    private static final String KEY_NAME = "Name";
-    private static final String KEY_TOPICS = "Topics";
+    static final String KEY_PREFIX = "lesson";
+    static final String KEY_NAME = "name";
+    static final String KEY_TOPICS = "topics";
 
-    static Pattern LESSON_ID_FILTER = Pattern.compile("^Lesson(\\d+).Id");
+    static final String LESSONS_REF = "res.lessons";
+    static final String LESSON_FORMAT = "Lesson%d";
+
+    static final String LESSONS_PATH = "/res/lessons/";
+    static Pattern LESSON_FILTER = Pattern.compile("^Lesson(\\d+).properties");
 
     /**
      * @return The "list" of available lessons for the program.
      */
     public static Set<Lesson> lessons () {
-        final ResourceBundle r = ResourceBundle.getBundle(
-            "res.lessons.Lessons"
+        final Scanner in = new Scanner(
+            LessonLoader.class.getResourceAsStream(LESSONS_PATH)
         );
         final Set<Lesson> lessons = new HashSet<>();
         Matcher m;
 
-        for (String key: r.keySet()) {
-            m = LESSON_ID_FILTER.matcher(key);
+        while (in.hasNextLine()) {
+            m = LESSON_FILTER.matcher(in.nextLine());
 
             if (m.matches()) {
-                lessons.add(loadFromLocale(Integer.valueOf(m.group(1))));
+                lessons.add(
+                    loadFromLocale(Integer.valueOf(m.group(1)))
+                );
             }
         }
 
@@ -43,20 +50,21 @@ public class LessonLoader {
     }
 
     /**
-     * @param key Key of the lesson to fetch.
+     * @param lessonId Id of the lesson to fetch.
      * @return A {@code Lesson} instance, whose values have been set to the
      * current locale, if available.
      */
-    public static Lesson loadFromLocale (int key) {
+    public static Lesson loadFromLocale (int lessonId) {
         final ResourceBundle r = ResourceBundle.getBundle(
-            "res.lessons.Lessons"
+            String.join(
+                ".", LESSONS_REF, String.format(LESSON_FORMAT, lessonId)
+            )
         );
 
         return new Lesson(
-            key,
-            r.getString(String.format("Lesson%d.%s", key, KEY_NAME)),
-            r.getString(String.format("Lesson%d.%s", key, KEY_TOPICS))
-                .split(",")
+            lessonId,
+            r.getString(String.join(".", KEY_PREFIX, KEY_NAME)),
+            r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
         );
     }
 }
