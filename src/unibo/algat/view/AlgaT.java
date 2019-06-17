@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,6 +21,9 @@ public class AlgaT extends Application {
 
 		stage.setScene(s);
 		stage.setTitle("AlgaT");
+		stage.getIcons().add(new Image(
+		        getClass().getResourceAsStream("/res/logo-small.png")
+        ));
 		stage.show();
 	}
 
