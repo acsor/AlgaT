@@ -21,9 +21,9 @@ public class AlgaT extends Application {
 
 		stage.setScene(s);
 		stage.setTitle("AlgaT");
-		stage.getIcons().add(new Image(
-		        getClass().getResourceAsStream("/res/logo-small.png")
-        ));
+		stage.getIcons().add(
+			new Image(getClass().getResourceAsStream("/res/logo-small.png"))
+		);
 		stage.show();
 	}
 
