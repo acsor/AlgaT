@@ -14,19 +14,19 @@ import java.util.regex.Pattern;
  * {@code Question<LessonId>:<QuestionId>_<locale spec>.properties} format.
  */
 public class QuestionLoader {
-	static final String KEY_TEXT = "Text";
-	static final String KEY_CHOICE = "Choice.%s";
-	static final String KEY_CORRECT_ID = "CorrectChoiceId";
+	public static final String KEY_TEXT = "Text";
+	public static final String KEY_CHOICE = "Choice.%s";
+	public static final String KEY_CORRECT_ID = "CorrectChoiceId";
 
-	static final String QUESTIONS_REF = "res.questions";
-	static final String QUESTION_FORMAT = "Question%d:%d";
+	public static final String QUESTIONS_REF = "res.questions";
+	public static final String QUESTION_FORMAT = "Question%d:%d";
 
-	static final String QUESTIONS_PATH = "/res/questions/";
-	static final Pattern QUESTION_FILTER = Pattern.compile(
+	public static final String QUESTIONS_PATH = "/res/questions/";
+	public static final Pattern QUESTION_FILTER = Pattern.compile(
 		"^Question(\\d+):(\\d+).properties"
 	);
 
-	static final Pattern CHOICE_PATTERN = Pattern.compile(
+	public static final Pattern CHOICE_PATTERN = Pattern.compile(
 		"^Choice.(\\d+)"
 	);
 

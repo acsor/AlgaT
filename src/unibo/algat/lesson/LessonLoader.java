@@ -16,15 +16,17 @@ import java.util.regex.Pattern;
  * and the associated {@link java.util.ResourceBundle} class.</p>
  */
 public class LessonLoader {
-    static final String KEY_PREFIX = "lesson";
-    static final String KEY_NAME = "name";
-    static final String KEY_TOPICS = "topics";
+    public static final String KEY_PREFIX = "lesson";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_TOPICS = "topics";
 
-    static final String LESSONS_REF = "res.lessons";
-    static final String LESSON_FORMAT = "Lesson%d";
+    public static final String LESSONS_REF = "res.lessons";
+    public static final String LESSON_FORMAT = "Lesson%d";
 
-    static final String LESSONS_PATH = "/res/lessons/";
-    static Pattern LESSON_FILTER = Pattern.compile("^Lesson(\\d+).properties");
+    public static final String LESSONS_PATH = "/res/lessons/";
+    public static Pattern LESSON_FILTER = Pattern.compile(
+        "^Lesson(\\d+).properties"
+    );
 
     /**
      * @return The "list" of available lessons for the program.
