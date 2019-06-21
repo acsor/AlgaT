@@ -11,6 +11,10 @@
         <MenuItem text="%gui.menu.file.exit" onAction="#onExit"
                   accelerator="Ctrl+Q" />
     </Menu>
+    <Menu text="%gui.menu.view">
+        <MenuItem fx:id="mCloseTab" text="%gui.menu.view.closeTab"
+                  accelerator="Ctrl+W" />
+    </Menu>
     <Menu text="%gui.menu.edit">
         <MenuItem text="%gui.menu.edit.pref" accelerator="Ctrl+P"
                   disable="true" />

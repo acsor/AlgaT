@@ -1,8 +1,10 @@
 package unibo.algat.view;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -10,11 +12,15 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class MainMenuController {
-	public void onExit () {
+	@FXML MenuItem mCloseTab;
+
+	@FXML
+	private void onExit () {
 		System.exit(0);
 	}
 
-	public void onShowCredits () throws IOException {
+	@FXML
+	private void onShowCredits () throws IOException {
 		// TO-DO Ensure there are no better alternatives (e.g. dialog) to
 		// display the credits screen
 		Stage dialog = new Stage(StageStyle.DECORATED);

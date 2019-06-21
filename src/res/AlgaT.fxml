@@ -15,14 +15,14 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="unibo.algat.view.AlgaTController"
 >
-    <fx:include source="MainMenu.fxml" />
+	<fx:include fx:id="mMainMenu" source="MainMenu.fxml" />
 
     <TabPane
             fx:id="mTabPane"
             prefHeight="400.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS"
     >
         <tabs>
-            <Tab fx:id="mLessonTab" text="%gui.algat.lessonTab"
+            <Tab fx:id="mLessonsTab" text="%gui.algat.lessonsTab"
                  closable="false">
                 <VBox prefHeight="400.0" prefWidth="600.0" >
                     <TreeView fx:id="mTreeView"/>
@@ -37,7 +37,7 @@
                     </Label>
 
                     <Button fx:id="mStartLesson" text="%gui.algat.startLesson"
-                            onAction="#openNewTab" />
+                            onAction="#onTabOpen" />
                 </VBox>
             </Tab>
         </tabs>

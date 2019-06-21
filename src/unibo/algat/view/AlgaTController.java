@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import unibo.algat.lesson.Lesson;
@@ -13,12 +14,43 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 public class AlgaTController {
+	@FXML private MainMenuController mMainMenuController;
 	@FXML private TabPane mTabPane;
-	@FXML private Tab mLessonTab;
+	@FXML private Tab mLessonsTab;
 	@FXML private TreeView<LessonTreeNode> mTreeView;
 	@FXML private Button mStartLesson;
 
 	private LessonTreeNode mSelected;
+	/**
+	 * <p>Monitors the lessons (main, non-closeable) tab, deactivating the
+	 * "Close active tab" menu item when the former is visible.</p>
+	 */
+	private final ChangeListener<Boolean> mSelectedTabListener
+		= new ChangeListener<> () {
+		@Override
+		public void changed (
+			ObservableValue<? extends Boolean> observable, Boolean oldValue,
+			Boolean newValue
+		) {
+			// Deactivate or activate the "Close tab" menu item
+			if (newValue) {
+				mMainMenuController.mCloseTab.setDisable(true);
+			} else {
+				mMainMenuController.mCloseTab.setDisable(false);
+			}
+		}
+	};
+	private final EventHandler<ActionEvent> mOnCloseTabHandler =
+		new EventHandler<>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Tab selected = mTabPane.getSelectionModel().getSelectedItem();
+
+				if (selected != null && selected != mLessonsTab) {
+                    mTabPane.getTabs().remove(selected);
+				}
+			}
+		};
 	/**
 	 * <p>Handles the selection of a new lesson in the lesson tree view.</p>
 	 */
@@ -40,14 +72,21 @@ public class AlgaTController {
 			}
 	};
 
-	public void initialize() {
+	@FXML
+	private void initialize() {
 		final ResourceBundle r = ResourceBundle.getBundle("res.Interface");
 
-		mStartLesson.setDisable(true);
+		mLessonsTab.selectedProperty().addListener(mSelectedTabListener);
+		mMainMenuController.mCloseTab.setOnAction(mOnCloseTabHandler);
+		// TODO Assuming the default selected tab is mLessonsTab all is fine;
+		//  however I'd much prefer to have the callback method of
+		//  mSelectedTabListener invoked automatically to achieve the result
+		mMainMenuController.mCloseTab.setDisable(true);
 		mTreeView.getSelectionModel().selectedItemProperty().addListener(
 			mSelectedListener
 		);
 		mTreeView.setRoot(buildLessonTree(LessonLoader.lessons(), r));
+		mStartLesson.setDisable(true);
 	}
 
 	/**
@@ -55,10 +94,10 @@ public class AlgaTController {
 	 * button is pressed.</p>
 	 */
 	@FXML
-	private void openNewTab(ActionEvent event) {
-        if (mSelected != null && mSelected.lesson != null) {
-        	mTabPane.getTabs().add(
-        		new Tab(mSelected.lesson.getName())
+	private void onTabOpen(ActionEvent event) {
+		if (mSelected != null && mSelected.lesson != null) {
+			mTabPane.getTabs().add(
+				new Tab(mSelected.lesson.getName())
 			);
 		}
 	}
