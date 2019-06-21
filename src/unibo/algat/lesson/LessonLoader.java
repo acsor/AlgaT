@@ -16,17 +16,15 @@ import java.util.regex.Pattern;
  * and the associated {@link java.util.ResourceBundle} class.</p>
  */
 public class LessonLoader {
-    public static final String KEY_PREFIX = "lesson";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_TOPICS = "topics";
+    static final String KEY_PREFIX = "lesson";
+    static final String KEY_NAME = "name";
+    static final String KEY_TOPICS = "topics";
 
-    public static final String LESSONS_REF = "res.lessons";
-    public static final String LESSON_FORMAT = "Lesson%d";
+    static final String LESSONS_REF = "res.lessons";
+    static final String LESSON_FORMAT = "Lesson%d";
 
-    public static final String LESSONS_PATH = "/res/lessons/";
-    public static Pattern LESSON_FILTER = Pattern.compile(
-        "^Lesson(\\d+).properties"
-    );
+    static final String LESSONS_PATH = "/res/lessons/";
+    static Pattern LESSON_FILTER = Pattern.compile("^Lesson(\\d+).properties");
 
     /**
      * @return The "list" of available lessons for the program.
@@ -57,16 +55,25 @@ public class LessonLoader {
      * current locale, if available.
      */
     public static Lesson loadFromLocale (int lessonId) {
-        final ResourceBundle r = ResourceBundle.getBundle(
-            String.join(
-                ".", LESSONS_REF, String.format(LESSON_FORMAT, lessonId)
-            )
-        );
+        final ResourceBundle r = lessonBundle(lessonId);
 
         return new Lesson(
             lessonId,
             r.getString(String.join(".", KEY_PREFIX, KEY_NAME)),
             r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
+        );
+    }
+
+    /**
+     * @param lessonId Lesson id to fetch resources for
+     * @return a {@code ResourceBundle} instance, containing localized assets
+     * for the given lesson.
+     */
+    public static ResourceBundle lessonBundle(int lessonId) {
+        return ResourceBundle.getBundle(
+            String.join(
+                ".", LESSONS_REF, String.format(LESSON_FORMAT, lessonId)
+            )
         );
     }
 }
