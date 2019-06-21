@@ -40,36 +40,42 @@ public class AlgaTController {
 			}
 		}
 	};
+	/**
+	 * <p>Handles closing of lessons tab when the Cltr+W combination, or
+	 * "Close active tab" menu item, are issued.</p>
+	 */
 	private final EventHandler<ActionEvent> mOnCloseTabHandler =
 		new EventHandler<>() {
 			@Override
 			public void handle(ActionEvent event) {
 				Tab selected = mTabPane.getSelectionModel().getSelectedItem();
 
-				if (selected != null && selected != mLessonsTab) {
-                    mTabPane.getTabs().remove(selected);
+				// I want to assume selected will not be null. If it turns out
+				// to be, one might exploit the occasion to fix a bug
+				if (selected != mLessonsTab) {
+					mTabPane.getTabs().remove(selected);
 				}
 			}
 		};
 	/**
 	 * <p>Handles the selection of a new lesson in the lesson tree view.</p>
 	 */
-	private final ChangeListener<TreeItem<LessonTreeNode>> mSelectedListener =
-		new ChangeListener<>() {
-			@Override
-			public void changed(
-				ObservableValue<? extends TreeItem<LessonTreeNode>> observable,
-				TreeItem<LessonTreeNode> oldValue,
-				TreeItem<LessonTreeNode> newValue
-			) {
-				mSelected = newValue.getValue();
+	private final ChangeListener<TreeItem<LessonTreeNode>>
+		mSelectedLessonListener = new ChangeListener<>() {
+		@Override
+		public void changed(
+			ObservableValue<? extends TreeItem<LessonTreeNode>> observable,
+			TreeItem<LessonTreeNode> oldValue,
+			TreeItem<LessonTreeNode> newValue
+		) {
+			mSelected = newValue.getValue();
 
-				if (mSelected != null && mSelected.lesson != null) {
-					mStartLesson.setDisable(false);
-				} else {
-					mStartLesson.setDisable(true);
-				}
+			if (mSelected.lesson != null) {
+				mStartLesson.setDisable(false);
+			} else {
+				mStartLesson.setDisable(true);
 			}
+		}
 	};
 
 	@FXML
@@ -78,20 +84,17 @@ public class AlgaTController {
 
 		mLessonsTab.selectedProperty().addListener(mSelectedTabListener);
 		mMainMenuController.mCloseTab.setOnAction(mOnCloseTabHandler);
-		// TODO Assuming the default selected tab is mLessonsTab all is fine;
-		//  however I'd much prefer to have the callback method of
-		//  mSelectedTabListener invoked automatically to achieve the result
-		mMainMenuController.mCloseTab.setDisable(true);
 		mTreeView.getSelectionModel().selectedItemProperty().addListener(
-			mSelectedListener
+			mSelectedLessonListener
 		);
 		mTreeView.setRoot(buildLessonTree(LessonLoader.lessons(), r));
-		mStartLesson.setDisable(true);
+
+		mTabPane.getTabs().add(mLessonsTab);
 	}
 
 	/**
-	 * <p>Handles the opening of a new lesson tab when the "Start lesson"
-	 * button is pressed.</p>
+	 * <p>Handles the opening of a new lesson tab when the "Start lesson" button
+	 * is pressed.</p>
 	 */
 	@FXML
 	private void onTabOpen(ActionEvent event) {

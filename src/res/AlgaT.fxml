@@ -2,44 +2,43 @@
 
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 
-<?import javafx.scene.control.Button?>
 <VBox xmlns="http://javafx.com/javafx/8.0.999-ea"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="unibo.algat.view.AlgaTController"
 >
 	<fx:include fx:id="mMainMenu" source="MainMenu.fxml" />
 
+	<!-- mLessonsTab is later added through code to have one of its listeners
+	 activate automatically -->
+    <fx:define>
+        <Tab fx:id="mLessonsTab" text="%gui.algat.lessonsTab"
+             closable="false">
+            <VBox prefHeight="400.0" prefWidth="600.0" >
+                <TreeView fx:id="mTreeView"/>
+
+                <Label fx:id="mBottomText" text="%gui.algat.bottomText"
+                       alignment="CENTER" style="-fx-wrap-text: true"
+                >
+                    <font><Font name="Arial" size="14" /></font>
+                    <padding>
+                        <Insets top="20" left="40" bottom="20" right="40" />
+                    </padding>
+                </Label>
+
+                <Button fx:id="mStartLesson" text="%gui.algat.startLesson"
+                        onAction="#onTabOpen" disable="true" />
+            </VBox>
+        </Tab>
+    </fx:define>
+
     <TabPane
             fx:id="mTabPane"
             prefHeight="400.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS"
     >
-        <tabs>
-            <Tab fx:id="mLessonsTab" text="%gui.algat.lessonsTab"
-                 closable="false">
-                <VBox prefHeight="400.0" prefWidth="600.0" >
-                    <TreeView fx:id="mTreeView"/>
-
-                    <Label fx:id="mBottomText" text="%gui.algat.bottomText"
-                           alignment="CENTER" style="-fx-wrap-text: true"
-                    >
-                        <font><Font name="Arial" size="14" /></font>
-                        <padding>
-                            <Insets top="20" left="40" bottom="20" right="40" />
-                        </padding>
-                    </Label>
-
-                    <Button fx:id="mStartLesson" text="%gui.algat.startLesson"
-                            onAction="#onTabOpen" />
-                </VBox>
-            </Tab>
-        </tabs>
     </TabPane>
 </VBox>
