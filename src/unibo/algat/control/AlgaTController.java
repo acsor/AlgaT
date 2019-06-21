@@ -1,4 +1,4 @@
-package unibo.algat.view;
+package unibo.algat.control;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

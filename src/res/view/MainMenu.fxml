@@ -5,7 +5,7 @@
 <MenuBar
         xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
-        fx:controller="unibo.algat.view.MainMenuController"
+        fx:controller="unibo.algat.control.MainMenuController"
         >
     <Menu text="%gui.menu.file">
         <MenuItem text="%gui.menu.file.exit" onAction="#onExit"

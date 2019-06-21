@@ -1,4 +1,4 @@
-package unibo.algat.view;
+package unibo.algat;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
