@@ -24,6 +24,7 @@ public class Lesson {
      */
     private final Queue<String> mTopics;
     private Set<Question> mQuestions;
+    private String mDescription;
 
     /**
      * @param id Id of the lesson
@@ -32,7 +33,7 @@ public class Lesson {
      *               Any {@code topics} string will be stripped of her
      *               leading and trailing whitespaces.
      */
-    Lesson(int id, String name, String ... topics) {
+    Lesson(int id, String name, String description, String ... topics) {
         if (id >= 0)
             mId = id;
         else
@@ -42,6 +43,11 @@ public class Lesson {
             mName = name;
         else
             throw new NullPointerException("name argument was null");
+        
+        if (description != null)
+            mDescription = description;
+        else
+            throw new NullPointerException("description argument was null");
 
         mTopics = new ArrayDeque<>(topics.length);
 

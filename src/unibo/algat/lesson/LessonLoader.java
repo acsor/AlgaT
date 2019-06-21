@@ -19,6 +19,7 @@ public class LessonLoader {
     public static final String KEY_PREFIX = "lesson";
     public static final String KEY_NAME = "name";
     public static final String KEY_TOPICS = "topics";
+    public static final String KEY_DESCRIPTION = "description";
 
     public static final String LESSONS_REF = "res.lessons";
     public static final String LESSON_FORMAT = "Lesson%d";
@@ -66,6 +67,7 @@ public class LessonLoader {
         return new Lesson(
             lessonId,
             r.getString(String.join(".", KEY_PREFIX, KEY_NAME)),
+            r.getString(String.join(".", KEY_PREFIX, KEY_DESCRIPTION)),
             r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
         );
     }
