@@ -25,7 +25,7 @@ public class MainMenuController {
 		// display the credits screen
 		Stage dialog = new Stage(StageStyle.DECORATED);
 		Parent layout = FXMLLoader.load(
-				getClass().getResource("/res/CreditsDialog.fxml")
+				getClass().getResource("/res/view/CreditsDialog.fxml")
 		);
 		Scene s = new Scene(layout);
 

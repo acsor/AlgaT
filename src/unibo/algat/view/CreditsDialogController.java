@@ -9,9 +9,10 @@ public class CreditsDialogController {
 
 	@FXML
     private void initialize () {
-		// TO-DO Have links in the WebView open in an external browser
+		// TODO Have links in the WebView open in an external browser
 		creditsView.getEngine().load(
-			getClass().getResource("/res/CreditsDialog.html").toExternalForm()
+			getClass().getResource("/res/static/CreditsDialog.html")
+				.toExternalForm()
 		);
 	}
 

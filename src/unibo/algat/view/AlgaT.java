@@ -14,16 +14,16 @@ public class AlgaT extends Application {
 	@Override
 	public void start (Stage stage) throws IOException {
 		Parent root = FXMLLoader.load(
-			getClass().getResource("/res/AlgaT.fxml"),
+			getClass().getResource("/res/view/AlgaT.fxml"),
 			ResourceBundle.getBundle("res.Interface")
 		);
 		Scene s = new Scene(root, 500, 500);
 
 		stage.setScene(s);
 		stage.setTitle("AlgaT");
-		stage.getIcons().add(
-			new Image(getClass().getResourceAsStream("/res/logo-small.png"))
-		);
+		stage.getIcons().add(new Image(
+			getClass().getResourceAsStream("/res/static/logo-small.png")
+		));
 		stage.show();
 	}
 
