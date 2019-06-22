@@ -10,24 +10,52 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+/**
+ * <p>The application class, behaving as a singleton to provide utility
+ * access to the {@code Stage} object.</p>
+ */
 public class AlgaT extends Application {
+	private static AlgaT sSingleton;
+	private Stage mStage;
+
+	public AlgaT () {
+		super();
+
+		if (sSingleton == null) {
+			sSingleton = this;
+		} else {
+			throw new IllegalStateException(
+				"AlgaT application can only be built once"
+			);
+		}
+	}
+
+	public static AlgaT getInstance () {
+		return sSingleton;
+	}
+
 	@Override
 	public void start (Stage stage) throws IOException {
-		Parent root = FXMLLoader.load(
-			getClass().getResource("/res/view/AlgaT.fxml"),
-			ResourceBundle.getBundle("res.Interface")
+		final ResourceBundle r = ResourceBundle.getBundle("res.Interface");
+		mStage = stage;
+		final Parent root = FXMLLoader.load(
+			getClass().getResource("/res/view/AlgaT.fxml"), r
 		);
-		Scene s = new Scene(root, 500, 500);
+		final Scene s = new Scene(root, 500, 500);
 
-		stage.setScene(s);
-		stage.setTitle("AlgaT");
-		stage.getIcons().add(new Image(
+		mStage.setScene(s);
+		mStage.setTitle(r.getString("gui.app.title"));
+		mStage.getIcons().add(new Image(
 			getClass().getResourceAsStream("/res/static/logo-small.png")
 		));
-		stage.show();
+		mStage.show();
 	}
 
 	public static void main (String[] args) {
 		launch(args);
+	}
+
+	public void setWindowTitle (String title) {
+		mStage.setTitle(title);
 	}
 }

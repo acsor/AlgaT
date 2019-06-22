@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import unibo.algat.AlgaT;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
 
@@ -21,24 +22,35 @@ public class AlgaTController {
 	@FXML private TreeView<LessonTreeNode> mTreeView;
 	@FXML private Button mStartLesson;
 
+	private ResourceBundle mInterface;
 	private LessonTreeNode mSelected;
 	/**
 	 * <p>Monitors the lessons (main, non-closeable) tab, deactivating the
 	 * "Close active tab" menu item when the former is visible.</p>
 	 */
-	private final ChangeListener<Boolean> mSelectedTabListener
+	private final ChangeListener<Tab> mSelectedTabListener
 		= new ChangeListener<> () {
 		@Override
 		public void changed (
-			ObservableValue<? extends Boolean> observable, Boolean oldValue,
-			Boolean newValue
+			ObservableValue<? extends Tab> observable, Tab oldValue,
+			Tab newValue
 		) {
-			// Deactivate or activate the "Close tab" menu item
-			if (newValue) {
+			String windowTitle;
+
+			if (newValue == mLessonsTab) {
+				// Deactivate or activate the "Close tab" menu item
 				mMainMenuController.mCloseTab.setDisable(true);
+				windowTitle = mInterface.getString("gui.app.title");
 			} else {
 				mMainMenuController.mCloseTab.setDisable(false);
+				windowTitle = String.format(
+					"%s - %s", newValue.getText(),
+					mInterface.getString("gui.app.title")
+				);
 			}
+
+			// Set the updated window title
+			AlgaT.getInstance().setWindowTitle(windowTitle);
 		}
 	};
 	/**
@@ -79,16 +91,20 @@ public class AlgaTController {
 		}
 	};
 
+	public AlgaTController () {
+		mInterface = ResourceBundle.getBundle("res.Interface");
+	}
+
 	@FXML
 	private void initialize() {
-		final ResourceBundle r = ResourceBundle.getBundle("res.Interface");
-
-		mLessonsTab.selectedProperty().addListener(mSelectedTabListener);
+		mTabPane.getSelectionModel().selectedItemProperty().addListener(
+			mSelectedTabListener
+		);
 		mMainMenuController.mCloseTab.setOnAction(mOnCloseTabHandler);
 		mTreeView.getSelectionModel().selectedItemProperty().addListener(
 			mSelectedLessonListener
 		);
-		mTreeView.setRoot(buildLessonTree(LessonLoader.lessons(), r));
+		mTreeView.setRoot(buildLessonTree(LessonLoader.lessons(), mInterface));
 
 		mTabPane.getTabs().add(mLessonsTab);
 	}
