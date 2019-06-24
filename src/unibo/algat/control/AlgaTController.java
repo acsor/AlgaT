@@ -21,6 +21,7 @@ public class AlgaTController {
 	@FXML private Tab mLessonsTab;
 	@FXML private TreeView<LessonTreeNode> mTreeView;
 	@FXML private Button mStartLesson;
+	@FXML private Label mBottomText;
 
 	private ResourceBundle mInterface;
 	private LessonTreeNode mSelected;
@@ -85,6 +86,7 @@ public class AlgaTController {
 
 			if (mSelected.lesson != null) {
 				mStartLesson.setDisable(false);
+				mBottomText.setText(mSelected.lesson.getDescription());
 			} else {
 				mStartLesson.setDisable(true);
 			}
