@@ -12,6 +12,7 @@ import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -102,12 +103,18 @@ public class AlgaTController {
 		}
 	};
 
+	static final String LESSONS_DIR = "res.lessons";
+
 	public AlgaTController () {
 		mInterface = ResourceBundle.getBundle("res.Interface");
 	}
 
 	@FXML
 	private void initialize() {
+		final LessonLoader l = new LessonLoader(
+			LESSONS_DIR, Locale.getDefault()
+		);
+
 		mTabPane.getSelectionModel().selectedItemProperty().addListener(
 			mSelectedTabListener
 		);
@@ -115,7 +122,7 @@ public class AlgaTController {
 		mTreeView.getSelectionModel().selectedItemProperty().addListener(
 			mSelectedLessonListener
 		);
-		mTreeView.setRoot(buildLessonTree(LessonLoader.lessons(), mInterface));
+		mTreeView.setRoot(buildLessonTree(l.lessons()));
 
 		mTabPane.getTabs().add(mLessonsTab);
 	}
@@ -140,16 +147,12 @@ public class AlgaTController {
 
 	/**
 	 * @param lessons {@code Set} of lessons to build the hierarchy from.
-	 * @param resources {@code ResourceBundle} aiding in the content
-	 *                                           localization.
 	 * @return A {@code TreeItem} hierarchy, representing the data from the
 	 * {@code lessons} parameter in a tree-like form.
 	 */
-	private TreeItem<LessonTreeNode> buildLessonTree (
-		Set<Lesson> lessons, ResourceBundle resources
-	) {
+	private TreeItem<LessonTreeNode> buildLessonTree (Set<Lesson> lessons) {
 		final TreeItem<LessonTreeNode> root = new TreeItem<>(
-			new LessonTreeNode(resources.getString("gui.algat.treeRoot"))
+			new LessonTreeNode(mInterface.getString("gui.algat.treeRoot"))
 		);
 		TreeItem<LessonTreeNode> curr;
 		boolean found;

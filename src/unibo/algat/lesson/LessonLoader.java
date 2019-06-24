@@ -1,51 +1,70 @@
 package unibo.algat.lesson;
 
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <p>Utility class designed to provide read and write operations about a given
- * lesson data (e.g. showing how many of them there are, loading their
- * associated questions etc).</p>
- *
- * <p>For this purpose, {@code LessonLoader} relies on {@code .properties} files
- * and the associated {@link java.util.ResourceBundle} class.</p>
+ * <p>{@code LessonLoader} takes as input directory class paths, looks for
+ * relevant {@code .properties} files of the form {@code Lesson<id>
+ * .properties} and creates {@link Lesson} instances off that data. If
+ * available, localized values will be returned.</p>
+ * @see Lesson
+ * @see QuestionLoader
  */
 public class LessonLoader {
+    /**
+     * The base class path pointing to a directory containing {@code
+     * .properties} lessons files.
+     */
+	private String mBaseRef;
+    private String mBasePath;
+	private Locale mLocale;
+
     static final String KEY_PREFIX = "lesson";
     static final String KEY_NAME = "name";
     static final String KEY_TOPICS = "topics";
     static final String KEY_DESCRIPTION = "description";
 
-    static final String LESSONS_REF = "res.lessons";
-    static final String LESSON_FORMAT = "Lesson%d";
+    static final String FILE_FORMAT = "Lesson%d";
+    static final Pattern FILE_PATTERN = Pattern.compile(
+        "^Lesson(\\d+).properties"
+    );
 
-    static final String LESSONS_PATH = "/res/lessons/";
-    static Pattern LESSON_FILTER = Pattern.compile("^Lesson(\\d+).properties");
+    public LessonLoader (String classPath) {
+        // TODO Is Locale.getDefault() what we really want?
+        this(classPath, Locale.getDefault());
+    }
 
     /**
-     * @return The "list" of available lessons for the program.
+     * @param classPath Class path of the directory containing lesson files
+     * @param locale Locale fo fetch lesson data with
      */
-    public static Set<Lesson> lessons () {
-        final Scanner in = new Scanner(
-            LessonLoader.class.getResourceAsStream(LESSONS_PATH)
-        );
+    public LessonLoader (String classPath, Locale locale) {
+        mBaseRef = classPath;
+        mBasePath = "/" + String.join("/", classPath.split("\\."));
+        mLocale = locale;
+    }
+
+    /**
+     * @return The set of available lessons stored in the specified location.
+     */
+    public Set<Lesson> lessons () {
         final Set<Lesson> lessons = new HashSet<>();
+        final Scanner in = new Scanner(
+            getClass().getResourceAsStream(mBasePath)
+        );
         Matcher m;
 
         while (in.hasNextLine()) {
-            m = LESSON_FILTER.matcher(in.nextLine());
+            m = FILE_PATTERN.matcher(in.nextLine());
 
             if (m.matches()) {
-                lessons.add(
-                    loadFromLocale(Integer.valueOf(m.group(1)))
-                );
+                lessons.add(load(Integer.valueOf(m.group(1))));
             }
         }
+
+        in.close();
 
         return lessons;
     }
@@ -53,9 +72,9 @@ public class LessonLoader {
     /**
      * @param lessonId Id of the lesson to fetch.
      * @return A {@code Lesson} instance, whose values have been set to the
-     * current locale, if available.
+     * specified locale, if available.
      */
-    public static Lesson loadFromLocale (int lessonId) {
+    public Lesson load (int lessonId) {
         final ResourceBundle r = lessonBundle(lessonId);
         final Lesson l = new Lesson(
             lessonId,
@@ -73,13 +92,12 @@ public class LessonLoader {
     /**
      * @param lessonId Lesson id to fetch resources for
      * @return a {@code ResourceBundle} instance, containing localized assets
-     * for the given lesson.
+     * for the given lesson in the specified class path.
      */
-    public static ResourceBundle lessonBundle(int lessonId) {
+    public ResourceBundle lessonBundle (int lessonId) {
         return ResourceBundle.getBundle(
-            String.join(
-                ".", LESSONS_REF, String.format(LESSON_FORMAT, lessonId)
-            )
+            String.join(".", mBaseRef, String.format(FILE_FORMAT, lessonId)),
+            mLocale
         );
     }
 }

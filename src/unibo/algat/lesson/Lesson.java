@@ -29,7 +29,7 @@ public class Lesson {
      *               leading and trailing whitespaces.
      * @throws NullPointerException if {@code name} is {@code null}
      */
-    Lesson(int id, String name, String description, String ... topics) {
+    public Lesson(int id, String name, String description, String ... topics) {
         if (id >= 0)
             mId = id;
         else
