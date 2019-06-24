@@ -82,13 +82,22 @@ public class AlgaTController {
 			TreeItem<LessonTreeNode> oldValue,
 			TreeItem<LessonTreeNode> newValue
 		) {
+			String description;
 			mSelected = newValue.getValue();
 
 			if (mSelected.lesson != null) {
+				description = mSelected.lesson.getDescription();
 				mStartLesson.setDisable(false);
-				mBottomText.setText(mSelected.lesson.getDescription());
+
+                mBottomText.setText(
+                    description == null || description.isBlank() ?
+						mSelected.lesson.getName(): description
+				);
 			} else {
 				mStartLesson.setDisable(true);
+				mBottomText.setText(
+					mInterface.getString("gui.algat.bottomText")
+				);
 			}
 		}
 	};

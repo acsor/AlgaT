@@ -23,12 +23,11 @@ public class Lesson {
     /**
      * @param id Id of the lesson
      * @param name Name of the lesson
-     * @param description Lesson description, cannot be {@code null}
+     * @param description Lesson description, possibly be {@code null}
      * @param topics <b>Ordered</b> array of topics this lesson belongs to.
      *               Any {@code topics} string will be stripped of her
      *               leading and trailing whitespaces.
-     * @throws NullPointerException if any of the object arguments is {@code
-     * null}
+     * @throws NullPointerException if {@code name} is {@code null}
      */
     Lesson(int id, String name, String description, String ... topics) {
         if (id >= 0)
@@ -41,11 +40,7 @@ public class Lesson {
         else
             throw new NullPointerException("name argument was null");
 
-        if (description != null)
-            mDescription = description;
-        else
-            throw new NullPointerException("description argument was null");
-
+		mDescription = description;
         mTopics = new ArrayDeque<>(topics.length);
 
         for (String topic: topics)
