@@ -55,7 +55,7 @@ public class AlgaTController {
 	};
 	/**
 	 * <p>Handles closing of lessons tab when the Cltr+W combination, or
-	 * "Close active tab" menu item, are issued.</p>
+	 * "Close active tab" menu item, is issued.</p>
 	 */
 	private final EventHandler<ActionEvent> mOnCloseTabHandler =
 		new EventHandler<>() {
@@ -182,7 +182,11 @@ public class AlgaTController {
 
 	/**
 	 * <p>Utility class encapsulating data in nodes of a {@code TreeItem}
-	 * hierarchy that contains the available program lessons.</p>
+	 * hierarchy containing available the lessons.</p>
+	 *
+	 * <p>{@code LessonTreeNode} effectively acts as a "union". When used
+	 * as an interior node, only the {@code topic} field will be set, while when
+	 * being used as a leaf node, {@code lesson} will be set instead.</p>
 	 */
 	static class LessonTreeNode {
 		String topic;

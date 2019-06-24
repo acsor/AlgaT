@@ -3,17 +3,12 @@ package unibo.algat.lesson;
 import java.util.*;
 
 /**
- * Basic abstract class encapsulating data about a generic lesson, to be
- * displayed in one of the main screens.<br><br>
- *
- * The usefulness of the derived {@code Lesson} classes stems from their
- * coupling with the {@link java.util.prefs} mechanism, whereby they are
- * provided as arguments to such calls as
- * {@code Preferences.user/systemNodeForPackage()}.
+ * <p>Basic class encapsulating data about a lesson.</p>
  */
 public class Lesson {
     private int mId;
     private String mName;
+    private String mDescription;
     /**
      * <p>The nested topic categories this lesson belongs to.</p>
      *
@@ -24,7 +19,6 @@ public class Lesson {
      */
     private final Queue<String> mTopics;
     private Set<Question> mQuestions;
-    private String mDescription;
 
     /**
      * @param id Id of the lesson

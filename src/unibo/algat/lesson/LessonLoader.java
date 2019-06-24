@@ -57,13 +57,17 @@ public class LessonLoader {
      */
     public static Lesson loadFromLocale (int lessonId) {
         final ResourceBundle r = lessonBundle(lessonId);
-
-        return new Lesson(
+        final Lesson l = new Lesson(
             lessonId,
             r.getString(String.join(".", KEY_PREFIX, KEY_NAME)),
             r.getString(String.join(".", KEY_PREFIX, KEY_DESCRIPTION)),
             r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
         );
+
+        for (Question q: QuestionLoader.questions(lessonId))
+            l.addQuestion(q);
+
+        return l;
     }
 
     /**

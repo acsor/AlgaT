@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 /**
- * <p>Utility class designed to construct a "view" component capable of
- * displaying a given lesson.</p>
+ * <p>Utility class capable of constructing a "view object" out of a
+ * {@link Lesson} instance.</p>
  */
 public class LessonViewFactory {
 	static final String KEY_VIEW = "lesson.view";
@@ -18,7 +18,7 @@ public class LessonViewFactory {
 
 	/**
 	 * @param lesson Lesson to produce a view for
-	 * @return The graphical object the lesson was associated to
+	 * @return The graphical object the lesson has been associated to
 	 * @throws IOException Upon failure of loading the lesson view FXML file.
 	 */
 	public static Pane lessonView (Lesson lesson) throws IOException {

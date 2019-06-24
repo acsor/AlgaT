@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Class encapsulating data about a question related to a specific lesson.
+ * <p>Class encapsulating data about a question and providing utility
+ * methods.</p>
  */
 public class Question {
     private int mLessonId;

@@ -14,27 +14,28 @@ import java.util.regex.Pattern;
  * {@code Question<LessonId>:<QuestionId>_<locale spec>.properties} format.
  */
 public class QuestionLoader {
-	public static final String KEY_TEXT = "Text";
-	public static final String KEY_CHOICE = "Choice.%s";
-	public static final String KEY_CORRECT_ID = "CorrectChoiceId";
+	static final String KEY_TEXT = "Text";
+	static final String KEY_CHOICE = "Choice.%s";
+	static final String KEY_CORRECT_ID = "CorrectChoiceId";
 
-	public static final String QUESTIONS_REF = "res.questions";
-	public static final String QUESTION_FORMAT = "Question%d:%d";
+	static final String QUESTIONS_REF = "res.questions";
+	static final String QUESTION_FORMAT = "Question%d:%d";
 
-	public static final String QUESTIONS_PATH = "/res/questions/";
-	public static final Pattern QUESTION_FILTER = Pattern.compile(
+	static final String QUESTIONS_PATH = "/res/questions/";
+	static final Pattern QUESTION_FILTER = Pattern.compile(
 		"^Question(\\d+):(\\d+).properties"
 	);
 
-	public static final Pattern CHOICE_PATTERN = Pattern.compile(
+	static final Pattern CHOICE_PATTERN = Pattern.compile(
 		"^Choice.(\\d+)"
 	);
 
 	/**
-	 * @return A "list" of available questions stored in {@code .properties}
-	 * files of the {@code res/questions} folder.
+	 * @param lessonId Id of the lesson to fetch questions for
+	 * @return A list of available questions related to the lesson identified
+	 * by {@code lessonId}.
 	 */
-	public static Set<Question> questions () {
+	public static Set<Question> questions (int lessonId) {
 		// TODO Urgent! Ensure this code works with .jar files, else find
 		// a workaround to the issue!
 		Set<Question> questions = new HashSet<>();
@@ -46,7 +47,7 @@ public class QuestionLoader {
 		while (in.hasNextLine()) {
 			m = QUESTION_FILTER.matcher(in.nextLine());
 
-			if (m.matches()) {
+			if (m.matches() && Integer.valueOf(m.group(1)) == lessonId) {
 				questions.add(loadFromLocale(
 					Integer.valueOf(m.group(1)),
 					Integer.valueOf(m.group(2))
