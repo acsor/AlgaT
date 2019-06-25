@@ -21,7 +21,7 @@ public class LessonLoaderTests {
 	 * <p>Tests {@code LessonLoader.lessons()}, or the whole {@code LessonLoader
 	 * } class by that matter.</p>
 	 */
-	public void testLessons () {
+	void testLessons () {
 		final LessonLoader l = new LessonLoader(ASSETS_REF, Locale.ROOT);
         final Map<Integer, Lesson> expected = new HashMap<>(3);
         Lesson e;
