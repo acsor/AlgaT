@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Text?>
-
-<StackPane
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<VBox
 		xmlns="http://javafx.com/javafx"
 		xmlns:fx="http://javafx.com/fxml"
+		alignment="CENTER"
 	>
     <!-- TODO Add an image to enrich the interface -->
 	<!-- TODO Embellish the interface as needed - choose better font, font
 	size etc -->
-	<Text text="%gui.lesson.unavailable" />
-</StackPane>
+	<ImageView fitHeight="250" fitWidth="250">
+		<image>
+			<Image url="@stop_icon5.png"/>
+
+		</image>
+	</ImageView>
+	<Label fx:id="mUnavailable" text="%gui.lesson.unavailable"
+		   prefHeight="300.0"
+		   alignment="CENTER" style="-fx-wrap-text: true"
+	>
+		<padding>
+			<Insets top="20" left="40" bottom="20" right="40" />
+		</padding>
+
+		<font><Font name="Helvetica" size="15" /></font>
+	</Label>
+	<padding>
+		<Insets top="20" left="40" bottom="20" right="40" />
+	</padding>
+</VBox>
