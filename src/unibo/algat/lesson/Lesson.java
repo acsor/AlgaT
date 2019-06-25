@@ -18,7 +18,6 @@ public class Lesson {
      * a nested fashion.</p>
      */
     private final Queue<String> mTopics;
-    private Set<Question> mQuestions;
 
     /**
      * @param id Id of the lesson
@@ -45,8 +44,6 @@ public class Lesson {
 
         for (String topic: topics)
             mTopics.add(topic.strip());
-
-        mQuestions = new HashSet<>();
     }
 
     /**
@@ -77,24 +74,6 @@ public class Lesson {
      */
     public Queue<String> getTopics () {
         return new ArrayDeque<>(mTopics);
-    }
-
-    /**
-     * @param q Question instance to associate to this lesson
-	 * @throws NullPointerException if q is {@code null}
-     */
-    public void addQuestion(Question q) {
-    	if (q != null)
-            mQuestions.add(q);
-        else
-    	    throw new NullPointerException("Question argument was null");
-	}
-
-    /**
-     * @return All the available questions associated to this lesson.
-     */
-    public Set<Question> questions () {
-        return mQuestions;
     }
 
     @Override

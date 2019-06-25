@@ -90,12 +90,14 @@ public class AlgaTController {
 				description = mSelected.lesson.getDescription();
 				mStartLesson.setDisable(false);
 
+				// Update the bottom text field with the lesson description
                 mBottomText.setText(
                     description == null || description.isBlank() ?
 						mSelected.lesson.getName(): description
 				);
 			} else {
 				mStartLesson.setDisable(true);
+				// Set the bottom text field back to the original value
 				mBottomText.setText(
 					mInterface.getString("gui.algat.bottomText")
 				);
@@ -104,6 +106,7 @@ public class AlgaTController {
 	};
 
 	static final String LESSONS_DIR = "res.lessons";
+	static final String QUESTIONS_DIR = "res.questions";
 
 	public AlgaTController () {
 		mInterface = ResourceBundle.getBundle("res.Interface");

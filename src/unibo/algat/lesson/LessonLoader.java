@@ -17,8 +17,8 @@ public class LessonLoader {
      * The base class path pointing to a directory containing {@code
      * .properties} lessons files.
      */
-	private String mBaseRef;
-    private String mBasePath;
+	private final String mBaseRef;
+    private final String mBasePath;
 	private Locale mLocale;
 
     static final String KEY_PREFIX = "lesson";
@@ -50,6 +50,8 @@ public class LessonLoader {
      * @return The set of available lessons stored in the specified location.
      */
     public Set<Lesson> lessons () {
+    	// TODO Check for other ways to get a listing of .properties files
+        //  out of a "resource directory"
         final Set<Lesson> lessons = new HashSet<>();
         final Scanner in = new Scanner(
             getClass().getResourceAsStream(mBasePath)
@@ -82,9 +84,6 @@ public class LessonLoader {
             r.getString(String.join(".", KEY_PREFIX, KEY_DESCRIPTION)),
             r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
         );
-
-        for (Question q: QuestionLoader.questions(lessonId))
-            l.addQuestion(q);
 
         return l;
     }
