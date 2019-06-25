@@ -1,5 +1,8 @@
 # AlgaT
-AlgaT is an interactive environment whereby apprentice students can familiarize
+
+![AlgaT Logo][logo]
+
+AlgaT is an interactive simulator whereby apprentice students can familiarize
 themselves with common algorithmic solutions. This project was developed as an
 assignment at [University of Bologna](https://www.unibo.it/en/), CS course on
 a.y. 2018/2019 asking to pick a few, selected areas on which to specialize the
@@ -18,3 +21,5 @@ on a terminal console.
 ## Testing
 AlgaT provides a unit testing suite, written in JUnit 5. We suppose it to be
 easily runnable from terminal or IDE tools.
+
+[logo]: src/res/static/logo-medium.png "Logo"
