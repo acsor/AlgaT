@@ -38,6 +38,8 @@ public class QuestionLoader {
 	 * by {@code lessonId}.
 	 */
 	public Set<Question> questions (int lessonId) {
+		// TODO The Lesson and Question classes are too loosely coupled, do
+		//  something to strengthen their relationship
 		// TODO Urgent! Ensure this code works with .jar files, else find
 		//  a workaround to the issue!
 		Set<Question> questions = new HashSet<>();
