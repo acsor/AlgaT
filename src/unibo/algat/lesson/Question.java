@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Class encapsulating data about a question related to a specific lesson.
+ * <p>Class encapsulating data about a question and providing utility
+ * methods.</p>
  */
 public class Question {
     private int mLessonId;
@@ -13,7 +14,7 @@ public class Question {
     private Set<Choice> mChoices;
     private Choice mCorrectChoice;
 
-    Question(int lessonId, int id, String text) {
+    public Question(int lessonId, int id, String text) {
         mLessonId = lessonId;
         mId = id;
         mText = text;
@@ -33,6 +34,13 @@ public class Question {
      */
     public int getLessonId () {
         return mLessonId;
+    }
+
+    /**
+     * @return This question text.
+     */
+    public String getText () {
+        return mText;
     }
 
     /**
@@ -125,8 +133,8 @@ public class Question {
         private String mText;
 
         public Choice(int id, String text) {
-            this.mId = id;
-            this.mText = text;
+            mId = id;
+            mText = text;
         }
 
         public int getId() {

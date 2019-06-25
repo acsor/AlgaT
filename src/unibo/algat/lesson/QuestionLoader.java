@@ -14,45 +14,50 @@ import java.util.regex.Pattern;
  * {@code Question<LessonId>:<QuestionId>_<locale spec>.properties} format.
  */
 public class QuestionLoader {
+	private final String mBaseRef;
+	private final String mBasePath;
+
 	static final String KEY_TEXT = "Text";
 	static final String KEY_CHOICE = "Choice.%s";
 	static final String KEY_CORRECT_ID = "CorrectChoiceId";
+	static final Pattern CHOICE_PATTERN = Pattern.compile("^Choice.(\\d+)");
 
-	static final String QUESTIONS_REF = "res.questions";
-	static final String QUESTION_FORMAT = "Question%d:%d";
-
-	static final String QUESTIONS_PATH = "/res/questions/";
-	static final Pattern QUESTION_FILTER = Pattern.compile(
+	static final String FILE_FORMAT = "Question%d:%d";
+	static final Pattern FILE_PATTERN = Pattern.compile(
 		"^Question(\\d+):(\\d+).properties"
 	);
 
-	static final Pattern CHOICE_PATTERN = Pattern.compile(
-		"^Choice.(\\d+)"
-	);
+	public QuestionLoader (String classPath) {
+		mBaseRef = classPath;
+		mBasePath = "/" + String.join("/", classPath.split("\\."));
+	}
 
 	/**
-	 * @return A "list" of available questions stored in {@code .properties}
-	 * files of the {@code res/questions} folder.
+	 * @param lessonId Id of the lesson to fetch questions for
+	 * @return A list of available questions related to the lesson identified
+	 * by {@code lessonId}.
 	 */
-	public static Set<Question> questions () {
+	public Set<Question> questions (int lessonId) {
+		// TODO The Lesson and Question classes are too loosely coupled, do
+		//  something to strengthen their relationship
 		// TODO Urgent! Ensure this code works with .jar files, else find
-		// a workaround to the issue!
+		//  a workaround to the issue!
 		Set<Question> questions = new HashSet<>();
-		Scanner in = new Scanner(
-			QuestionLoader.class.getResourceAsStream(QUESTIONS_PATH)
-		);
+		Scanner in = new Scanner(getClass().getResourceAsStream(mBasePath));
 		Matcher m;
 
 		while (in.hasNextLine()) {
-			m = QUESTION_FILTER.matcher(in.nextLine());
+			m = FILE_PATTERN.matcher(in.nextLine());
 
-			if (m.matches()) {
-				questions.add(loadFromLocale(
+			if (m.matches() && Integer.valueOf(m.group(1)) == lessonId) {
+				questions.add(load(
 					Integer.valueOf(m.group(1)),
 					Integer.valueOf(m.group(2))
 				));
 			}
 		}
+
+		in.close();
 
 		return questions;
 	}
@@ -63,11 +68,10 @@ public class QuestionLoader {
 	 * @return A {@link Question} instance identified by the two id integers,
 	 * with localized values from {@code .properties} files (if available).
 	 */
-	public static Question loadFromLocale (int lessonId, int questionId) {
+	public Question load (int lessonId, int questionId) {
 		final ResourceBundle r = ResourceBundle.getBundle(
 			String.join(
-				".", QUESTIONS_REF,
-				String.format(QUESTION_FORMAT, lessonId, questionId)
+				".", mBaseRef, String.format(FILE_FORMAT, lessonId, questionId)
 			)
 		);
 		final String correctChoiceId = r.getString(KEY_CORRECT_ID);

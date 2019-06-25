@@ -3,17 +3,12 @@ package unibo.algat.lesson;
 import java.util.*;
 
 /**
- * Basic abstract class encapsulating data about a generic lesson, to be
- * displayed in one of the main screens.<br><br>
- *
- * The usefulness of the derived {@code Lesson} classes stems from their
- * coupling with the {@link java.util.prefs} mechanism, whereby they are
- * provided as arguments to such calls as
- * {@code Preferences.user/systemNodeForPackage()}.
+ * <p>Basic class encapsulating data about a lesson.</p>
  */
 public class Lesson {
     private int mId;
     private String mName;
+    private String mDescription;
     /**
      * <p>The nested topic categories this lesson belongs to.</p>
      *
@@ -23,16 +18,17 @@ public class Lesson {
      * a nested fashion.</p>
      */
     private final Queue<String> mTopics;
-    private Set<Question> mQuestions;
 
     /**
      * @param id Id of the lesson
      * @param name Name of the lesson
+     * @param description Lesson description, possibly be {@code null}
      * @param topics <b>Ordered</b> array of topics this lesson belongs to.
      *               Any {@code topics} string will be stripped of her
      *               leading and trailing whitespaces.
+     * @throws NullPointerException if {@code name} is {@code null}
      */
-    Lesson(int id, String name, String ... topics) {
+    public Lesson(int id, String name, String description, String ... topics) {
         if (id >= 0)
             mId = id;
         else
@@ -43,12 +39,11 @@ public class Lesson {
         else
             throw new NullPointerException("name argument was null");
 
+		mDescription = description;
         mTopics = new ArrayDeque<>(topics.length);
 
         for (String topic: topics)
             mTopics.add(topic.strip());
-
-        mQuestions = new HashSet<>();
     }
 
     /**
@@ -66,30 +61,19 @@ public class Lesson {
     }
 
     /**
+     * @return This lesson description.
+     */
+    public String getDescription() {
+        return mDescription;
+    }
+
+    /**
      * @return A copy of the queued topics this lesson belongs to, ordered
      * from most general to the most specific, as in {@code Ordering >
      * In-place algorithms > Quicksort}.
      */
     public Queue<String> getTopics () {
         return new ArrayDeque<>(mTopics);
-    }
-
-    /**
-     * @param q Question instance to associate to this lesson
-	 * @throws NullPointerException if q is {@code null}
-     */
-    public void addQuestion(Question q) {
-    	if (q != null)
-            mQuestions.add(q);
-        else
-    	    throw new NullPointerException("Question argument was null");
-	}
-
-    /**
-     * @return All the available questions associated to this lesson.
-     */
-    public Set<Question> questions () {
-        return mQuestions;
     }
 
     @Override
