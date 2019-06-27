@@ -38,7 +38,7 @@ public class ALGraph<T> implements Graph<T> {
     }
 
     @Override
-    public Set<Node<T>> vertices() {
+    public Set<Node<T>> nodes() {
          return mEntries.keySet();
     }
 

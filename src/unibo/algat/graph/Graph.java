@@ -30,10 +30,10 @@ public interface Graph<T> {
     boolean containsNode(Node<T> needle);
 
     /**
-     * @return The set of vertices contained in the graph, empty if none are
+     * @return The set of nodes contained in the graph, empty if none are
      * present.
      */
-    Set<Node<T>> vertices();
+    Set<Node<T>> nodes ();
     /**
      * @param node Node value of which a list of adjacent nodes is queried for.
      * @return A set of nodes v such that, if u is the current node, then the

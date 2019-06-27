@@ -43,11 +43,11 @@ class ALGraphTests {
 
         g.insertNode(new Node<>(id));
         assertTrue(g.containsNode(new Node<>(id)));
-        assertEquals(1, g.vertices().size());
+        assertEquals(1, g.nodes().size());
 
         g.deleteNode(new Node<>(id));
         assertFalse(g.containsNode(new Node<>(id)));
-        assertEquals(0, g.vertices().size());
+        assertEquals(0, g.nodes().size());
     }
 
     /**
