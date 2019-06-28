@@ -21,5 +21,3 @@ on a terminal console.
 ## Testing
 AlgaT provides a unit testing suite, written in JUnit 5. We suppose it to be
 easily runnable from terminal or IDE tools.
-
-[logo]: src/res/static/logo-medium.png "Logo"

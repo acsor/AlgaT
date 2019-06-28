@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
  */
 public class LessonLoaderTests {
 	static final String
-		ASSETS_REF = "unibo.algat.tests.assets.LessonLoaderTests";
+		ASSETS_REF = "LessonLoaderTests";
 
 	@Test
 	/**

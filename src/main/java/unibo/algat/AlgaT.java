@@ -36,17 +36,17 @@ public class AlgaT extends Application {
 
 	@Override
 	public void start (Stage stage) throws IOException {
-		final ResourceBundle r = ResourceBundle.getBundle("res.Interface");
+		final ResourceBundle r = ResourceBundle.getBundle("Interface");
 		mStage = stage;
 		final Parent root = FXMLLoader.load(
-			getClass().getResource("/res/view/AlgaT.fxml"), r
+			getClass().getResource("/view/AlgaT.fxml"), r
 		);
 		final Scene s = new Scene(root, 500, 500);
 
 		mStage.setScene(s);
 		mStage.setTitle(r.getString("gui.app.title"));
 		mStage.getIcons().add(new Image(
-			getClass().getResourceAsStream("/res/static/logo-small.png")
+			getClass().getResourceAsStream("/static/logo-small.png")
 		));
 		mStage.show();
 	}

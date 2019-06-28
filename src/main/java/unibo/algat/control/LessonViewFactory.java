@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
  */
 public class LessonViewFactory {
 	static final String KEY_VIEW = "lesson.view";
-	static final String VIEW_PATH = "/res/view/";
+	static final String VIEW_PATH = "/view/";
 
 	/**
 	 * @param lesson Lesson to produce a view for
@@ -30,7 +30,7 @@ public class LessonViewFactory {
 
         return FXMLLoader.load(
             l.getClass().getResource(VIEW_PATH + r.getString(KEY_VIEW)),
-			ResourceBundle.getBundle("res.Interface")
+			ResourceBundle.getBundle("Interface")
 		);
 	}
 }

@@ -16,8 +16,11 @@ repositories {
 	jcenter()
 }
 
+ext.junit_version = "5.4.2"
+
 dependencies {
-	testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+	testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
+	testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_version"
 }
 
 javafx {

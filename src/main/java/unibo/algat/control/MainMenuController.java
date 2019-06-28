@@ -19,7 +19,7 @@ public class MainMenuController {
 	private final ResourceBundle mInterface;
 
 	public MainMenuController() {
-		mInterface = ResourceBundle.getBundle("res.Interface");
+		mInterface = ResourceBundle.getBundle("Interface");
 	}
 
 	@FXML
@@ -33,14 +33,14 @@ public class MainMenuController {
 		// display the credits screen
 		final Stage dialog = new Stage(StageStyle.DECORATED);
 		Parent layout = FXMLLoader.load(
-			getClass().getResource("/res/view/CreditsDialog.fxml")
+			getClass().getResource("/view/CreditsDialog.fxml")
 		);
 		Scene s = new Scene(layout);
 
 		dialog.setScene(s);
 		dialog.setTitle(mInterface.getString("gui.dialog.credits.title"));
         dialog.getIcons().add(new Image(
-			getClass().getResourceAsStream("/res/static/logo-small.png")
+			getClass().getResourceAsStream("/static/logo-small.png")
 		));
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.show();

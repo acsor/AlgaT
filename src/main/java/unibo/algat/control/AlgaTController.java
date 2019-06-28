@@ -105,11 +105,11 @@ public class AlgaTController {
 		}
 	};
 
-	static final String LESSONS_DIR = "res.lessons";
-	static final String QUESTIONS_DIR = "res.questions";
+	static final String LESSONS_DIR = "lessons";
+	static final String QUESTIONS_DIR = "questions";
 
 	public AlgaTController () {
-		mInterface = ResourceBundle.getBundle("res.Interface");
+		mInterface = ResourceBundle.getBundle("Interface");
 	}
 
 	@FXML

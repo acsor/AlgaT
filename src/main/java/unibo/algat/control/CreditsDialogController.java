@@ -11,7 +11,7 @@ public class CreditsDialogController {
     private void initialize () {
 		// TODO Have links in the WebView open in an external browser
 		creditsView.getEngine().load(
-			getClass().getResource("/res/static/CreditsDialog.html")
+			getClass().getResource("/static/CreditsDialog.html")
 				.toExternalForm()
 		);
 	}
