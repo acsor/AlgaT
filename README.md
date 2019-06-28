@@ -1,6 +1,6 @@
 # AlgaT
 
-![AlgaT Logo][logo]
+<img alt="AlgaT Logo" src="src/main/resources/res/static/logo.png" width="256" />
 
 AlgaT is an interactive simulator whereby apprentice students can familiarize
 themselves with common algorithmic solutions. This project was developed as an
