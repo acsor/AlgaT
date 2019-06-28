@@ -1,0 +1,46 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+}
+
+plugins {
+	id 'java'
+	id 'application'
+	id 'org.openjfx.javafxplugin' version '0.0.7'
+	id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+}
+
+javafx {
+	version = '12'
+	modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'unibo.algat.Main'
+	}
+}
+
+// Main class is inherited from :jar task
+shadowJar {
+	classifier = null // No suffix
+}
+
+mainClassName = 'unibo.algat.Main'

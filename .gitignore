@@ -3,7 +3,10 @@
 *.iml
 *.sw[op]
 *.zip
+*.jar
+*.class
 
 # Specific folders section
-/*
-!src/
+/.gradle
+/build/
+!gradle-wrapper.jar
