@@ -46,7 +46,7 @@ public class AlgaT extends Application {
 		mStage.setScene(s);
 		mStage.setTitle(r.getString("gui.app.title"));
 		mStage.getIcons().add(new Image(
-			getClass().getResourceAsStream("/static/logo-small.png")
+			getClass().getResourceAsStream("/static/icon.png")
 		));
 		mStage.show();
 	}

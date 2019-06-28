@@ -40,7 +40,7 @@ public class MainMenuController {
 		dialog.setScene(s);
 		dialog.setTitle(mInterface.getString("gui.dialog.credits.title"));
         dialog.getIcons().add(new Image(
-			getClass().getResourceAsStream("/static/logo-small.png")
+			getClass().getResourceAsStream("/static/icon.png")
 		));
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.show();
