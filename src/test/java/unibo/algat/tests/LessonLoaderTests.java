@@ -13,8 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
  * TODO Decide whether to improve and extend these tests.
  */
 public class LessonLoaderTests {
-	static final String
-		ASSETS_REF = "LessonLoaderTests";
+	static final String ASSETS_REF = "LessonLoaderTests";
 
 	@Test
 	/**

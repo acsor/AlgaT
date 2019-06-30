@@ -10,8 +10,7 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class QuestionLoaderTests {
-	static final String
-		ASSETS_REF ="QuestionLoaderTests";
+	static final String ASSETS_REF ="QuestionLoaderTests";
 
 	@ParameterizedTest
 	@MethodSource("questionFactory")

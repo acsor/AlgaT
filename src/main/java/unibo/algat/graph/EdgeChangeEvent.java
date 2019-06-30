@@ -1,7 +1,5 @@
 package unibo.algat.graph;
 
-import unibo.algat.util.Pair;
-
 import java.util.EventObject;
 
 public class EdgeChangeEvent<T> extends EventObject {
@@ -18,15 +16,19 @@ public class EdgeChangeEvent<T> extends EventObject {
 		mInserted = inserted;
 	}
 
-	public Pair<Node<T>, Node<T>> getEdge () {
-		return new Pair<>(mU, mV);
+	public Node<T> getFirst () {
+		return mU;
+	}
+
+	public Node<T> getSecond () {
+		return mV;
 	}
 
 	public boolean wasInserted () {
 		return mInserted;
 	}
 
-	public boolean wasRemoved () {
+	public boolean wasDeleted() {
 		return mInserted;
 	}
 }

@@ -9,5 +9,5 @@ public interface NodeChangeListener<T> extends EventListener {
      * @param e The {@link NodeChangeEvent} instance encapsulating the event
      *          data
      */
-    void nodeChanged (NodeChangeEvent e);
+    void nodeChanged (NodeChangeEvent<T> e);
 }

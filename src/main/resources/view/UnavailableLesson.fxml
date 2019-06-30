@@ -18,12 +18,10 @@
 	</ImageView>
 
 	<Label fx:id="mUnavailable" text="%gui.lesson.unavailable"
-		   prefHeight="300.0"
 		   alignment="CENTER" style="-fx-wrap-text: true"
+		   textAlignment="CENTER"
 	>
-		<padding>
-			<Insets top="20" left="40" bottom="20" right="40" />
-		</padding>
+		<padding><Insets topRightBottomLeft="20" /></padding>
 
 		<font><Font name="Helvetica" size="15" /></font>
 	</Label>
