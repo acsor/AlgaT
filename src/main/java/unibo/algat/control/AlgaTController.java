@@ -25,7 +25,7 @@ public class AlgaTController {
 	@FXML private Label mBottomText;
 
 	private ResourceBundle mInterface;
-	private LessonTreeNode mSelected;
+	private Lesson mSelectedLesson;
 	/**
 	 * <p>Monitors the lessons (main, non-closeable) tab, deactivating the
 	 * "Close active tab" menu item when the former is visible.</p>
@@ -84,23 +84,25 @@ public class AlgaTController {
 			TreeItem<LessonTreeNode> newValue
 		) {
 			String description;
-			mSelected = newValue.getValue();
 
-			if (mSelected.lesson != null) {
-				description = mSelected.lesson.getDescription();
+			// If we have a lesson node, i.e. a leaf:
+			if (newValue != null && newValue.getValue().lesson != null) {
+				mSelectedLesson = newValue.getValue().lesson;
+				description = mSelectedLesson.getDescription();
+
 				mStartLesson.setDisable(false);
-
 				// Update the bottom text field with the lesson description
-                mBottomText.setText(
-                    description == null || description.isBlank() ?
-						mSelected.lesson.getName(): description
+				mBottomText.setText(
+					description == null || description.isBlank() ?
+						mSelectedLesson.getName(): description
 				);
 			} else {
+				mSelectedLesson = null;
+				// Otherwise, either the newValue variable is null or we find
+				// ourselves at an interior node of the lesson tree
 				mStartLesson.setDisable(true);
 				// Set the bottom text field back to the original value
-				mBottomText.setText(
-					mInterface.getString("gui.algat.bottomText")
-				);
+				mBottomText.setText(mInterface.getString("gui.algat.welcome"));
 			}
 		}
 	};
@@ -138,11 +140,11 @@ public class AlgaTController {
 	private void onTabOpen(ActionEvent event) throws IOException {
 		// TODO Do not re-raise any exception -- handle it by displaying a
 		//  dialog to the user indicating the failure
-		if (mSelected != null && mSelected.lesson != null) {
+		if (mSelectedLesson != null) {
 			mTabPane.getTabs().add(
 				new Tab(
-					mSelected.lesson.getName(),
-					LessonViewFactory.lessonView(mSelected.lesson)
+					mSelectedLesson.getName(),
+					LessonViewFactory.lessonView(mSelectedLesson)
 				)
 			);
 		}
