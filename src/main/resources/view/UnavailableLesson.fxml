@@ -17,7 +17,7 @@
 		<Image url="@../static/incomplete.png" />
 	</ImageView>
 
-	<Label fx:id="mUnavailable" text="%gui.lesson.unavailable"
+	<Label fx:id="mUnavailable" text="%gui.lessonview.unavailDesc"
 		   alignment="CENTER" style="-fx-wrap-text: true"
 		   textAlignment="CENTER"
 	>

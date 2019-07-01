@@ -49,7 +49,7 @@
                             onAction="#onTabOpen" disable="true"
                     >
                         <graphic>
-                            <ImageView fitWidth="14" preserveRatio="true">
+                            <ImageView fitWidth="13" preserveRatio="true">
                                 <Image url="@/static/play.png" />
                             </ImageView>
                         </graphic>
@@ -63,7 +63,7 @@
     hardcoded values? Is there an option to specify "extend up to available
     space"? -->
     <TabPane
-            fx:id="mTabPane" prefHeight="1000.0" prefWidth="200.0"
-            tabClosingPolicy="ALL_TABS"
+		fx:id="mTabPane" prefHeight="1000.0" prefWidth="200.0"
+		tabClosingPolicy="ALL_TABS"
     />
 </VBox>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import unibo.algat.view.ExecutionControls?>
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml"
+>
+	<padding><Insets topRightBottomLeft="16" /></padding>
+
+	<top>
+		<Label fx:id="mTitle" text="%gui.lessonview.unavailTitle">
+			<font><Font size="23" name="Arial" /></font>
+		</Label>
+	</top>
+
+	<left>
+		<Label text="%gui.lessonview.unavailQuestions" BorderPane.alignment="CENTER">
+			<font><Font size="16" name="Arial" /></font>
+		</Label>
+	</left>
+
+	<bottom>
+		<ExecutionControls
+			fx:id="mControls" alignment="CENTER" BorderPane.alignment="CENTER"
+		/>
+	</bottom>
+</fx:root>

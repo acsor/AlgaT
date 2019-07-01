@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import unibo.algat.AlgaT;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
+import unibo.algat.view.LessonView;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -107,8 +108,8 @@ public class AlgaTController {
 		}
 	};
 
-	static final String LESSONS_DIR = "lessons";
-	static final String QUESTIONS_DIR = "questions";
+	public static final String LESSONS_DIR = "lessons";
+	public static final String QUESTIONS_DIR = "questions";
 
 	public AlgaTController () {
 		mInterface = ResourceBundle.getBundle("Interface");
@@ -143,8 +144,7 @@ public class AlgaTController {
 		if (mSelectedLesson != null) {
 			mTabPane.getTabs().add(
 				new Tab(
-					mSelectedLesson.getName(),
-					LessonViewFactory.lessonView(mSelectedLesson)
+					mSelectedLesson.getName(), new LessonView(mSelectedLesson)
 				)
 			);
 		}
