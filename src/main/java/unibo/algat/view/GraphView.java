@@ -8,6 +8,12 @@ import unibo.algat.util.Pair;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <p>TODO Write documentation</p>
+ * <p>TODO Improve the generics system, possibly getting rid of the type
+ * parameter {@code T}.</p>
+ * @param <T>
+ */
 public class GraphView<T> extends Region {
 	private ObservableGraph<T> mGraph;
 

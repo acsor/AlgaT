@@ -3,7 +3,6 @@ package unibo.algat.view;
 import unibo.algat.control.AlgaTController;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
-import unibo.algat.view.LessonView;
 
 import java.lang.reflect.Constructor;
 import java.util.Locale;
@@ -29,6 +28,7 @@ public class LessonViewFactory {
         LessonView view;
 
 		try {
+			// TODO Remove cast and use instanceof operator
 			toLoad = (Class<LessonView>) Class.forName(
 				l.lessonBundle(lesson).getString(KEY_VIEW)
 			);

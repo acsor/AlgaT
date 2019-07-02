@@ -27,6 +27,10 @@ public abstract class LessonView extends BorderPane {
 		l.load();
 	}
 
+	@FXML
+	protected void initialize () {
+	}
+
 	public void setLesson(Lesson lesson) {
 		mLesson = lesson;
 

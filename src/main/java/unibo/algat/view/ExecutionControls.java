@@ -68,4 +68,8 @@ public class ExecutionControls extends HBox {
 	public Button getNextButton () {
 		return mNext;
 	}
+
+	public boolean isPlaying () {
+		return mPlaying;
+	}
 }
