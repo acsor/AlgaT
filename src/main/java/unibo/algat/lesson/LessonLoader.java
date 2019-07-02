@@ -79,7 +79,8 @@ public class LessonLoader {
      */
     public Lesson load (int lessonId) {
         final ResourceBundle r = lessonBundle(lessonId);
-        final Lesson l = new Lesson(
+
+        return new Lesson(
             lessonId,
             r.getString(String.join(".", KEY_PREFIX, KEY_NAME)),
             r.getString(String.join(".", KEY_PREFIX, KEY_DESCRIPTION)),
@@ -88,12 +89,20 @@ public class LessonLoader {
             ),
             r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
         );
-
-        return l;
     }
 
     /**
-     * @param lessonId Lesson id to fetch resources for
+     * @param lesson Lesson to fetch the associated {@link ResourceBundle} for
+     * @return a {@code ResourceBundle} instance, containing localized assets
+     * for the given lesson in the specified class path.
+     */
+    public ResourceBundle lessonBundle (Lesson lesson) {
+        return lessonBundle(lesson.getId());
+    }
+
+    /**
+     * @param lessonId Lesson id to fetch the associated {@link ResourceBundle}
+     *                for
      * @return a {@code ResourceBundle} instance, containing localized assets
      * for the given lesson in the specified class path.
      */

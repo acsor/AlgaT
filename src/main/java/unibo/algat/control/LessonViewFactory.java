@@ -1,13 +1,11 @@
 package unibo.algat.control;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.Pane;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
+import unibo.algat.view.LessonView;
 
-import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 /**
  * <p>Utility class capable of constructing a "view object" out of a
@@ -19,18 +17,29 @@ public class LessonViewFactory {
 
 	/**
 	 * @param lesson Lesson to produce a view for
-	 * @return The graphical object the lesson has been associated to
-	 * @throws IOException Upon failure of loading the lesson view FXML file.
+	 * @return The graphical object the lesson is associated to
 	 */
-	public static Pane lessonView (Lesson lesson) throws IOException {
-		final LessonLoader l = new LessonLoader(
+	public static LessonView lessonView (Lesson lesson) throws Exception {
+		LessonLoader l = new LessonLoader(
 			AlgaTController.LESSONS_DIR, Locale.getDefault()
 		);
-        final ResourceBundle r = l.lessonBundle(lesson.getId());
+        Class<LessonView> toLoad;
+        Constructor<LessonView> defaultConstructor;
+        LessonView view;
 
-        return FXMLLoader.load(
-            l.getClass().getResource(VIEW_PATH + r.getString(KEY_VIEW)),
-			ResourceBundle.getBundle("Interface")
-		);
+		try {
+			toLoad = (Class<LessonView>) Class.forName(
+				l.lessonBundle(lesson).getString(KEY_VIEW)
+			);
+			defaultConstructor = toLoad.getConstructor();
+			view = defaultConstructor.newInstance();
+		} catch (Exception e) {
+			// TODO Choose a more appropriate exception type
+            throw new Exception(e);
+		}
+
+		view.setLesson(lesson);
+
+		return view;
 	}
 }

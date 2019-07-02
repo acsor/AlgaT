@@ -10,9 +10,7 @@ import javafx.scene.control.*;
 import unibo.algat.AlgaT;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
-import unibo.algat.view.LessonView;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -138,13 +136,14 @@ public class AlgaTController {
 	 * is pressed.</p>
 	 */
 	@FXML
-	private void onTabOpen(ActionEvent event) throws IOException {
+	private void onTabOpen(ActionEvent event) throws Exception {
 		// TODO Do not re-raise any exception -- handle it by displaying a
 		//  dialog to the user indicating the failure
 		if (mSelectedLesson != null) {
 			mTabPane.getTabs().add(
 				new Tab(
-					mSelectedLesson.getName(), new LessonView(mSelectedLesson)
+					mSelectedLesson.getName(),
+					LessonViewFactory.lessonView(mSelectedLesson)
 				)
 			);
 		}
