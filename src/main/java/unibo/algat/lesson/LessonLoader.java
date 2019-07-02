@@ -23,8 +23,9 @@ public class LessonLoader {
 
     static final String KEY_PREFIX = "lesson";
     static final String KEY_NAME = "name";
-    static final String KEY_TOPICS = "topics";
     static final String KEY_DESCRIPTION = "description";
+    static final String KEY_AVAILABLE = "available";
+    static final String KEY_TOPICS = "topics";
 
     static final String FILE_FORMAT = "Lesson%d";
     static final Pattern FILE_PATTERN = Pattern.compile(
@@ -82,6 +83,9 @@ public class LessonLoader {
             lessonId,
             r.getString(String.join(".", KEY_PREFIX, KEY_NAME)),
             r.getString(String.join(".", KEY_PREFIX, KEY_DESCRIPTION)),
+            Boolean.valueOf(
+                r.getString(String.join(".", KEY_PREFIX, KEY_AVAILABLE))
+            ),
             r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
         );
 

@@ -9,6 +9,7 @@ public class Lesson {
     private int mId;
     private String mName;
     private String mDescription;
+    private boolean mAvailable;
     /**
      * <p>The nested topic categories this lesson belongs to.</p>
      *
@@ -28,7 +29,10 @@ public class Lesson {
      *               leading and trailing whitespaces.
      * @throws NullPointerException if {@code name} is {@code null}
      */
-    public Lesson(int id, String name, String description, String ... topics) {
+    public Lesson(
+        int id, String name, String description, boolean available,
+		String ... topics
+    ) {
         if (id >= 0)
             mId = id;
         else
@@ -39,6 +43,7 @@ public class Lesson {
         else
             throw new NullPointerException("name argument was null");
 
+        mAvailable = available;
 		mDescription = description;
         mTopics = new ArrayDeque<>(topics.length);
 
@@ -65,6 +70,14 @@ public class Lesson {
      */
     public String getDescription() {
         return mDescription;
+    }
+
+    /**
+     * @return {@code true} if the code relative to this lesson has been
+     * implemented, {@code false} otherwise.
+     */
+    public boolean isAvailable () {
+        return mAvailable;
     }
 
     /**

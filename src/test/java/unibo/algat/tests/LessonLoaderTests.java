@@ -25,12 +25,18 @@ public class LessonLoaderTests {
         final Map<Integer, Lesson> expected = new HashMap<>(3);
         Lesson e;
 
-		expected.put(0, new Lesson(0, "Shortest Path Problem", "AAA", "Graph"));
-		expected.put(1, new Lesson(1, "Minimum Spanning Tree", "BBB", "Graph"));
-		expected.put(2, new Lesson(
-			2, "Sample lesson name", "CCC", "A", "B", "C", "D", "E", "F", "...",
-			"Z"
-		));
+		expected.put(
+			0, new Lesson(0, "Shortest Path Problem", "AAA", true, "Graph")
+		);
+		expected.put(
+			1, new Lesson(1, "Minimum Spanning Tree", "BBB", false, "Graph")
+		);
+		expected.put(
+			2, new Lesson(
+				2, "Sample lesson name", "CCC", true, "A", "B", "C", "D", "E",
+				"F", "...", "Z"
+			)
+		);
 
 		for (Lesson actual: l.lessons()) {
             e = expected.get(actual.getId());
@@ -38,6 +44,7 @@ public class LessonLoaderTests {
             assertEquals(e.getId(), actual.getId());
 			assertEquals(e.getName(), actual.getName());
 			assertEquals(e.getDescription(), actual.getDescription());
+			assertEquals(e.isAvailable(), actual.isAvailable());
 			assertIterableEquals(e.getTopics(), actual.getTopics());
 		}
 	}
