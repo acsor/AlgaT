@@ -3,7 +3,9 @@ package unibo.algat.view;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import unibo.algat.graph.Node;
@@ -19,11 +21,25 @@ public class NodeView<T> extends Region {
 		// TODO How to correctly set the padding within a custom Region?
 		setPadding(new Insets(parent.getNodeMargin()));
 		getChildren().addAll(mNode, mNodeId);
+		//DEFAULT COLOR
+		if (mNode.getFill() instanceof Color)
+			mNode.setStroke(((Color) mNode.getFill()).darker());
+		else
+			mNode.setStroke(Color.BLACK);
+
+		mNode.setStrokeWidth(mNode.getRadius()*0.1);
 	}
 
 	public double getRadius () {
 		return mNode.getRadius();
 	}
+
+	public void setOutlineColor(Paint color){
+		if (color != null)
+			mNode.setStroke(color);
+		else throw new NullPointerException("color was null");
+	}
+
 
 	@Override
 	public void layoutChildren () {
