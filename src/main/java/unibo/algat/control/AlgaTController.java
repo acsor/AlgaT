@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import unibo.algat.AlgaT;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
+import unibo.algat.view.LessonViewFactory;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

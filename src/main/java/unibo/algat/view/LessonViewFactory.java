@@ -1,5 +1,6 @@
-package unibo.algat.control;
+package unibo.algat.view;
 
+import unibo.algat.control.AlgaTController;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
 import unibo.algat.view.LessonView;
