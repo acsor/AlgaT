@@ -17,7 +17,7 @@
     </Menu>
     <Menu text="%gui.menu.edit">
         <MenuItem text="%gui.menu.edit.pref" accelerator="Ctrl+P"
-                  disable="true" />
+                  onAction="#onShowPreferences"/>
     </Menu>
     <Menu text="%gui.menu.help">
         <MenuItem text="%gui.menu.help.usage" disable="true" />

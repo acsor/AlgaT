@@ -45,4 +45,19 @@ public class MainMenuController {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.show();
 	}
+
+	@FXML
+	private void onShowPreferences () throws IOException {
+		Stage dialog = new Stage(StageStyle.UTILITY);
+		Parent layout = FXMLLoader.load(
+				getClass().getResource("/view/Preferences.fxml")
+		);
+		Scene s = new Scene(layout);
+
+		dialog.setScene(s);
+		dialog.setTitle(mInterface.getString("gui.dialog.preferences.title"));
+		//TODO: set icon if deemed neceessary
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		dialog.show();
+	}
 }
