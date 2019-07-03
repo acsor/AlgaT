@@ -50,7 +50,8 @@ public class MainMenuController {
 	private void onShowPreferences () throws IOException {
 		Stage dialog = new Stage(StageStyle.UTILITY);
 		Parent layout = FXMLLoader.load(
-				getClass().getResource("/view/Preferences.fxml")
+			getClass().getResource("/view/Preferences.fxml"),
+			ResourceBundle.getBundle("Interface")
 		);
 		Scene s = new Scene(layout);
 
