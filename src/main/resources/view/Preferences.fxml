@@ -21,9 +21,10 @@
         <Label fx:id="mLanguageField" text="%gui.dialog.preferences.language" GridPane.columnIndex="1"
                GridPane.rowIndex="1" />
 
-        <ChoiceBox fx:id="mLanguageChoice" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+        <ComboBox fx:id="mLanguageChoice" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
 
     </GridPane>
+    <Pane VBox.vgrow="ALWAYS"/>
     <HBox alignment="BOTTOM_RIGHT">
         <Button text="%gui.dialog.preferences.save" onAction="#savePressed"/>
         <Button text="%gui.dialog.preferences.cancel" onAction="#cancelPressed"/>
