@@ -3,11 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="unibo.algat.control.PreferencesController"
-      prefHeight="400.0" prefWidth="600.0"
-      stylesheets="@preferencesStyle.css">
+      prefHeight="400.0" prefWidth="600.0" stylesheets="@preferencesStyle.css"
+>
     <GridPane>
         <columnConstraints>
             <ColumnConstraints percentWidth="10"/>
@@ -15,19 +14,27 @@
             <ColumnConstraints percentWidth="50"/>
         </columnConstraints>
 
-        <Label text="%gui.dialog.preferences.langSection" GridPane.columnIndex="0"
-               GridPane.columnSpan="2" GridPane.rowIndex="0"/>
+        <Label text="%gui.dialog.preferences.langSection"
+               GridPane.columnIndex="0" GridPane.columnSpan="2"
+               GridPane.rowIndex="0"
+        />
 
-        <Label fx:id="mLanguageField" text="%gui.dialog.preferences.language" GridPane.columnIndex="1"
-               GridPane.rowIndex="1" />
+        <Label fx:id="mLanguageField" text="%gui.dialog.preferences.language"
+               GridPane.columnIndex="1" GridPane.rowIndex="1"
+        />
 
-        <ComboBox fx:id="mLanguageChoice" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-
+        <ComboBox fx:id="mLanguageChoice" GridPane.columnIndex="2"
+                  GridPane.rowIndex="1"
+        />
     </GridPane>
-    <Pane VBox.vgrow="ALWAYS"/>
-    <HBox alignment="BOTTOM_RIGHT">
-        <Button text="%gui.dialog.preferences.save" onAction="#savePressed"/>
-        <Button text="%gui.dialog.preferences.cancel" onAction="#cancelPressed"/>
+
+    <Pane VBox.vgrow="ALWAYS" />
+
+    <HBox alignment="BOTTOM_RIGHT" >
+        <Button fx:id="mSaveButton" text="%gui.dialog.preferences.save"
+                onAction="#savePressed" />
+        <Button fx:id="mCancelButton" text="%gui.dialog.preferences.cancel"
+                onAction="#cancelPressed" />
     </HBox>
 </VBox>
 
