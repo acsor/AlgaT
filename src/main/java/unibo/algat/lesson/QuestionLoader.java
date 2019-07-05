@@ -33,11 +33,11 @@ public class QuestionLoader {
 	}
 
 	/**
-	 * @param lessonId Id of the lesson to fetch questions for
+	 * @param lesson Lesson to fetch questions for
 	 * @return A list of available questions related to the lesson identified
 	 * by {@code lessonId}.
 	 */
-	public Set<Question> questions (int lessonId) {
+	public Set<Question> questions (Lesson lesson) {
 		// TODO The Lesson and Question classes are too loosely coupled, do
 		//  something to strengthen their relationship
 		// TODO Urgent! Ensure this code works with .jar files, else find
@@ -49,7 +49,7 @@ public class QuestionLoader {
 		while (in.hasNextLine()) {
 			m = FILE_PATTERN.matcher(in.nextLine());
 
-			if (m.matches() && Integer.valueOf(m.group(1)) == lessonId) {
+			if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId()) {
 				questions.add(load(
 					Integer.valueOf(m.group(1)),
 					Integer.valueOf(m.group(2))

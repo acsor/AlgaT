@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx"
+		 xmlns:fx="http://javafx.com/fxml"
+		 spacing="15" prefHeight="1000"
+>
+	<fx:define>
+		<Image fx:id="mCorrectImage" url="@/static/correct.png" />
+	</fx:define>
+	<fx:define>
+		<Image fx:id="mWrongImage" url="@/static/wrong.png" />
+	</fx:define>
+
+	<padding><Insets topRightBottomLeft="10" /></padding>
+
+	<Label fx:id="mTitle" />
+	<Label fx:id="mText" />
+
+	<fx:define>
+		<Label fx:id="mEmpty" text="%gui.quizview.empty" />
+	</fx:define>
+	<VBox fx:id="mChoiceView" spacing="5" />
+
+	<HBox VBox.vgrow="SOMETIMES" spacing="5">
+		<ImageView
+			fx:id="mAnswerIndicator" fitWidth="32" preserveRatio="true"
+		/>
+		<Button
+			fx:id="mAccept" text="%gui.quizview.accept" disable="true"
+			alignment="BASELINE_CENTER"
+		/>
+	</HBox>
+
+	<HBox VBox.vgrow="ALWAYS" spacing="5" alignment="BOTTOM_CENTER">
+        <Button
+			fx:id="mPrev" text="%gui.quizview.prev" alignment="BOTTOM_LEFT"
+		/>
+		<Button
+			fx:id="mNext" text="%gui.quizview.next" alignment="CENTER_RIGHT"
+		/>
+
+		<Label fx:id="mPos" />
+	</HBox>
+</fx:root>

@@ -13,6 +13,7 @@ public abstract class LessonView extends BorderPane {
 	protected Lesson mLesson;
 
 	@FXML protected Label mTitle;
+	@FXML protected QuizView mQuizView;
 	@FXML protected ExecutionControls mControls;
 
 	public LessonView () throws IOException {
@@ -34,8 +35,10 @@ public abstract class LessonView extends BorderPane {
 	public void setLesson(Lesson lesson) {
 		mLesson = lesson;
 
-		if (mLesson != null)
+		if (mLesson != null) {
 			mTitle.setText(mLesson.getName());
+			mQuizView.setLesson(mLesson);
+		}
 	}
 
 	public Lesson getLesson() {

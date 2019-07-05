@@ -12,6 +12,7 @@ public class Question {
     private int mId;
     private String mText;
     private Set<Choice> mChoices;
+    private Choice mSubmittedAnswer;
     private Choice mCorrectChoice;
 
     public Question(int lessonId, int id, String text) {
@@ -41,6 +42,13 @@ public class Question {
      */
     public String getText () {
         return mText;
+    }
+
+    /**
+     * @return The list of available choices for the current question.
+     */
+    public Set<Choice> choices () {
+        return mChoices;
     }
 
     /**
@@ -91,11 +99,12 @@ public class Question {
         }
     }
 
-    /**
-     * @return The list of available choices for the current question.
-     */
-    public Set<Choice> choices () {
-        return mChoices;
+    public void setSubmittedAnswer(Choice answer) {
+        mSubmittedAnswer = answer;
+    }
+
+    public Choice getSubittedAnswer() {
+        return mSubmittedAnswer;
     }
 
     @Override
