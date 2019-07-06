@@ -12,11 +12,13 @@ import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
 import unibo.algat.view.LessonViewFactory;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class AlgaTController {
+	private TreeItem<LessonTreeNode> mTree;
+	private ResourceBundle mInterface;
+	private Lesson mSelectedLesson;
+
 	@FXML private MainMenuController mMainMenuController;
 	@FXML private TabPane mTabPane;
 	@FXML private Tab mLessonsTab;
@@ -24,8 +26,6 @@ public class AlgaTController {
 	@FXML private Button mStartLesson;
 	@FXML private Label mBottomText;
 
-	private ResourceBundle mInterface;
-	private Lesson mSelectedLesson;
 	/**
 	 * <p>Monitors the lessons (main, non-closeable) tab, deactivating the
 	 * "Close active tab" menu item when the former is visible.</p>
@@ -111,15 +111,19 @@ public class AlgaTController {
 	public static final String QUESTIONS_DIR = "questions";
 
 	public AlgaTController () {
-		mInterface = ResourceBundle.getBundle("Interface");
-	}
-
-	@FXML
-	private void initialize() {
 		final LessonLoader l = new LessonLoader(
 			LESSONS_DIR, Locale.getDefault()
 		);
 
+		mInterface = ResourceBundle.getBundle("Interface");
+		mTree = buildLessonTree(l.lessons());
+
+		mTree.setExpanded(true);
+		sortLessonTree(new ABComparator());
+	}
+
+	@FXML
+	private void initialize() {
 		mTabPane.getSelectionModel().selectedItemProperty().addListener(
 			mSelectedTabListener
 		);
@@ -127,7 +131,7 @@ public class AlgaTController {
 		mTreeView.getSelectionModel().selectedItemProperty().addListener(
 			mSelectedLessonListener
 		);
-		mTreeView.setRoot(buildLessonTree(l.lessons()));
+		mTreeView.setRoot(mTree);
 
 		mTabPane.getTabs().add(mLessonsTab);
 	}
@@ -164,8 +168,6 @@ public class AlgaTController {
 		LessonTreeNode lookedFor;
 		ObservableList<TreeItem<LessonTreeNode>> children;
 
-		root.setExpanded(true);
-
 		for (Lesson l: lessons) {
 			curr = root;
 
@@ -199,13 +201,24 @@ public class AlgaTController {
 		return root;
 	}
 
+	private void sortLessonTree (Comparator<TreeItem<LessonTreeNode>> order) {
+		Queue<TreeItem<LessonTreeNode>> toOrder = new LinkedList<>();
+
+		toOrder.add(mTree);
+
+		while (!toOrder.isEmpty()) {
+            toOrder.peek().getChildren().sort(order);
+            toOrder.addAll(toOrder.remove().getChildren());
+		}
+	}
+
 	/**
 	 * <p>Utility class encapsulating data in nodes of a {@code TreeItem}
 	 * hierarchy containing available the lessons.</p>
 	 *
 	 * <p>{@code LessonTreeNode} effectively acts as a "union". When used
 	 * as an interior node, only the {@code topic} field will be set, while when
-	 * being used as a leaf node, {@code lesson} will be set instead.</p>
+	 * being used as a leaf node, {@code lesson} will be used instead.</p>
 	 */
 	static class LessonTreeNode {
 		String topic;
@@ -237,6 +250,27 @@ public class AlgaTController {
 		@Override
 		public String toString () {
 			return (lesson == null) ? topic : lesson.getName();
+		}
+	}
+
+	/**
+	 * <p>A {@link Comparator} implementation that orders {@link TreeItem}s
+	 * made of {@link LessonTreeNode}s alphabetically, grouping "topic" nodes
+	 * first.</p>
+	 */
+	static class ABComparator implements Comparator<TreeItem<LessonTreeNode>> {
+		@Override
+		public int compare(
+			TreeItem<LessonTreeNode> n, TreeItem<LessonTreeNode> m
+		) {
+			if (n.getValue().topic != null && m.getValue().topic == null) {
+				return 1;
+			} else if (n.getValue().topic == null && m.getValue().topic != null)
+			{
+				return -1;
+			} else {
+				return n.toString().compareTo(m.toString());
+			}
 		}
 	}
 }
