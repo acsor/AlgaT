@@ -27,10 +27,8 @@ public class ShortestPathLessonView extends LessonView {
 		Graph<String> g;
 		mGraphView = new GraphView<>();
 
-		mGraphView.setPrefWidth(500);
-		mGraphView.setPrefHeight(500);
 		mGraphView.setNodeRadius(25);
-		mGraphView.setNodeMargin(25);
+		mGraphView.setNodeMargin(10);
 		mGraphView.setPadding(new Insets(10));
 		mGraphView.setGraphLayout(new GraphGridLayout(4));
 		mGraphView.setNodeFill(Color.rgb(62, 134, 160));
@@ -38,16 +36,19 @@ public class ShortestPathLessonView extends LessonView {
 		mGraphView.setGraph(new ALGraph<>());
 		g = mGraphView.getGraph();
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 40; i++) {
 			g.insertNode(new Node<>(i));
 		}
 
-		g.insertEdge(new Node<>(1), new Node<>(4));
+		g.insertEdge(new Node<>(0), new Node<>(7));
 		g.insertEdge(new Node<>(3), new Node<>(0));
 		g.insertEdge(new Node<>(2), new Node<>(1));
 		g.insertEdge(new Node<>(9), new Node<>(8));
 		g.insertEdge(new Node<>(0), new Node<>(7));
+		g.insertEdge(new Node<>(0), new Node<>(23));
 		g.insertEdge(new Node<>(4), new Node<>(5));
+		g.insertEdge(new Node<>(39), new Node<>(0));
+		g.insertEdge(new Node<>(11), new Node<>(36));
 
 		setCenter(mGraphView);
 

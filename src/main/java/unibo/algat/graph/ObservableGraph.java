@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+// TODO Rewrite the ObservableGraph system by relying on the java.beans package
 public final class ObservableGraph<T> implements Graph<T> {
 	private Graph<T> mGraph;
 

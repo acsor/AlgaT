@@ -1,7 +1,7 @@
 package unibo.algat.view;
 
-import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 
 public interface GraphLayout {
-	void layout (NodeView node, Insets bounds);
+	Point2D layout (NodeView node);
 }

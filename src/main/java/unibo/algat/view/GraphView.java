@@ -1,6 +1,11 @@
 package unibo.algat.view;
 
-import javafx.scene.layout.Region;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.geometry.VPos;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import unibo.algat.graph.*;
 import unibo.algat.util.Pair;
@@ -17,61 +22,36 @@ import java.util.Map;
 public class GraphView<T> extends Region {
 	private ObservableGraph<T> mGraph;
 
-	private Map<Node<T>, NodeView<T>> mNodes;
+	private Map<Node<T>, NodeView> mNodes;
 	private Map<Pair<Node<T>, Node<T>>, ArcView> mArcs;
 	private GraphLayout mLayout;
-	private double mNodeRadius, mNodeMargin, mNodeOutline;
+	private double mNodeRadius, mNodeMargin;
 	private Paint mNodeFill;
 
-	private NodeChangeListener<T> mNodeListener = new NodeChangeListener<> () {
-		@Override
-		public void nodeChanged(NodeChangeEvent<T> e) {
-			if (e.wasInserted()) {
-				addNodeView(e.getNode());
-			} else if (e.wasDeleted()) {
-				removeNodeView(e.getNode());
-			}
+	private static final double DEFAULT_NODE_RADIUS = 1;
+	private static final double DEFAULT_NODE_MARGIN = 1;
+
+	private NodeChangeListener<T> mNodeListener = e -> {
+		if (e.wasInserted()) {
+			addNodeView(e.getNode());
+		} else if (e.wasDeleted()) {
+			removeNodeView(e.getNode());
 		}
 	};
-	private EdgeChangeListener<T> mEdgeListener = new EdgeChangeListener<> () {
-		@Override
-		public void edgeChanged(EdgeChangeEvent<T> e) {
-			if (e.wasInserted()) {
-				addArcView(e.getFirst(), e.getSecond());
-			} else if (e.wasDeleted()) {
-				removeArcView(e.getFirst(), e.getSecond());
-			}
+	private EdgeChangeListener<T> mEdgeListener = e -> {
+		if (e.wasInserted()) {
+			addArcView(e.getFirst(), e.getSecond());
+		} else if (e.wasDeleted()) {
+			removeArcView(e.getFirst(), e.getSecond());
 		}
 	};
 
 	public GraphView () {
+		mNodes = new HashMap<>();
+		mArcs = new HashMap<>();
 		mLayout = new GraphGridLayout(6);
-	}
-
-	@Override
-	protected void layoutChildren () {
-		if (mGraph != null) {
-            for (NodeView view: mNodes.values())
-                mLayout.layout(view, getInsets());
-
-			for (Pair<Node<T>, Node<T>> k: mArcs.keySet()) {
-				mArcs.get(k).orient(
-					mNodes.get(k.getFirst()), mNodes.get(k.getSecond())
-				);
-			}
-		}
-	}
-
-	@Override
-	protected double computePrefWidth (double height) {
-		// TODO Better implement
-        return height;
-	}
-
-	@Override
-	protected double computePrefHeight (double width) {
-		// TODO Better implement
-		return width;
+		mNodeRadius = DEFAULT_NODE_RADIUS;
+		mNodeMargin = DEFAULT_NODE_MARGIN;
 	}
 
 	public void setGraph(Graph<T> graph) {
@@ -103,6 +83,9 @@ public class GraphView<T> extends Region {
 
 	public void setNodeRadius(double radius) {
 		mNodeRadius = radius;
+
+		for (NodeView v: mNodes.values())
+			v.setRadius(radius);
 	}
 
 	public double getNodeRadius() {
@@ -111,22 +94,20 @@ public class GraphView<T> extends Region {
 
 	public void setNodeMargin (double margin) {
 		mNodeMargin = margin;
+
+		for (NodeView v: mNodes.values())
+			v.setPadding(new Insets(margin));
 	}
 
 	public double getNodeMargin() {
 		return mNodeMargin;
 	}
 
-	public void setNodeOutline (double outline) {
-		mNodeOutline = outline;
-	}
-
-	public double getNodeOutline() {
-		return mNodeOutline;
-	}
-
 	public void setNodeFill (Paint nodeFill) {
 		mNodeFill = nodeFill;
+
+		for (NodeView v: mNodes.values())
+			v.setFill(nodeFill);
 	}
 
 	public Paint getNodeFill () {
@@ -135,28 +116,75 @@ public class GraphView<T> extends Region {
 
 	public void setGraphLayout (GraphLayout layout) {
 		mLayout = layout;
+
+        requestLayout();
 	}
 
 	public GraphLayout getGraphLayout () {
 		return mLayout;
 	}
 
+	@Override
+	protected void layoutChildren () {
+		final Insets bounds = getInsets();
+
+		for (NodeView view: mNodes.values()) {
+			Point2D location = mLayout.layout(view);
+			double width = Math.min(
+				view.computePrefWidth(-1), getWidth() - bounds.getLeft() -
+					bounds.getRight() - location.getX()
+			);
+			double height = Math.min(
+				view.computePrefHeight(-1), getHeight() - bounds.getTop() -
+					bounds.getBottom() - location.getY()
+			);
+
+			// TODO Ensure this is correct
+			setPrefWidth(Math.max(
+				getPrefWidth(), bounds.getLeft() + bounds.getLeft() +
+					location.getX() + view.getWidth()
+			));
+			setPrefHeight(Math.max(
+				getPrefHeight(), bounds.getTop() + bounds.getBottom() +
+					location.getY() + view.getHeight()
+			));
+
+			layoutInArea(
+				view,
+				location.getX() + bounds.getLeft(),
+				location.getY() + bounds.getTop(),
+				width, height , 0, HPos.CENTER, VPos.CENTER
+			);
+		}
+
+		for (Pair<Node<T>, Node<T>> key: mArcs.keySet()) {
+			mArcs.get(key).setNodes(
+				mNodes.get(key.getFirst()), mNodes.get(key.getSecond())
+			);
+		}
+	}
+
 	private void addNodeView (Node<T> node) {
-		final NodeView view = new NodeView<>(this, node);
+		final NodeView view = new NodeView(node);
+
+		view.setRadius(mNodeRadius);
+		view.setFill(mNodeFill);
+		view.setPadding(new Insets(mNodeMargin));
 
         mNodes.put(node, view);
         getChildren().add(view);
 	}
 
 	private void removeNodeView (Node<T> node) {
-		NodeView view = mNodes.remove(node);
+		NodeView removed = mNodes.remove(node);
 
-		if (view != null)
-			getChildren().remove(view);
+		if (removed != null) {
+			getChildren().remove(removed);
+		}
 	}
 
 	private void addArcView(Node<T> u, Node<T> v) {
-		final ArcView view = new ArcView();
+		final ArcView view = new ArcView(mNodes.get(u), mNodes.get(v));
 
 		mArcs.put(new Pair<>(u, v), view);
 		getChildren().add(view);
@@ -167,5 +195,15 @@ public class GraphView<T> extends Region {
 
 		if (view != null)
 			getChildren().remove(view);
+	}
+
+	void setDebug (boolean debug) {
+		if (debug) {
+			setBorder(new Border(new BorderStroke(
+				Color.GREEN, BorderStrokeStyle.SOLID, null, new BorderWidths(4)
+			)));
+		} else {
+			setBorder(null);
+		}
 	}
 }

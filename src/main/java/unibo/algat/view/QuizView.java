@@ -94,6 +94,8 @@ public class QuizView extends VBox {
 	};
 
 	public QuizView () throws IOException {
+		// TODO This class might be implemented by following the Java Properties
+		//  paradigm instead of relying on the huge updateView() method
 		FXMLLoader loader;
 
 		mQuestions = new ArrayList<>(0);
