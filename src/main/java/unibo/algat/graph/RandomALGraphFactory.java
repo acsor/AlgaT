@@ -1,17 +1,15 @@
 package unibo.algat.graph;
 
 /**
- * <p>A {@link RandomGraphFactory}, generating {@link ALGraph} instances only.
- * </p>
+ * <p>A {@link RandomGraphFactory} subclass, producing random {@link ALGraph}
+ * instances.</p>
  */
-public class RandomALGraphFactory extends RandomGraphFactory {
+public class RandomALGraphFactory<T> extends RandomGraphFactory<T> {
 	public RandomALGraphFactory (int nodes, int edges) {
 		super(nodes, edges);
 	}
 
-	protected Graph getInstance () {
-		// Here you need to return a fresh instance of ALGraph, supplying
-		// arguments to its constructor (if available and/or needed)
-		throw new UnsupportedOperationException("Not implemented");
+	protected Graph<T> getInstance () {
+        return new ALGraph<>();
 	}
 }

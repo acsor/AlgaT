@@ -69,12 +69,17 @@ public class GraphView<T> extends Region {
 
 		getChildren().remove(0, getChildren().size());
 
-        for (Node<T> u: mGraph.nodes()) {
+        for (Node<T> u: mGraph.nodes())
 			addNodeView(u);
 
-			for (Node<T> v: mGraph.adjacents(u))
-				addArcView(u, v);
+		for (Node<T> u: mGraph.nodes()) {
+            for (Node<T> v: mGraph.adjacents(u))
+            	addArcView(u, v);
 		}
+	}
+
+	public void setGraph(GraphFactory<T> factory) {
+		setGraph(factory.makeGraph());
 	}
 
 	public Graph<T> getGraph () {
