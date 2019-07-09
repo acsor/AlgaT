@@ -1,14 +1,17 @@
 package unibo.algat.graph;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 /**
- * <p>A node class, to be handled by {@code Graph<T>}. Note that {@code Node}
+ * <p>A node class, to be handled by {@link Graph}. Note that {@code Node}
  * instances within a graph are identified by their id only (which needs to be
  * specified by the user) and that any associated data is irrelevant in
- * determining whether a node is equal to another.</p>
+ * determining equality with another.</p>
  */
 public class Node<T> {
 	private int mId;
-	private T mData;
+	private ObjectProperty<T> mData;
 
 	public Node(int id) {
 		this(id, null);
@@ -16,7 +19,7 @@ public class Node<T> {
 
 	public Node(int id, T data) {
 		mId = id;
-		mData = data;
+        mData = new SimpleObjectProperty<>(data);
 	}
 
 	public int getId() {
@@ -27,7 +30,7 @@ public class Node<T> {
 	 * Sets the data associated with this node.
 	 */
 	public void setData(T data) {
-		mData = data;
+		mData.set(data);
 	}
 
 	/**
@@ -35,6 +38,10 @@ public class Node<T> {
 	 * contained.
 	 */
 	public T getData() {
+		return mData.get();
+	}
+
+	public ObjectProperty<T> dataProperty () {
 		return mData;
 	}
 
@@ -58,6 +65,6 @@ public class Node<T> {
 
 	@Override
 	public String toString() {
-		return String.format("[%d] %s", mId, mData);
+		return String.format("[%d] %s", mId, mData.get());
 	}
 }
