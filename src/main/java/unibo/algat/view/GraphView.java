@@ -14,16 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>TODO Write documentation</p>
- * <p>TODO Improve the generics system, possibly getting rid of the type
- * parameter {@code T}.</p>
- * @param <T>
+ * <p>A view class responsible for displaying a {@link Graph} object.</p>
  */
+// TODO Improve the generics system, possibly getting rid of the type parameter T
 public class GraphView<T> extends Region {
 	private ObservableGraph<T> mGraph;
+	private WeightFunction<T> mWeights;
 
 	private Map<Node<T>, NodeView> mNodes;
-	private Map<Pair<Node<T>, Node<T>>, ArcView> mArcs;
+	private Map<Pair<Node<T>, Node<T>>, EdgeLine> mArcs;
 	private GraphLayout mLayout;
 	private double mNodeRadius, mNodeMargin;
 	private Paint mNodeFill;
@@ -34,15 +33,17 @@ public class GraphView<T> extends Region {
 	private NodeChangeListener<T> mNodeListener = e -> {
 		if (e.wasInserted()) {
 			addNodeView(e.getNode());
+			// TODO Once a Node is removed, ObservableGraph won't notify
+			//  the removal of its associated edges!
 		} else if (e.wasDeleted()) {
 			removeNodeView(e.getNode());
 		}
 	};
 	private EdgeChangeListener<T> mEdgeListener = e -> {
 		if (e.wasInserted()) {
-			addArcView(e.getFirst(), e.getSecond());
+			addEdgeView(e.getFirst(), e.getSecond());
 		} else if (e.wasDeleted()) {
-			removeArcView(e.getFirst(), e.getSecond());
+			removeEdgeView(e.getFirst(), e.getSecond());
 		}
 	};
 
@@ -52,6 +53,10 @@ public class GraphView<T> extends Region {
 		mLayout = new GraphGridLayout(6);
 		mNodeRadius = DEFAULT_NODE_RADIUS;
 		mNodeMargin = DEFAULT_NODE_MARGIN;
+	}
+
+	public void setGraph(GraphFactory<T> factory) {
+		setGraph(factory.makeGraph());
 	}
 
 	public void setGraph(Graph<T> graph) {
@@ -67,23 +72,35 @@ public class GraphView<T> extends Region {
 		mNodes = new HashMap<>(graph.nodes().size());
 		mArcs = new HashMap<>();
 
-		getChildren().remove(0, getChildren().size());
+		getChildren().clear();
 
         for (Node<T> u: mGraph.nodes())
 			addNodeView(u);
 
 		for (Node<T> u: mGraph.nodes()) {
             for (Node<T> v: mGraph.adjacents(u))
-            	addArcView(u, v);
+            	addEdgeView(u, v);
 		}
-	}
-
-	public void setGraph(GraphFactory<T> factory) {
-		setGraph(factory.makeGraph());
 	}
 
 	public Graph<T> getGraph () {
 		return mGraph;
+	}
+
+	public void setWeightFunction(WeightFunction<T> w) {
+        mWeights = w;
+
+        if (mWeights != null) {
+			for (Pair<Node<T>, Node<T>> edge: mArcs.keySet()) {
+				mArcs.get(edge).setWeight(
+                    mWeights.weight(edge.getFirst(), edge.getSecond())
+				);
+			}
+		}
+	}
+
+	public WeightFunction<T> getWeightFunction() {
+		return mWeights;
 	}
 
 	public void setNodeRadius(double radius) {
@@ -161,12 +178,6 @@ public class GraphView<T> extends Region {
 				width, height , 0, HPos.CENTER, VPos.CENTER
 			);
 		}
-
-		for (Pair<Node<T>, Node<T>> key: mArcs.keySet()) {
-			mArcs.get(key).setNodes(
-				mNodes.get(key.getFirst()), mNodes.get(key.getSecond())
-			);
-		}
 	}
 
 	private void addNodeView (Node<T> node) {
@@ -188,15 +199,18 @@ public class GraphView<T> extends Region {
 		}
 	}
 
-	private void addArcView(Node<T> u, Node<T> v) {
-		final ArcView view = new ArcView(mNodes.get(u), mNodes.get(v));
+	private void addEdgeView(Node<T> u, Node<T> v) {
+		final EdgeLine view = new EdgeLine(
+			mNodes.get(u), mNodes.get(v),
+			mWeights != null ? mWeights.weight(u, v): null
+		);
 
 		mArcs.put(new Pair<>(u, v), view);
 		getChildren().add(view);
 	}
 
-	private void removeArcView(Node<T> u, Node<T> v) {
-		ArcView view = mArcs.remove(new Pair<>(u, v));
+	private void removeEdgeView(Node<T> u, Node<T> v) {
+		EdgeLine view = mArcs.remove(new Pair<>(u, v));
 
 		if (view != null)
 			getChildren().remove(view);
