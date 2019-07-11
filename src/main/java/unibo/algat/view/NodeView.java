@@ -2,6 +2,7 @@ package unibo.algat.view;
 
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
@@ -9,20 +10,21 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.text.Text;
 import unibo.algat.graph.Node;
 
 public class NodeView extends Region {
 	private Node<?> mNode;
 
-	private Circle mNodeView;
-	private Text mNodeId;
+	private Circle mCircle;
+	private Label mId;
+	private Label mLabel;
 
 	private SimpleDoubleProperty mRadius;
 	private SimpleObjectProperty<Point2D> mCenter;
@@ -43,19 +45,21 @@ public class NodeView extends Region {
 
 	public NodeView(Node<?> node) {
 		mNode = node;
-		mNodeView = new Circle(DEFAULT_RADIUS, DEFAULT_FILL);
-		mNodeId = new Text(String.valueOf(mNode.getId()));
+		mCircle = new Circle(DEFAULT_RADIUS, DEFAULT_FILL);
+		mId = new Label(String.valueOf(mNode.getId()));
+		mLabel = new Label();
 
 		mRadius = new SimpleDoubleProperty();
 		mCenter = new SimpleObjectProperty<>();
 
-		mNodeView.setStrokeType(StrokeType.INSIDE);
-		mRadius.bindBidirectional(mNodeView.radiusProperty());
-		mNodeView.strokeWidthProperty().bind(mRadius.multiply(0.1));
+		mLabel.textProperty().bind(mNode.dataProperty().asString());
+		mCircle.setStrokeType(StrokeType.INSIDE);
+		mRadius.bindBidirectional(mCircle.radiusProperty());
+		mCircle.strokeWidthProperty().bind(mRadius.multiply(0.1));
 
 		mCenter.bind(new ObjectBinding<>() {
 			{
-				super.bind(
+				bind(
 					layoutXProperty(), layoutYProperty(), translateXProperty(),
 					translateYProperty(), mRadius
 				);
@@ -66,10 +70,8 @@ public class NodeView extends Region {
 				final Insets bounds = getInsets();
 
 				return new Point2D(
-					getLayoutX() + getTranslateX() + mNodeView.getRadius() +
-						bounds.getLeft(),
-					getLayoutY() + getTranslateY() + mNodeView.getRadius() +
-						bounds.getTop()
+					getLayoutX() + getTranslateX() + mRadius.get() + bounds.getLeft(),
+					getLayoutY() + getTranslateY() + mRadius.get() + bounds.getTop()
 				);
 			}
 		});
@@ -81,7 +83,7 @@ public class NodeView extends Region {
 		setOnMouseReleased(event -> setOpacity(1));
 		setOnMouseDragged(mDragListener);
 
-		getChildren().addAll(mNodeView, mNodeId);
+		getChildren().addAll(mCircle, mId, mLabel);
 	}
 
 	public Point2D getCenter () {
@@ -105,32 +107,38 @@ public class NodeView extends Region {
 	}
 
 	public void setFill (Paint color){
-		mNodeView.setFill(color);
+		mCircle.setFill(color);
 
 		if (color instanceof Color)
-			mNodeView.setStroke(((Color) color).darker());
+			mCircle.setStroke(((Color) color).darker());
 		else
-			mNodeView.setStroke(DEFAULT_STROKE);
+			mCircle.setStroke(DEFAULT_STROKE);
 	}
 
 	public Paint getFill () {
-		return mNodeView.getFill();
+		return mCircle.getFill();
+	}
+
+	public ObjectProperty<Paint> fillProperty () {
+		return mCircle.fillProperty();
+	}
+
+	public ObjectProperty<Paint> outlineProperty () {
+		return mCircle.strokeProperty();
 	}
 
 	@Override
 	protected void layoutChildren () {
-//		super.layoutChildren();
 		final Insets bounds = getInsets();
 		final double x = bounds.getLeft(), y = bounds.getTop(),
 			width = getWidth() - bounds.getLeft() - bounds.getRight(),
 			height = getHeight() - bounds.getTop() - bounds.getBottom();
 
+		layoutInArea(mCircle, x, y, width, height, 0, HPos.CENTER, VPos.TOP);
 		layoutInArea(
-			mNodeView, x, y, width, height, 0, HPos.CENTER, VPos.CENTER
+			mId, x, y, width, 2 * mRadius.get() , 0, HPos.CENTER, VPos.CENTER
 		);
-		layoutInArea(
-			mNodeId, x, y, width, height , 0, HPos.CENTER, VPos.CENTER
-		);
+		layoutInArea(mLabel, x, y, width, height, 0, HPos.CENTER, VPos.BOTTOM);
 	}
 
 	@Override
@@ -144,7 +152,8 @@ public class NodeView extends Region {
 	protected double computePrefHeight (double width) {
 		final Insets insets = getInsets();
 
-		return insets.getTop() + 2 * mRadius.get() + insets.getBottom();
+		return insets.getTop() + 2 * mRadius.get() + insets.getBottom()
+			+ mLabel.getHeight();
 	}
 
 	void setDebug (boolean debug) {
