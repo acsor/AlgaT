@@ -12,16 +12,34 @@ import java.util.NoSuchElementException;
  *
  * @param <T> Type of the graph nodes to assign weights to.
  */
-public class DifferentialWeightFunction<T extends Number> implements
-	WeightFunction<T, Double> {
+// TODO Might as well define a ArithmeticWeightFunction
+public class DifferentialWeightFunction<T extends Number>
+	extends WeightFunction<T> {
+	public DifferentialWeightFunction(Graph<T> graph) {
+        super(graph);
+	}
 
 	@Override
-	public Double weight(Graph<T> g, Node<T> a, Node<T> b) {
-		if (g.containsEdge(a, b))
-			return b.getData().doubleValue() - a.getData().doubleValue();
+	public DifferentialEdgeWeight<T> weight(Node<T> a, Node<T> b) {
+		if (mGraph.containsEdge(a, b))
+            return new DifferentialEdgeWeight<>(a, b);
 		else
 			throw new NoSuchElementException(
 				"The (a, b) edge is not in the graph"
 			);
+	}
+
+	public static class DifferentialEdgeWeight<T extends Number>
+		extends EdgeWeight<T> {
+
+		public DifferentialEdgeWeight(Node<T> a, Node<T> b) {
+			super(a, b);
+			bind(a.dataProperty(), b.dataProperty());
+		}
+
+		@Override
+		protected double computeValue() {
+			return mB.getData().doubleValue() - mA.getData().doubleValue();
+		}
 	}
 }
