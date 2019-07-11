@@ -1,5 +1,7 @@
 package unibo.algat.graph;
 
-public interface EdgeChangeListener<T> {
+import java.util.EventListener;
+
+public interface EdgeChangeListener<T> extends EventListener {
 	void edgeChanged(EdgeChangeEvent<T> e);
 }

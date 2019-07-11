@@ -101,4 +101,9 @@ public final class ObservableGraph<T> implements Graph<T> {
 	public void removeEdgeChangeListener (EdgeChangeListener<T> l) {
 		mEdgeListeners.remove(l);
 	}
+
+	@Override
+	public String toString () {
+		return mGraph.toString();
+	}
 }
