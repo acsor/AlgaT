@@ -8,7 +8,6 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.QuadCurveTo;
 import unibo.algat.graph.EdgeWeight;
-import unibo.algat.util.Point2D360;
 
 /**
  * <p>A class responsible for tracing a parabola curve between two
@@ -85,15 +84,13 @@ public class EdgeLine extends Path {
 
 			@Override
 			protected Point2D computeValue() {
-				Point2D360 diff = new Point2D360(
-						mTop.get().subtract(mEnd.get()).normalize().getX(),
-						mTop.get().subtract(mEnd.get()).normalize().getY());
-				final double newAngle = diff.angle(1, 0) + 230;
+				Point2D diff = mTop.get().subtract(mEnd.get()).normalize();
+				// Get diff angle and add 30 degrees to it
+				final double newAngle = Math.atan2(
+					diff.getY(), diff.getX()
+				) + Math.PI / 6.0;
 
-				diff = new Point2D360(
-					Math.cos(Math.toRadians(newAngle)),
-					Math.sin(Math.toRadians(newAngle))
-				);
+				diff = new Point2D(Math.cos(newAngle), Math.sin(newAngle));
 
 				return mEnd.get().add(diff.multiply(15));
 			}
@@ -103,15 +100,13 @@ public class EdgeLine extends Path {
 
 			@Override
 			protected Point2D computeValue() {
-				Point2D360 diff = new Point2D360(
-						mTop.get().subtract(mEnd.get()).normalize().getX(),
-						mTop.get().subtract(mEnd.get()).normalize().getY());
-				final double newAngle = diff.angle(1, 0) - 50;
+				Point2D diff = mTop.get().subtract(mEnd.get()).normalize();
+				// Get diff angle and subtract 30 degrees to it
+				final double newAngle = Math.atan2(
+					diff.getY(), diff.getX()
+				) - Math.PI / 6.0;
 
-				diff = new Point2D360(
-					Math.cos(Math.toRadians(newAngle)),
-					Math.sin(Math.toRadians(newAngle))
-				);
+				diff = new Point2D(Math.cos(newAngle), Math.sin(newAngle));
 
 				return mEnd.get().add(diff.multiply(15));
 			}
