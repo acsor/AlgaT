@@ -22,6 +22,7 @@ public class ShortestPathLessonView extends LessonView {
 	@FXML
 	protected void initialize () {
 		super.initialize();
+
 		final Random r = new Random(System.currentTimeMillis());
 		final RandomALGraphFactory<Integer> factory =
 			new RandomALGraphFactory<>(20,	10);

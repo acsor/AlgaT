@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
-<?import unibo.algat.view.ExecutionControls?>
 <?import unibo.algat.view.QuizView?>
 <fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml"
 >
@@ -17,10 +16,4 @@
 	</top>
 
 	<right><QuizView fx:id="mQuizView" /></right>
-
-	<bottom>
-		<ExecutionControls
-			fx:id="mControls" alignment="CENTER" BorderPane.alignment="CENTER"
-		/>
-	</bottom>
 </fx:root>

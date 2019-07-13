@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public abstract class LessonView extends BorderPane {
 
 	@FXML protected Label mTitle;
 	@FXML protected QuizView mQuizView;
-	@FXML protected ExecutionControls mControls;
+	protected AlgaToolBar mToolBar;
 
 	public LessonView () throws IOException {
 		FXMLLoader l = new FXMLLoader(
@@ -30,6 +31,11 @@ public abstract class LessonView extends BorderPane {
 
 	@FXML
 	protected void initialize () {
+		mToolBar = AlgaTApplication.getInstance().getToolBar();
+
+		mToolBar.getTogglePlayButton().setOnAction(
+            e -> System.out.println("Toggle play button pressed!")
+		);
 	}
 
 	public void setLesson(Lesson lesson) {

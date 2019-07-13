@@ -1,6 +1,5 @@
 package unibo.algat.view;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
@@ -19,11 +18,6 @@ public class UnavailableLessonView extends LessonView {
 		l.setController(this);
 
 		l.load();
-	}
-
-	@FXML
-	protected void initialize () {
-		mControls.setDisable(true);
 	}
 }
 

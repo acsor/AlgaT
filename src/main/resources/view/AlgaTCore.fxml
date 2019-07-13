@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<TabPane
+		xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+		fx:id="mTabPane" fx:controller="unibo.algat.control.AlgaTCoreController"
+		prefHeight="1000.0" tabClosingPolicy="ALL_TABS"
+>
+	<!-- TODO There are too many hardcoded <padding> tags. Setting a global
+	 style should clean them up. -->
+
+	<!-- mLessonsTab is later added through code to the tab pane to have one of
+	its listeners fire up automatically -->
+	<fx:define>
+		<Tab fx:id="mLessonsTab" text="%gui.algat.lessonsTab"
+			 closable="false">
+			<VBox prefHeight="Infinity" prefWidth="Infinity">
+				<TreeView fx:id="mTreeView" />
+
+				<ScrollPane fitToWidth="true" fitToHeight="true">
+					<Label fx:id="mBottomText" text="%gui.algat.welcome"
+						   prefHeight="300.0"
+						   alignment="CENTER" style="-fx-wrap-text: true"
+					>
+						<padding><Insets topRightBottomLeft="20" /></padding>
+
+						<font><Font name="Arial" size="14" /></font>
+					</Label>
+				</ScrollPane>
+
+				<Button
+						fx:id="mStartLesson" text="%gui.algat.startLesson"
+						onAction="#onTabOpen" disable="true"
+				>
+					<VBox.margin>
+						<Insets topRightBottomLeft="15" />
+					</VBox.margin>
+					<graphic>
+						<ImageView fitWidth="13" preserveRatio="true">
+							<Image url="@/static/play.png" />
+						</ImageView>
+					</graphic>
+				</Button>
+			</VBox>
+		</Tab>
+	</fx:define>
+</TabPane>

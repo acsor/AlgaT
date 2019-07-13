@@ -7,19 +7,23 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import unibo.algat.AlgaT;
+import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
+import unibo.algat.view.AlgaToolBar;
 import unibo.algat.view.LessonViewFactory;
 
 import java.util.*;
 
-public class AlgaTController {
+public class AlgaTCoreController {
 	private TreeItem<LessonTreeNode> mTree;
 	private ResourceBundle mInterface;
 	private Lesson mSelectedLesson;
 
-	@FXML private MainMenuController mMainMenuController;
+	private AlgaTApplication mApp;
+	private MainMenuController mMainMenuController;
+	private AlgaToolBar mToolBar;
+
 	@FXML private TabPane mTabPane;
 	@FXML private Tab mLessonsTab;
 	@FXML private TreeView<LessonTreeNode> mTreeView;
@@ -40,10 +44,12 @@ public class AlgaTController {
 			String windowTitle;
 
 			if (newValue == mLessonsTab) {
+				mToolBar.setDisable(true);
 				// Deactivate or activate the "Close tab" menu item
 				mMainMenuController.mCloseTab.setDisable(true);
 				windowTitle = mInterface.getString("gui.app.title");
 			} else {
+				mToolBar.setDisable(false);
 				mMainMenuController.mCloseTab.setDisable(false);
 				windowTitle = String.format(
 					"%s - %s", newValue.getText(),
@@ -52,7 +58,7 @@ public class AlgaTController {
 			}
 
 			// Set the updated window title
-			AlgaT.getInstance().setWindowTitle(windowTitle);
+			AlgaTApplication.getInstance().setWindowTitle(windowTitle);
 		}
 	};
 	/**
@@ -110,11 +116,12 @@ public class AlgaTController {
 	public static final String LESSONS_DIR = "lessons";
 	public static final String QUESTIONS_DIR = "questions";
 
-	public AlgaTController () {
+	public AlgaTCoreController() {
 		final LessonLoader l = new LessonLoader(
 			LESSONS_DIR, Locale.getDefault()
 		);
 
+		mApp = AlgaTApplication.getInstance();
 		mInterface = ResourceBundle.getBundle("Interface");
 		mTree = buildLessonTree(l.lessons());
 
@@ -124,6 +131,9 @@ public class AlgaTController {
 
 	@FXML
 	private void initialize() {
+		mMainMenuController = mApp.getMenuBarController();
+		mToolBar = mApp.getToolBar();
+
 		mTabPane.getSelectionModel().selectedItemProperty().addListener(
 			mSelectedTabListener
 		);
