@@ -1,45 +1,39 @@
 package unibo.algat.view;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
-public class ExecutionControls extends HBox {
-	private boolean mPlaying;
+public class AlgaToolBar extends ToolBar {
+	private BooleanProperty mPlaying;
 
-	@FXML ImageView mPlayImage;
-	@FXML ImageView mPauseImage;
-
-	@FXML Button mStop;
-	@FXML Button mPrev;
-	@FXML Button mTogglePlay;
-	@FXML Button mNext;
+	@FXML ImageView mPlayImage, mPauseImage;
+	@FXML Button mStop, mPrev, mTogglePlay, mNext;
 
 	/**
 	 * <p>Switches the graphic of {@code mTogglePlay} button from play to
 	 * pause statuses, updating the {@code mPlaying} variable as well.</p>
 	 */
-	private final EventHandler<ActionEvent>
-		mToggleHandler = new EventHandler<>() {
-		@Override
-		public void handle(ActionEvent event) {
-			mPlaying = !mPlaying;
+	private final EventHandler<ActionEvent> mToggleHandler = event -> {
+		mPlaying.set(!mPlaying.get());
 
-			mTogglePlay.setGraphic(mPlaying ? mPauseImage: mPlayImage);
-		}
+		mTogglePlay.setGraphic(mPlaying.get() ? mPauseImage: mPlayImage);
 	};
 
-	public ExecutionControls () throws IOException {
+	public AlgaToolBar() throws IOException {
 		FXMLLoader l = new FXMLLoader(
-			getClass().getResource("/view/ExecutionControls.fxml")
+			getClass().getResource("/view/AlgaToolBar.fxml")
 		);
 
+		mPlaying = new SimpleBooleanProperty(this, "playing", false);
 		l.setRoot(this);
 		l.setController(this);
 
@@ -48,8 +42,6 @@ public class ExecutionControls extends HBox {
 
 	@FXML
 	private void initialize () {
-		mPlaying = false;
-
 		mTogglePlay.addEventHandler(ActionEvent.ACTION, mToggleHandler);
 	}
 
@@ -69,7 +61,15 @@ public class ExecutionControls extends HBox {
 		return mNext;
 	}
 
+	public void setPlaying (boolean playing) {
+        mPlaying.set(playing);
+	}
+
 	public boolean isPlaying () {
+		return mPlaying.get();
+	}
+
+	public BooleanProperty playingProperty () {
 		return mPlaying;
 	}
 }
