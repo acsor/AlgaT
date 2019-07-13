@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
@@ -173,6 +175,9 @@ public class AlgaTCoreController {
 		final TreeItem<LessonTreeNode> root = new TreeItem<>(
 			new LessonTreeNode(mInterface.getString("gui.algat.treeRoot"))
 		);
+		final Image unavailable = new Image(
+			"/static/lesson-unavailable.png", 16, 16, true, false
+		);
 		TreeItem<LessonTreeNode> curr;
 		boolean found;
 		LessonTreeNode lookedFor;
@@ -205,7 +210,12 @@ public class AlgaTCoreController {
 			}
 
 			// Add the leaf node
-			curr.getChildren().add(new TreeItem<>(new LessonTreeNode(l)));
+			if (l.isAvailable())
+				curr.getChildren().add(new TreeItem<>(new LessonTreeNode(l)));
+			else
+				curr.getChildren().add(new TreeItem<>(
+					new LessonTreeNode(l), new ImageView(unavailable)
+				));
 		}
 
 		return root;
