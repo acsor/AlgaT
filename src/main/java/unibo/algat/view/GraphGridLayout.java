@@ -11,6 +11,10 @@ public class GraphGridLayout implements GraphLayout {
 	private int mCurrPos;
 	private int mCols;
 
+	public GraphGridLayout() {
+        this(1);
+	}
+
 	public GraphGridLayout(int columns) {
 		mNodePos = new HashMap<>();
 		mCurrPos = 0;

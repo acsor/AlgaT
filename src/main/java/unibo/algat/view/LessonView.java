@@ -1,41 +1,39 @@
 package unibo.algat.view;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 public abstract class LessonView extends BorderPane {
 	protected Lesson mLesson;
 
-	@FXML protected Label mTitle;
-	@FXML protected QuizView mQuizView;
+	protected Label mTitle;
+	protected QuizView mQuizView;
 	protected AlgaToolBar mToolBar;
 
 	public LessonView () throws IOException {
-		FXMLLoader l = new FXMLLoader(
-			getClass().getResource("/view/LessonView.fxml"),
-			ResourceBundle.getBundle("Interface")
-		);
-
-		l.setRoot(this);
-		l.setController(this);
-
-		l.load();
-	}
-
-	@FXML
-	protected void initialize () {
+		// TODO It looks like defining double-nested custom controls through
+		//  FXML yields some problems, particularly with fetching elements
+		//  through fx:id. For this reason, LessonView FXML file was deleted,
+		//  to let its subclasses have one. One should try to have LessonView
+		//  posses one too.
+		mTitle = new Label();
+		mQuizView = new QuizView();
 		mToolBar = AlgaTApplication.getInstance().getToolBar();
 
+		mTitle.setFont(new Font("Arial", 23));
 		mToolBar.getTogglePlayButton().setOnAction(
-            e -> System.out.println("Toggle play button pressed!")
+			e -> System.out.println("Toggle play button pressed!")
 		);
+
+		setTop(mTitle);
+		setRight(mQuizView);
+		setPadding(new Insets(16));
 	}
 
 	public void setLesson(Lesson lesson) {

@@ -16,7 +16,6 @@ import java.util.Map;
 /**
  * <p>A view class responsible for displaying a {@link Graph} object.</p>
  */
-// TODO Improve the generics system, possibly getting rid of the type parameter T
 public class GraphView<T> extends Region {
 	private ObservableGraph<T> mGraph;
 	private WeightFunction<T> mWeights;
@@ -152,14 +151,6 @@ public class GraphView<T> extends Region {
 
 		for (NodeView view: mNodes.values()) {
 			Point2D location = mLayout.layout(view);
-			double width = Math.min(
-				view.computePrefWidth(-1), getWidth() - bounds.getLeft() -
-					bounds.getRight() - location.getX()
-			);
-			double height = Math.min(
-				view.computePrefHeight(-1), getHeight() - bounds.getTop() -
-					bounds.getBottom() - location.getY()
-			);
 
 			// TODO Ensure this is correct
 			setPrefWidth(Math.max(
@@ -175,7 +166,8 @@ public class GraphView<T> extends Region {
 				view,
 				location.getX() + bounds.getLeft(),
 				location.getY() + bounds.getTop(),
-				width, height , 0, HPos.CENTER, VPos.CENTER
+				view.computePrefWidth(-1), view.computePrefHeight(-1),
+				0, HPos.CENTER, VPos.CENTER
 			);
 		}
 	}
