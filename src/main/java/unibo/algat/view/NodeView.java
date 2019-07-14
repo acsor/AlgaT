@@ -41,7 +41,6 @@ public class NodeView extends Region {
 
 	private static final double DEFAULT_RADIUS = 4.0;
 	private static final Paint DEFAULT_FILL = Color.rgb(62, 134, 160);
-	private static final Paint DEFAULT_STROKE = Color.BLACK;
 
 	public NodeView(Node<?> node) {
 		mNode = node;
@@ -51,6 +50,12 @@ public class NodeView extends Region {
 
 		mRadius = new SimpleDoubleProperty();
 		mCenter = new SimpleObjectProperty<>();
+
+		getStyleClass().add("node-view");
+		// TODO Why I cannot apply the .node-view > .circle selector is out
+		//  of me
+		mCircle.getStyleClass().add("node-view-circle");
+		mId.getStyleClass().add("node-view-id");
 
 		mLabel.textProperty().bind(mNode.dataProperty().asString());
 		mCircle.setStrokeType(StrokeType.INSIDE);
@@ -108,13 +113,11 @@ public class NodeView extends Region {
 		return mRadius;
 	}
 
-	public void setFill (Paint color){
-		mCircle.setFill(color);
+	public void setFill (Paint paint){
+		mCircle.setFill(paint);
 
-		if (color instanceof Color)
-			mCircle.setStroke(((Color) color).darker());
-		else
-			mCircle.setStroke(DEFAULT_STROKE);
+		if (paint instanceof Color)
+			mCircle.setStroke(((Color) paint).darker());
 	}
 
 	public Paint getFill () {

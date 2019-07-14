@@ -1,9 +1,7 @@
 package unibo.algat.view;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font;
 import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 
@@ -26,14 +24,11 @@ public abstract class LessonView extends BorderPane {
 		mQuizView = new QuizView();
 		mToolBar = AlgaTApplication.getInstance().getToolBar();
 
-		mTitle.setFont(new Font("Arial", 23));
-		mToolBar.getTogglePlayButton().setOnAction(
-			e -> System.out.println("Toggle play button pressed!")
-		);
+		getStyleClass().add("lesson-view");
+		mTitle.getStyleClass().add("lesson-view-title");
 
 		setTop(mTitle);
 		setRight(mQuizView);
-		setPadding(new Insets(16));
 	}
 
 	public void setLesson(Lesson lesson) {

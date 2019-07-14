@@ -35,7 +35,7 @@ public class QuizView extends VBox {
 	private ResourceBundle mInterface;
 
 	@FXML private Image mCorrectImage, mWrongImage;
-	@FXML private Label mTitle, mText;
+	@FXML private Label mText;
 	@FXML private Label mEmpty;
 	@FXML private VBox mChoiceView;
 	private ToggleGroup mChoiceGroup;
@@ -187,11 +187,6 @@ public class QuizView extends VBox {
 	 * will be used instead.</p>
 	 */
 	private void updateView () {
-		if (mLesson != null)
-			mTitle.setText(mLesson.getName());
-        else
-			mTitle.setText(mInterface.getString("gui.quizview.title.unavail"));
-
         // Clear up previous content
 		mChoiceView.getChildren().clear();
 		mChoiceGroup.getToggles().clear();

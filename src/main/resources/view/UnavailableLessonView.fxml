@@ -1,32 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import unibo.algat.view.LessonView?>
 <fx:root type="unibo.algat.view.LessonView" xmlns="http://javafx.com/javafx"
-		 xmlns:fx="http://javafx.com/fxml"
+		 xmlns:fx="http://javafx.com/fxml" styleClass="unavailable-lesson-view"
 >
 	<center>
-		<HBox alignment="CENTER">
-			<padding>
-				<Insets top="20" left="40" bottom="20" right="40" />
-			</padding>
-
-			<ImageView fitWidth="64" fitHeight="64">
+		<HBox styleClass="center">
+			<ImageView fitWidth="64" preserveRatio="true">
 				<Image url="@../static/incomplete.png" />
 			</ImageView>
 
-			<Label fx:id="mUnavailable" text="%gui.lessonview.unavailDesc"
-				   alignment="CENTER" style="-fx-wrap-text: true"
-				   textAlignment="CENTER"
-			>
-				<padding><Insets topRightBottomLeft="20" /></padding>
-
-				<font><Font name="Helvetica" size="15" /></font>
-			</Label>
+			<Label fx:id="mUnavailable" text="%gui.lessonview.unavailDesc" />
 		</HBox>
 	</center>
 </fx:root>

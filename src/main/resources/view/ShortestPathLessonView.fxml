@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
 <?import unibo.algat.view.GraphGridLayout?>
 <?import unibo.algat.view.GraphView?>
@@ -11,14 +10,8 @@
 >
 	<center>
 		<ScrollPane fx:id="mScrollPane" fitToHeight="true" fitToWidth="true">
-            <GraphView
-					fx:id="mGraphView" nodeRadius="25" nodeMargin="15"
-					nodeFill="#3E86A0"
-			>
-                <padding><Insets topRightBottomLeft="10" /></padding>
-				<graphLayout>
-					<GraphGridLayout columns="4" />
-				</graphLayout>
+            <GraphView fx:id="mGraphView" nodeRadius="25" nodeMargin="15">
+				<graphLayout><GraphGridLayout columns="4" /></graphLayout>
 			</GraphView>
 		</ScrollPane>
 	</center>

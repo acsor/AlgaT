@@ -49,8 +49,9 @@ public class AlgaTApplication extends Application {
 		mStage = stage;
 
 		final Parent root = l.load();
-		final Scene s = new Scene(root, 500, 500);
+		final Scene s = new Scene(root, 600, 500);
 
+		s.getStylesheets().add("/static/AlgaT.css");
 		mStage.setScene(s);
 		mStage.setTitle(r.getString("gui.app.title"));
 		mStage.getIcons().add(new Image(
