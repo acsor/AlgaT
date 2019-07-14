@@ -29,6 +29,9 @@ public class GraphView<T> extends Region {
 	private static final double DEFAULT_NODE_RADIUS = 1;
 	private static final double DEFAULT_NODE_MARGIN = 1;
 
+	private static final double NODE_VIEW_ORDER = 1;
+	private static final double EDGE_VIEW_ORDER = 2;
+
 	private NodeChangeListener<T> mNodeListener = e -> {
 		if (e.wasInserted()) {
 			addNodeView(e.getNode());
@@ -178,6 +181,8 @@ public class GraphView<T> extends Region {
 		view.setRadius(mNodeRadius);
 		view.setFill(mNodeFill);
 		view.setPadding(new Insets(mNodeMargin));
+		view.setOpacity(0.95);
+		view.setViewOrder(NODE_VIEW_ORDER);
 
         mNodes.put(node, view);
         getChildren().add(view);
@@ -197,6 +202,7 @@ public class GraphView<T> extends Region {
 			mWeights != null ? mWeights.weight(u, v): null
 		);
 
+		view.setViewOrder(EDGE_VIEW_ORDER);
 		mArcs.put(new Pair<>(u, v), view);
 		getChildren().add(view);
 	}

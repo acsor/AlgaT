@@ -30,7 +30,7 @@ public class NodeView extends Region {
 	private SimpleObjectProperty<Point2D> mCenter;
 	private Point2D mDragStart;
 
-	private EventHandler<MouseEvent> mDragListener = event -> {
+	private final EventHandler<MouseEvent> mDragListener = event -> {
 		Point2D diff = new Point2D(event.getX(), event.getY()).subtract(
 			mDragStart
 		);
@@ -76,12 +76,14 @@ public class NodeView extends Region {
 			}
 		});
 
-		setOnMousePressed(event -> {
+		// TODO Pressing right in the center of the circle does not trigger
+		//  drag events
+		mCircle.setOnMousePressed(event -> {
 			mDragStart = new Point2D(event.getX(), event.getY());
-			setOpacity(0.5);
+			setOpacity(getOpacity() - 0.5);
 		});
-		setOnMouseReleased(event -> setOpacity(1));
-		setOnMouseDragged(mDragListener);
+		mCircle.setOnMouseReleased(event -> setOpacity(getOpacity() + 0.5));
+		mCircle.setOnMouseDragged(mDragListener);
 
 		getChildren().addAll(mCircle, mId, mLabel);
 	}

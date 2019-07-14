@@ -3,10 +3,8 @@ package unibo.algat.view;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.QuadCurveTo;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 import unibo.algat.graph.EdgeWeight;
 
 /**
@@ -30,7 +28,10 @@ public class EdgeLine extends Path {
 	 */
 	public EdgeLine(NodeView u, NodeView v, EdgeWeight<?> weight) {
 		setWeight(weight);
-        // TODO Set stroke Paint
+		// TODO Choose nicer stroke
+        setStroke(Color.web("#353E4C"));
+		setStrokeLineCap(StrokeLineCap.ROUND);
+		setStrokeLineJoin(StrokeLineJoin.ROUND);
 
 		mTop  = new ObjectBinding<>() {
 			{ bind(u.centerProperty(), v.centerProperty()); }
