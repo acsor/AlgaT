@@ -21,7 +21,7 @@ public class GraphView<T> extends Region {
 	private WeightFunction<T> mWeights;
 
 	private Map<Node<T>, NodeView> mNodes;
-	private Map<Pair<Node<T>, Node<T>>, EdgeLine> mArcs;
+	private Map<Pair<Node<T>, Node<T>>, EdgeView> mEdges;
 	private GraphLayout mLayout;
 	private double mNodeRadius, mNodeMargin;
 	private Paint mNodeFill;
@@ -49,7 +49,8 @@ public class GraphView<T> extends Region {
 
 	public GraphView () {
 		mNodes = new HashMap<>();
-		mArcs = new HashMap<>();
+		mEdges = new HashMap<>();
+
 		mLayout = new GraphGridLayout(6);
 		mNodeRadius = DEFAULT_NODE_RADIUS;
 		mNodeMargin = DEFAULT_NODE_MARGIN;
@@ -70,7 +71,7 @@ public class GraphView<T> extends Region {
 		mGraph.addEdgeChangeListener(mEdgeListener);
 
 		mNodes = new HashMap<>(graph.nodes().size());
-		mArcs = new HashMap<>();
+		mEdges = new HashMap<>();
 
 		getChildren().clear();
 
@@ -91,8 +92,8 @@ public class GraphView<T> extends Region {
         mWeights = w;
 
         if (mWeights != null) {
-			for (Pair<Node<T>, Node<T>> edge: mArcs.keySet()) {
-				mArcs.get(edge).setWeight(
+			for (Pair<Node<T>, Node<T>> edge: mEdges.keySet()) {
+				mEdges.get(edge).setWeight(
                     mWeights.weight(edge.getFirst(), edge.getSecond())
 				);
 			}
@@ -195,18 +196,18 @@ public class GraphView<T> extends Region {
 	}
 
 	private void addEdgeView(Node<T> u, Node<T> v) {
-		final EdgeLine view = new EdgeLine(
+		final EdgeView view = new EdgeView(
 			mNodes.get(u), mNodes.get(v),
 			mWeights != null ? mWeights.weight(u, v): null
 		);
 
 		view.setViewOrder(EDGE_VIEW_ORDER);
-		mArcs.put(new Pair<>(u, v), view);
+		mEdges.put(new Pair<>(u, v), view);
 		getChildren().add(view);
 	}
 
 	private void removeEdgeView(Node<T> u, Node<T> v) {
-		EdgeLine view = mArcs.remove(new Pair<>(u, v));
+		EdgeView view = mEdges.remove(new Pair<>(u, v));
 
 		if (view != null)
 			getChildren().remove(view);

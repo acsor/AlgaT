@@ -12,7 +12,7 @@ import unibo.algat.graph.EdgeWeight;
  * {@link NodeView}s. It can optionally receive an {@link EdgeWeight}, be
  * notified by it and set its stroke width accordingly.</p>
  */
-public class EdgeLine extends Path {
+public class EdgeView extends Path {
 	private EdgeWeight<?> mWeight;
 
 	private final ObjectBinding<Point2D> mStart, mEnd;
@@ -26,7 +26,7 @@ public class EdgeLine extends Path {
 	 * @param v Second edge node
 	 * @param weight Weigth associated to the u, v nodes. Can be {@code null}.
 	 */
-	public EdgeLine(NodeView u, NodeView v, EdgeWeight<?> weight) {
+	public EdgeView(NodeView u, NodeView v, EdgeWeight<?> weight) {
 		setWeight(weight);
 		// TODO Choose nicer stroke
         setStroke(Color.web("#353E4C"));
