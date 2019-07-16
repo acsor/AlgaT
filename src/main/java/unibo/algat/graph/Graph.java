@@ -15,6 +15,9 @@ public interface Graph<T> {
      */
     void insertNode(Node<T> node);
     /**
+     * Deletes a node from the graph (if present) and all the edges that used to
+     * be associated to it.
+     *
      * @param node Node<T> instance to delete from the graph. If not present the
      *             graph is unaffected and thus {@code delete()} is a no-op.
      * @throws java.lang.NullPointerException if {@code node} happens to be

@@ -23,10 +23,14 @@ public class ALGraph<T> implements Graph<T> {
 
     @Override
     public void deleteNode(Node<T> node) {
-        if (node != null)
+        if (node != null) {
             mEntries.remove(node);
-        else
+
+            for (Set<Node<T>> adjList: mEntries.values())
+                adjList.remove(node);
+        } else {
             throw new NullPointerException("node argument was null");
+        }
     }
 
     @Override
