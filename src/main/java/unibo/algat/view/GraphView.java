@@ -35,8 +35,6 @@ public class GraphView<T> extends Region {
 	private NodeChangeListener<T> mNodeListener = e -> {
 		if (e.wasInserted()) {
 			addNodeView(e.getNode());
-			// TODO Once a Node is removed, ObservableGraph won't notify
-			//  the removal of its associated edges!
 		} else if (e.wasDeleted()) {
 			removeNodeView(e.getNode());
 		}

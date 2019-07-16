@@ -1,5 +1,8 @@
 package unibo.algat.graph;
 
+import unibo.algat.util.Pair;
+
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -38,12 +41,33 @@ public final class ObservableGraph<T> implements Graph<T> {
 
 	@Override
 	public void deleteNode(Node<T> node) {
-		final NodeChangeEvent<T> e = new NodeChangeEvent<>(this, node, false);
+		// TODO Test
+		final Set<Pair<Node<T>, Node<T>>> edges = new HashSet<>();
+		final NodeChangeEvent<T> nodeChanged = new NodeChangeEvent<>(
+			this, node, false
+		);
+
+		for (Node<T> v: mGraph.adjacents(node))
+			edges.add(new Pair<>(node, v));
+
+		for (Node<T> u: mGraph.nodes()) {
+			if (mGraph.containsEdge(u, node))
+				edges.add(new Pair<>(u, node));
+		}
 
 		mGraph.deleteNode(node);
 
 		for (NodeChangeListener<T> l: mNodeListeners)
-			l.nodeChanged(e);
+			l.nodeChanged(nodeChanged);
+
+		for (Pair<Node<T>, Node<T>> edge: edges) {
+			EdgeChangeEvent<T> edgeChanged = new EdgeChangeEvent<>(
+				this, edge.getFirst(), edge.getSecond(), false
+			);
+
+            for (EdgeChangeListener<T> l: mEdgeListeners)
+            	l.edgeChanged(edgeChanged);
+		}
 	}
 
 	@Override
