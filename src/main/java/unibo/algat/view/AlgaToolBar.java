@@ -17,6 +17,7 @@ public class AlgaToolBar extends ToolBar {
 
 	@FXML ImageView mPlayImage, mPauseImage;
 	@FXML Button mStop, mPrev, mTogglePlay, mNext;
+	@FXML Button mAdd, mRemove, mRandom, mClear;
 
 	/**
 	 * <p>Switches the graphic of {@code mTogglePlay} button from play to
@@ -59,6 +60,22 @@ public class AlgaToolBar extends ToolBar {
 
 	public Button getNextButton () {
 		return mNext;
+	}
+
+	public Button getAddButton () {
+		return mAdd;
+	}
+
+	public Button getRemoveButton () {
+		return mRemove;
+	}
+
+	public Button getRandomButton () {
+		return mRandom;
+	}
+
+	public Button getClearButton () {
+		return mClear;
 	}
 
 	public void setPlaying (boolean playing) {
