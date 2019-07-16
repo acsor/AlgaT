@@ -23,6 +23,12 @@
 }
 
 
+.weight-view {
+    -fx-font-size: 15;
+    -fx-font-weight: bold
+}
+
+
 .lesson-view {
     -fx-padding: 16;
 }

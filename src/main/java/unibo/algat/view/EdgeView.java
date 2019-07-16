@@ -2,6 +2,10 @@ package unibo.algat.view;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -13,11 +17,13 @@ import unibo.algat.graph.EdgeWeight;
  * notified by it and set its stroke width accordingly.</p>
  */
 public class EdgeView extends Path {
-	private EdgeWeight<?> mWeight;
+	private DoubleProperty mWeight;
 
 	private final ObjectBinding<Point2D> mStart, mEnd;
-	private final ObjectBinding<Point2D> mTop;
+	private final ObjectProperty<Point2D> mTop;
 	private final ObjectBinding<QuadCurveTo> mArc;
+	// The angle formed by the start and end graph nodes
+	private final DoubleProperty mAngle;
 
 	private final ObjectBinding<Point2D> mHeadLeft, mHeadRight;
 
@@ -27,27 +33,27 @@ public class EdgeView extends Path {
 	 * @param weight Weigth associated to the u, v nodes. Can be {@code null}.
 	 */
 	public EdgeView(NodeView u, NodeView v, EdgeWeight<?> weight) {
-		setWeight(weight);
-		// TODO Choose nicer stroke
-        setStroke(Color.web("#353E4C"));
-		setStrokeLineCap(StrokeLineCap.ROUND);
-		setStrokeLineJoin(StrokeLineJoin.ROUND);
+		mWeight = new SimpleDoubleProperty(this, "weight", 0);
 
-		mTop  = new ObjectBinding<>() {
-			{ bind(u.centerProperty(), v.centerProperty()); }
+		mTop = new SimpleObjectProperty<>(this, "top");
+		mTop.bind(
+			new ObjectBinding<>() {
+				{ bind(u.centerProperty(), v.centerProperty()); }
 
-			@Override
-			protected Point2D computeValue() {
-				final Point2D c1 = u.getCenter(), c2 = v.getCenter();
-				final Point2D mid = c1.midpoint(c2);
-				Point2D diff = c2.subtract(c1).normalize();
+				@Override
+				protected Point2D computeValue() {
+					final Point2D c1 = u.getCenter(), c2 = v.getCenter();
+					final Point2D mid = c1.midpoint(c2);
+					Point2D diff = c2.subtract(c1).normalize();
 
-				// Rotate diff by 90 degrees
-				diff = new Point2D(-diff.getY(), diff.getX());
+					// Rotate diff by 90 degrees
+					diff = new Point2D(-diff.getY(), diff.getX());
 
-				return mid.subtract(diff.multiply(c1.distance(c2) / 4.0));
+					return mid.subtract(diff.multiply(c1.distance(c2) / 4.0));
+				}
 			}
-		};
+		);
+
 		mStart = new ObjectBinding<>() {
 			{ bind(u.centerProperty(), u.radiusProperty(), mTop); }
 
@@ -80,6 +86,7 @@ public class EdgeView extends Path {
 				);
 			}
 		};
+		mAngle = new SimpleDoubleProperty(this, "angle");
 		mHeadLeft = new ObjectBinding<>() {
 			{ bind(mTop, mEnd); }
 
@@ -113,6 +120,18 @@ public class EdgeView extends Path {
 			}
 		};
 
+		mAngle.bind(new DoubleBinding() {
+			{ bind(u.centerProperty(), v.centerProperty()); }
+
+			@Override
+			protected double computeValue() {
+				final Point2D start = u.getCenter(), end = v.getCenter();
+
+				return Math.atan2(
+					end.getY() - start.getY(), end.getX() - start.getX()
+				);
+			}
+		});
         mArc.addListener((observable, oldValue, newValue) -> {
 			getElements().clear();
 			getElements().addAll(
@@ -124,32 +143,44 @@ public class EdgeView extends Path {
 				new LineTo(mHeadRight.get().getX(), mHeadRight.get().getY())
 			);
 		});
+
+        // Make the curve width proportional to 1 + w ^ 1/4
+		strokeWidthProperty().bind(
+			new DoubleBinding() {
+				{ bind(mWeight); }
+
+				@Override
+				protected double computeValue() {
+					return 1 + Math.pow(Math.abs(mWeight.get()), 1 / 4.0);
+				}
+			}
+		);
+
+		setWeight(weight);
+		// TODO Choose nicer stroke
+		setStroke(Color.web("#353E4C"));
+		setStrokeLineCap(StrokeLineCap.ROUND);
+		setStrokeLineJoin(StrokeLineJoin.ROUND);
+	}
+
+	public ObjectProperty<Point2D> topProperty () {
+		return mTop;
+	}
+
+	public DoubleProperty angleProperty () {
+		return mAngle;
 	}
 
 	public void setWeight(EdgeWeight<?> weight) {
-		strokeWidthProperty().unbind();
-
-		mWeight = weight;
-
-		if (mWeight != null) {
-			strokeWidthProperty().bind(
-                new DoubleBinding() {
-					{
-						bind(mWeight);
-					}
-
-					@Override
-					protected double computeValue() {
-						return 1 + Math.pow(
-							Math.abs(mWeight.get()), 1 / 4.0
-						);
-					}
-				}
-			);
-		}
+		if (weight != null)
+			mWeight.bind(weight);
 	}
 
-	public EdgeWeight<?> getWeight () {
+	public Double getWeight () {
+		return mWeight.get();
+	}
+
+	public DoubleProperty weightProperty() {
 		return mWeight;
 	}
 }

@@ -22,6 +22,7 @@ public class GraphView<T> extends Region {
 
 	private Map<Node<T>, NodeView> mNodes;
 	private Map<Pair<Node<T>, Node<T>>, EdgeView> mEdges;
+	private Map<Pair<Node<T>, Node<T>>, WeightView> mWeightViews;
 	private GraphLayout mLayout;
 	private double mNodeRadius, mNodeMargin;
 	private Paint mNodeFill;
@@ -30,7 +31,8 @@ public class GraphView<T> extends Region {
 	private static final double DEFAULT_NODE_MARGIN = 1;
 
 	private static final double NODE_VIEW_ORDER = 1;
-	private static final double EDGE_VIEW_ORDER = 2;
+	private static final double WEIGHT_LABEL_VIEW_ORDER = 2;
+	private static final double EDGE_VIEW_ORDER = 3;
 
 	private NodeChangeListener<T> mNodeListener = e -> {
 		if (e.wasInserted()) {
@@ -50,6 +52,7 @@ public class GraphView<T> extends Region {
 	public GraphView () {
 		mNodes = new HashMap<>();
 		mEdges = new HashMap<>();
+		mWeightViews = new HashMap<>();
 
 		mLayout = new GraphGridLayout(6);
 		mNodeRadius = DEFAULT_NODE_RADIUS;
@@ -172,6 +175,21 @@ public class GraphView<T> extends Region {
 				0, HPos.CENTER, VPos.CENTER
 			);
 		}
+
+		// Layout edge weight labels
+		for (WeightView view: mWeightViews.values()) {
+			Point2D location = view.getEdgeView().topProperty().get();
+
+			// TODO Important: labels need to be aligned more tightly to the
+			//  top point of the parabola
+			layoutInArea(
+                view,
+				bounds.getLeft() + location.getX(),
+				bounds.getTop() + location.getY(),
+				view.prefWidth(-1), view.prefHeight(-1),
+				0, HPos.CENTER, VPos.CENTER
+			);
+		}
 	}
 
 	private void addNodeView (Node<T> node) {
@@ -190,27 +208,35 @@ public class GraphView<T> extends Region {
 	private void removeNodeView (Node<T> node) {
 		NodeView removed = mNodes.remove(node);
 
-		if (removed != null) {
+		if (removed != null)
 			getChildren().remove(removed);
-		}
 	}
 
 	private void addEdgeView(Node<T> u, Node<T> v) {
-		final EdgeView view = new EdgeView(
+		final EdgeView edge = new EdgeView(
 			mNodes.get(u), mNodes.get(v),
 			mWeights != null ? mWeights.weight(u, v): null
 		);
+		final WeightView weightView = new WeightView(edge);
 
-		view.setViewOrder(EDGE_VIEW_ORDER);
-		mEdges.put(new Pair<>(u, v), view);
-		getChildren().add(view);
+		edge.setViewOrder(EDGE_VIEW_ORDER);
+		weightView.setViewOrder(WEIGHT_LABEL_VIEW_ORDER);
+
+		mEdges.put(new Pair<>(u, v), edge);
+		mWeightViews.put(new Pair<>(u, v), weightView);
+
+		getChildren().addAll(edge, weightView);
 	}
 
 	private void removeEdgeView(Node<T> u, Node<T> v) {
-		EdgeView view = mEdges.remove(new Pair<>(u, v));
+		EdgeView edge = mEdges.remove(new Pair<>(u, v));
+		WeightView weight = mWeightViews.remove(new Pair<>(u, v));
 
-		if (view != null)
-			getChildren().remove(view);
+		if (edge != null)
+			getChildren().remove(edge);
+
+		if (weight != null)
+			getChildren().remove(weight);
 	}
 
 	void setDebug (boolean debug) {
