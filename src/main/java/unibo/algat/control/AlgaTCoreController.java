@@ -115,12 +115,9 @@ public class AlgaTCoreController {
 		}
 	};
 
-	public static final String LESSONS_DIR = "lessons";
-	public static final String QUESTIONS_DIR = "questions";
-
 	public AlgaTCoreController() {
 		final LessonLoader l = new LessonLoader(
-			LESSONS_DIR, Locale.getDefault()
+			mApp.LESSONS_DIR, Locale.getDefault()
 		);
 
 		mApp = AlgaTApplication.getInstance();

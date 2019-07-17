@@ -26,6 +26,9 @@ public class AlgaTApplication extends Application {
 
 	private static AlgaTApplication sSingleton;
 
+	public static final String LESSONS_DIR = "lessons";
+	public static final String QUESTIONS_DIR = "questions";
+
 	public AlgaTApplication() {
 		super();
 

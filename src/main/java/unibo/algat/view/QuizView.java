@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import unibo.algat.control.AlgaTCoreController;
+import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.Question;
 import unibo.algat.lesson.QuestionLoader;
@@ -99,8 +99,7 @@ public class QuizView extends VBox {
 		FXMLLoader loader;
 
 		mQuestions = new ArrayList<>(0);
-		// TODO Wouldn't a config class be appropriate for storing class paths?
-		mQLoader = new QuestionLoader(AlgaTCoreController.QUESTIONS_DIR);
+		mQLoader = new QuestionLoader(AlgaTApplication.QUESTIONS_DIR);
 		mInterface = ResourceBundle.getBundle("Interface");
 		mChoiceGroup = new ToggleGroup();
 

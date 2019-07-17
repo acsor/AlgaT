@@ -1,6 +1,6 @@
 package unibo.algat.view;
 
-import unibo.algat.control.AlgaTCoreController;
+import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
 
@@ -21,7 +21,7 @@ public class LessonViewFactory {
 	 */
 	public static LessonView lessonView (Lesson lesson) throws Exception {
 		LessonLoader l = new LessonLoader(
-			AlgaTCoreController.LESSONS_DIR, Locale.getDefault()
+			AlgaTApplication.LESSONS_DIR, Locale.getDefault()
 		);
         Class<LessonView> toLoad;
         Constructor<LessonView> defaultConstructor;
