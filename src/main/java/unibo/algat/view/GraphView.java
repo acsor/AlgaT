@@ -208,8 +208,10 @@ public class GraphView<T> extends Region {
 	private void removeNodeView (Node<T> node) {
 		NodeView removed = mNodes.remove(node);
 
-		if (removed != null)
+		if (removed != null) {
+			mLayout.remove(removed);
 			getChildren().remove(removed);
+		}
 	}
 
 	private void addEdgeView(Node<T> u, Node<T> v) {
