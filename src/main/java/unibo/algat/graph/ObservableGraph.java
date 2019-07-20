@@ -28,19 +28,26 @@ public final class ObservableGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public void insertNode(Node<T> node) {
+	public boolean insertNode(Node<T> node) {
 		final NodeChangeEvent<T> e = new NodeChangeEvent<>(this, node, true);
 
 		// ObservableGraph does not abide to the specification by raising the
 		// given exceptions -- it waits for its wrapped Graph to do so
-		mGraph.insertNode(node);
 
-		for (NodeChangeListener<T> l: mNodeListeners)
-			l.nodeChanged(e);
+		// If the node was actually inserted (and did not already exist
+		// inside the graph) we need to notify listeners
+		if (mGraph.insertNode(node)) {
+			for (NodeChangeListener<T> l: mNodeListeners)
+				l.nodeChanged(e);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
-	public void deleteNode(Node<T> node) {
+	public boolean deleteNode(Node<T> node) {
 		// TODO Test
 		final Set<Pair<Node<T>, Node<T>>> edges = new HashSet<>();
 		final NodeChangeEvent<T> nodeChanged = new NodeChangeEvent<>(
@@ -55,19 +62,24 @@ public final class ObservableGraph<T> implements Graph<T> {
 				edges.add(new Pair<>(u, node));
 		}
 
-		mGraph.deleteNode(node);
+		// If the node was actually deleted, listeners need to be notified
+		if (mGraph.deleteNode(node)) {
+			for (NodeChangeListener<T> l : mNodeListeners)
+				l.nodeChanged(nodeChanged);
 
-		for (NodeChangeListener<T> l: mNodeListeners)
-			l.nodeChanged(nodeChanged);
+			for (Pair<Node<T>, Node<T>> edge : edges) {
+				EdgeChangeEvent<T> edgeChanged = new EdgeChangeEvent<>(
+					this, edge.getFirst(), edge.getSecond(), false
+				);
 
-		for (Pair<Node<T>, Node<T>> edge: edges) {
-			EdgeChangeEvent<T> edgeChanged = new EdgeChangeEvent<>(
-				this, edge.getFirst(), edge.getSecond(), false
-			);
+				for (EdgeChangeListener<T> l : mEdgeListeners)
+					l.edgeChanged(edgeChanged);
+			}
 
-            for (EdgeChangeListener<T> l: mEdgeListeners)
-            	l.edgeChanged(edgeChanged);
+			return true;
 		}
+
+		return false;
 	}
 
 	@Override
@@ -86,23 +98,31 @@ public final class ObservableGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public void insertEdge(Node<T> a, Node<T> b) {
+	public boolean insertEdge(Node<T> a, Node<T> b) {
 		final EdgeChangeEvent<T> e = new EdgeChangeEvent<>(this, a, b, true);
 
-		mGraph.insertEdge(a, b);
+		if (mGraph.insertEdge(a, b)) {
+			for (EdgeChangeListener<T> l: mEdgeListeners)
+				l.edgeChanged(e);
 
-        for (EdgeChangeListener<T> l: mEdgeListeners)
-        	l.edgeChanged(e);
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
-	public void deleteEdge(Node<T> a, Node<T> b) {
+	public boolean deleteEdge(Node<T> a, Node<T> b) {
 		final EdgeChangeEvent<T> e = new EdgeChangeEvent<>(this, a, b, false);
 
-		mGraph.deleteEdge(a, b);
+		if (mGraph.deleteEdge(a, b)) {
+			for (EdgeChangeListener<T> l: mEdgeListeners)
+				l.edgeChanged(e);
 
-		for (EdgeChangeListener<T> l: mEdgeListeners)
-			l.edgeChanged(e);
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

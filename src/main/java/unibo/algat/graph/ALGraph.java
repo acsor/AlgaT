@@ -14,20 +14,25 @@ public class ALGraph<T> implements Graph<T> {
     }
 
     @Override
-    public void insertNode(Node<T> node) {
+    public boolean insertNode(Node<T> node) {
         if (node != null)
-            mEntries.putIfAbsent(node, new HashSet<>());
+            return mEntries.putIfAbsent(node, new HashSet<>()) == null;
         else
             throw new NullPointerException("node argument was null");
     }
 
     @Override
-    public void deleteNode(Node<T> node) {
+    public boolean deleteNode(Node<T> node) {
         if (node != null) {
-            mEntries.remove(node);
+            // If the node being removed actually existed inside the graph:
+            if (mEntries.remove(node) != null) {
+                for (Set<Node<T>> adjList: mEntries.values())
+                    adjList.remove(node);
 
-            for (Set<Node<T>> adjList: mEntries.values())
-                adjList.remove(node);
+                return true;
+            }
+
+            return false;
         } else {
             throw new NullPointerException("node argument was null");
         }
@@ -43,7 +48,7 @@ public class ALGraph<T> implements Graph<T> {
 
     @Override
     public Set<Node<T>> nodes() {
-         return mEntries.keySet();
+         return new HashSet<>(mEntries.keySet());
     }
 
     @Override
@@ -59,10 +64,10 @@ public class ALGraph<T> implements Graph<T> {
     }
 
     @Override
-    public void insertEdge(Node<T> a, Node<T> b) {
+    public boolean insertEdge(Node<T> a, Node<T> b) {
         if (a != null && b != null) {
             if (mEntries.containsKey(a) && mEntries.containsKey(b))
-                mEntries.get(a).add(b);
+                return mEntries.get(a).add(b);
             else
                 throw new NoSuchElementException("Either a or b was absent");
         } else {
@@ -71,10 +76,10 @@ public class ALGraph<T> implements Graph<T> {
     }
 
     @Override
-    public void deleteEdge(Node<T> a, Node<T> b) {
+    public boolean deleteEdge(Node<T> a, Node<T> b) {
         if (a != null && b != null) {
             if (mEntries.containsKey(a) && mEntries.containsKey(b))
-                mEntries.get(a).remove(b);
+                return mEntries.get(a).remove(b);
             else
                 throw new NoSuchElementException("Either a or b was absent");
         } else {

@@ -10,20 +10,24 @@ public interface Graph<T> {
     /**
      * @param node Node<T> instance to insert into the current graph. If
      *             already present, the graph is unaffected.
+	 * @return {@code true} if node was actually inserted into the graph,
+     * {@code false} otherwise.
      * @throws java.lang.NullPointerException if {@code node} happens to be
      * {@code null}.
      */
-    void insertNode(Node<T> node);
+    boolean insertNode(Node<T> node);
     /**
      * Deletes a node from the graph (if present) and all the edges that used to
      * be associated to it.
      *
      * @param node Node<T> instance to delete from the graph. If not present the
      *             graph is unaffected and thus {@code delete()} is a no-op.
+     * @return {@code true} if node was actually deleted from the graph,
+     * {@code false} otherwise.
      * @throws java.lang.NullPointerException if {@code node} happens to be
      * {@code null}.
      */
-    void deleteNode(Node<T> node);
+    boolean deleteNode(Node<T> node);
     /**
      * @return {@code true} if {@code needle} is a node of this graph,
      * {@code false} otherwise.
@@ -52,21 +56,25 @@ public interface Graph<T> {
     /**
      * Inserts an {@code (a, b)} edge into the graph. Produces no change if
      * {@code (a, b)} was already present.
+     * @return {@code true} if the {@code (a, b)} edge was actually inserted
+     * into the graph, {@code false} otherwise.
      * @throws java.util.NoSuchElementException if either {@code a} or {@code b}
      * aren't within the graph.
      * @throws java.lang.NullPointerException if either {@code a} or
      * {@code b} was {@code null}.
      */
-    void insertEdge(Node<T> a, Node<T> b);
+    boolean insertEdge(Node<T> a, Node<T> b);
     /**
      * Delete the {@code (a, b)} edge from the graph, if present. If not this is
      * a no-op.
+     * @return {@code true} if the {@code (a, b)} edge was actually deleted
+     * from the graph, {@code false} otherwise.
      * @throws java.util.NoSuchElementException if either {@code a} or {@code b}
      * aren't within the graph.
      * @throws java.lang.NullPointerException if either {@code a} or
      * {@code b} was {@code null}.
      */
-    void deleteEdge(Node<T> a, Node<T> b);
+    boolean deleteEdge(Node<T> a, Node<T> b);
     /**
      * @return {@code true} if {@code (a, b)} is an edge of this graph,
      * {@code false} otherwise.
