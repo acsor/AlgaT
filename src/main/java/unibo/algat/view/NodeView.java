@@ -30,13 +30,20 @@ public class NodeView extends Region {
 	private SimpleObjectProperty<Point2D> mCenter;
 	private Point2D mDragStart;
 
-	private final EventHandler<MouseEvent> mDragListener = event -> {
+	private final EventHandler<MouseEvent> mMousePressed = event -> {
+		mDragStart = new Point2D(event.getX(), event.getY());
+		setOpacity(getOpacity() - 0.5);
+	};
+	private final EventHandler<MouseEvent> mMouseDrag = event -> {
 		Point2D diff = new Point2D(event.getX(), event.getY()).subtract(
 			mDragStart
 		);
 
 		setTranslateX(getTranslateX() + diff.getX());
 		setTranslateY(getTranslateY() + diff.getY());
+	};
+	private final EventHandler<MouseEvent> mMouseReleased = event -> {
+		setOpacity(getOpacity() + 0.5);
 	};
 
 	private static final double DEFAULT_RADIUS = 4.0;
@@ -81,14 +88,12 @@ public class NodeView extends Region {
 			}
 		});
 
-		// TODO Pressing right in the center of the circle does not trigger
-		//  drag events
-		mCircle.setOnMousePressed(event -> {
-			mDragStart = new Point2D(event.getX(), event.getY());
-			setOpacity(getOpacity() - 0.5);
-		});
-		mCircle.setOnMouseReleased(event -> setOpacity(getOpacity() + 0.5));
-		mCircle.setOnMouseDragged(mDragListener);
+		mCircle.setOnMousePressed(mMousePressed);
+		mCircle.setOnMouseDragged(mMouseDrag);
+		mCircle.setOnMouseReleased(mMouseReleased);
+		mId.setOnMousePressed(mMousePressed);
+		mId.setOnMouseDragged(mMouseDrag);
+		mId.setOnMouseReleased(mMouseReleased);
 
 		getChildren().addAll(mCircle, mId, mLabel);
 	}
