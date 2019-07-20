@@ -94,13 +94,10 @@ public class GraphView<T> extends Region {
 	public void setWeightFunction(WeightFunction<T> w) {
         mWeights = w;
 
-        if (mWeights != null) {
-			for (Pair<Node<T>, Node<T>> edge: mEdges.keySet()) {
-				mEdges.get(edge).setWeight(
-                    mWeights.weight(edge.getFirst(), edge.getSecond())
-				);
-			}
-		}
+        if (w != null)
+			mWeightViews.forEach((pair, view) ->
+				view.setWeight(w.weight(pair.getFirst(), pair.getSecond()))
+			);
 	}
 
 	public WeightFunction<T> getWeightFunction() {
@@ -215,11 +212,10 @@ public class GraphView<T> extends Region {
 	}
 
 	private void addEdgeView(Node<T> u, Node<T> v) {
-		final EdgeView edge = new EdgeView(
-			mNodes.get(u), mNodes.get(v),
-			mWeights != null ? mWeights.weight(u, v): null
+		final EdgeView edge = new EdgeView(mNodes.get(u), mNodes.get(v));
+		final WeightView weightView = new WeightView(
+			edge, mWeights != null ? mWeights.weight(u, v): null
 		);
-		final WeightView weightView = new WeightView(edge);
 
 		edge.setViewOrder(EDGE_VIEW_ORDER);
 		weightView.setViewOrder(WEIGHT_LABEL_VIEW_ORDER);

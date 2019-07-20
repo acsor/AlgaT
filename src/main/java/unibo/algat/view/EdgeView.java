@@ -17,8 +17,6 @@ import unibo.algat.graph.EdgeWeight;
  * notified by it and set its stroke width accordingly.</p>
  */
 public class EdgeView extends Path {
-	private DoubleProperty mWeight;
-
 	private final ObjectBinding<Point2D> mStart, mEnd;
 	private final ObjectProperty<Point2D> mTop;
 	private final ObjectBinding<QuadCurveTo> mArc;
@@ -27,14 +25,13 @@ public class EdgeView extends Path {
 
 	private final ObjectBinding<Point2D> mHeadLeft, mHeadRight;
 
+	private static final double DEFAULT_STROKE_WIDTH = 2;
+
 	/**
 	 * @param u First edge node
 	 * @param v Second edge node
-	 * @param weight Weigth associated to the u, v nodes. Can be {@code null}.
 	 */
-	public EdgeView(NodeView u, NodeView v, EdgeWeight<?> weight) {
-		mWeight = new SimpleDoubleProperty(this, "weight", 0);
-
+	public EdgeView(NodeView u, NodeView v) {
 		mTop = new SimpleObjectProperty<>(this, "top");
 		mTop.bind(
 			new ObjectBinding<>() {
@@ -144,19 +141,7 @@ public class EdgeView extends Path {
 			);
 		});
 
-        // Make the curve width proportional to 1 + w ^ 1/4
-		strokeWidthProperty().bind(
-			new DoubleBinding() {
-				{ bind(mWeight); }
-
-				@Override
-				protected double computeValue() {
-					return 1 + Math.pow(Math.abs(mWeight.get()), 1 / 4.0);
-				}
-			}
-		);
-
-		setWeight(weight);
+		setStrokeWidth(DEFAULT_STROKE_WIDTH);
 		// TODO Choose nicer stroke
 		setStroke(Color.web("#353E4C"));
 		setStrokeLineCap(StrokeLineCap.ROUND);
@@ -169,18 +154,5 @@ public class EdgeView extends Path {
 
 	public DoubleProperty angleProperty () {
 		return mAngle;
-	}
-
-	public void setWeight(EdgeWeight<?> weight) {
-		if (weight != null)
-			mWeight.bind(weight);
-	}
-
-	public Double getWeight () {
-		return mWeight.get();
-	}
-
-	public DoubleProperty weightProperty() {
-		return mWeight;
 	}
 }
