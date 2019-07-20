@@ -24,29 +24,29 @@ public class GraphView<T> extends Region {
 	private Map<Pair<Node<T>, Node<T>>, EdgeView> mEdges;
 	private Map<Pair<Node<T>, Node<T>>, WeightView> mWeightViews;
 	private GraphLayout mLayout;
+
 	private double mNodeRadius, mNodeMargin;
 	private Paint mNodeFill;
 
 	private static final double DEFAULT_NODE_RADIUS = 1;
 	private static final double DEFAULT_NODE_MARGIN = 1;
+	private static final double DEFAULT_NODE_OPACITY = 0.95;
 
 	private static final double NODE_VIEW_ORDER = 1;
 	private static final double WEIGHT_LABEL_VIEW_ORDER = 2;
 	private static final double EDGE_VIEW_ORDER = 3;
 
 	private NodeChangeListener<T> mNodeListener = e -> {
-		if (e.wasInserted()) {
+		if (e.wasInserted())
 			addNodeView(e.getNode());
-		} else if (e.wasDeleted()) {
+		else if (e.wasDeleted())
 			removeNodeView(e.getNode());
-		}
 	};
 	private EdgeChangeListener<T> mEdgeListener = e -> {
-		if (e.wasInserted()) {
+		if (e.wasInserted())
 			addEdgeView(e.getFirst(), e.getSecond());
-		} else if (e.wasDeleted()) {
+		else if (e.wasDeleted())
 			removeEdgeView(e.getFirst(), e.getSecond());
-		}
 	};
 
 	public GraphView () {
@@ -73,8 +73,11 @@ public class GraphView<T> extends Region {
 		mGraph.addNodeChangeListener(mNodeListener);
 		mGraph.addEdgeChangeListener(mEdgeListener);
 
-		mNodes = new HashMap<>(graph.nodes().size());
-		mEdges = new HashMap<>();
+		mLayout = new GraphGridLayout(6);
+		mWeightViews.clear();
+		setWeightFunction(null);
+        mEdges.clear();
+		mNodes.clear();
 
 		getChildren().clear();
 
@@ -195,7 +198,7 @@ public class GraphView<T> extends Region {
 		view.setRadius(mNodeRadius);
 		view.setFill(mNodeFill);
 		view.setPadding(new Insets(mNodeMargin));
-		view.setOpacity(0.95);
+		view.setOpacity(DEFAULT_NODE_OPACITY);
 		view.setViewOrder(NODE_VIEW_ORDER);
 
         mNodes.put(node, view);
@@ -235,6 +238,27 @@ public class GraphView<T> extends Region {
 
 		if (weight != null)
 			getChildren().remove(weight);
+	}
+
+	@Override
+	public String toString () {
+		final StringBuilder b = new StringBuilder();
+
+		b.append(String.format(
+			"[%s vertices=%d, edges=%d]\n",getClass().getSimpleName(),
+			mNodes == null ? 0: mNodes.keySet().size(),
+			mEdges == null ? 0: mEdges.keySet().size()
+		));
+
+		b.append(String.format("getChildren() = %d\n", getChildren().size()));
+        b.append(String.format("mNodes = %s\n", String.valueOf(mNodes)));
+		b.append(String.format("mEdges = %s\n", String.valueOf(mEdges)));
+		b.append(
+			String.format("mWeightViews = %s\n", String.valueOf(mWeightViews))
+		);
+		b.append(String.format("mLayout = %s\n", String.valueOf(mLayout)));
+
+		return b.toString();
 	}
 
 	void setDebug (boolean debug) {
