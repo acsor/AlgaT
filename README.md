@@ -16,8 +16,16 @@ AlgaT can be run by downloading the precompiled .jar file and doing
 java -jar algat.jar
 ```
 
-on a terminal console.
+on a terminal console. Alternatively, using Gradle
+
+```
+./gradlew run
+```
 
 ## Testing
 AlgaT provides a unit testing suite, written in JUnit 5. We suppose it to be
-easily runnable from terminal or IDE tools.
+easily runnable from popular IDEs or, again, with Gradle
+
+```
+./gradlew test
+```
