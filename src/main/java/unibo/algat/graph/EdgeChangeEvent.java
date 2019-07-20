@@ -29,6 +29,6 @@ public class EdgeChangeEvent<T> extends EventObject {
 	}
 
 	public boolean wasDeleted() {
-		return mInserted;
+		return !mInserted;
 	}
 }

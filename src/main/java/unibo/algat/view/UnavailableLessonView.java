@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-public class UnavailableLessonView extends LessonView {
+public class UnavailableLessonView extends LessonView implements ToolBarUser {
 	public UnavailableLessonView() throws IOException {
 		super();
 
@@ -18,6 +18,10 @@ public class UnavailableLessonView extends LessonView {
 		l.setController(this);
 
 		l.load();
+	}
+
+	@Override
+	public void onAcquireToolBar(AlgaToolBar toolBar) {
 	}
 }
 

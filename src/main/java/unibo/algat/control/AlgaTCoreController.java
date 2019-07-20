@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,6 +15,7 @@ import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
 import unibo.algat.view.AlgaToolBar;
 import unibo.algat.view.LessonViewFactory;
+import unibo.algat.view.ToolBarUser;
 
 import java.util.*;
 
@@ -44,20 +46,23 @@ public class AlgaTCoreController {
 			Tab newValue
 		) {
 			String windowTitle;
+			final Node content = newValue.getContent();
 
 			if (newValue == mLessonsTab) {
-				mToolBar.setDisable(true);
 				// Deactivate or activate the "Close tab" menu item
 				mMainMenuController.mCloseTab.setDisable(true);
 				windowTitle = mInterface.getString("gui.app.title");
 			} else {
-				mToolBar.setDisable(false);
 				mMainMenuController.mCloseTab.setDisable(false);
 				windowTitle = String.format(
 					"%s - %s", newValue.getText(),
 					mInterface.getString("gui.app.title")
 				);
 			}
+
+			mToolBar.setUser(
+				content instanceof ToolBarUser ? (ToolBarUser) content : null
+			);
 
 			// Set the updated window title
 			AlgaTApplication.getInstance().setWindowTitle(windowTitle);
@@ -117,7 +122,7 @@ public class AlgaTCoreController {
 
 	public AlgaTCoreController() {
 		final LessonLoader l = new LessonLoader(
-			mApp.LESSONS_DIR, Locale.getDefault()
+			AlgaTApplication.LESSONS_DIR, Locale.getDefault()
 		);
 
 		mApp = AlgaTApplication.getInstance();
