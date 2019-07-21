@@ -23,5 +23,9 @@ public class UnavailableLessonView extends LessonView implements ToolBarUser {
 	@Override
 	public void onAcquireToolBar(AlgaToolBar toolBar) {
 	}
+
+	@Override
+	public void onReleaseToolBar(AlgaToolBar toolBar) {
+	}
 }
 

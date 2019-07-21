@@ -57,6 +57,9 @@ public class AlgaToolBar extends ToolBar {
 	 *                 the toolbar.
 	 */
 	public void setUser (ToolBarUser user) {
+		if (mUser.get() != null)
+			mUser.get().onReleaseToolBar(this);
+
 		reset();
 		mUser.set(user);
 
@@ -131,6 +134,7 @@ public class AlgaToolBar extends ToolBar {
 			n -> {
 				((Button) n).setOnAction(null);
 				n.setDisable(true);
+				((Button) n).setTooltip(null);
 			}
 		);
 	}

@@ -38,6 +38,7 @@ public class ShortestPathLessonView extends LessonView implements ToolBarUser {
 
 	@Override
 	public void onAcquireToolBar(AlgaToolBar toolBar) {
+		// TODO Store callback lambdas in class fields
 		final Random r = new Random(System.currentTimeMillis());
 
         toolBar.getAddButton().disableProperty().bind(mGraph.isNull());
@@ -76,5 +77,11 @@ public class ShortestPathLessonView extends LessonView implements ToolBarUser {
 			mGraph.get().nodes().forEach(node -> mGraph.get().deleteNode(node));
 			mMaxId = 0;
 		});
+	}
+
+	@Override
+	public void onReleaseToolBar(AlgaToolBar toolBar) {
+		toolBar.getAddButton().disableProperty().unbind();
+		toolBar.getClearButton().disableProperty().unbind();
 	}
 }
