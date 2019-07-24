@@ -3,11 +3,28 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import unibo.algat.view.AlgaToolBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Separator?>
 <VBox xmlns="http://javafx.com/javafx/8.0.999-ea"
-      xmlns:fx="http://javafx.com/fxml/1"
+	  xmlns:fx="http://javafx.com/fxml/1"
 >
     <fx:include fx:id="mMenuBar" source="MainMenu.fxml" />
     <AlgaToolBar fx:id="mToolBar" />
 
     <fx:include source="AlgaTCore.fxml" />
+
+	<Separator />
+
+    <AnchorPane id="status-bar">
+        <Label
+			fx:id="mStatus" text="%gui.app.welcome"
+			AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0"
+		/>
+		<Label
+			id="version" HBox.hgrow="ALWAYS" text="%gui.app.version"
+			AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0"
+        />
+    </AnchorPane>
 </VBox>
