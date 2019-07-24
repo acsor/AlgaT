@@ -3,8 +3,19 @@
     -fx-font-size: 13;
 }
 
+
+#status-bar {
+    -fx-padding: 10px;
+    -fx-opacity: 0.70;
+}
+
+#status-bar .label {
+    -fx-font-size: 14px;
+}
+
+
 #lessons-tab .label {
-     -fx-font-size: 14px;
+     -fx-font-size: 14.5px;
      -fx-wrap-text: true;
      -fx-pref-height: 300;
      -fx-padding: 20 40 20 20;

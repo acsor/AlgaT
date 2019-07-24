@@ -1,10 +1,12 @@
 package unibo.algat;
 
 import javafx.application.Application;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -22,6 +24,8 @@ public class AlgaTApplication extends Application {
 	@FXML private MenuBar mMenuBar;
 	@FXML private MainMenuController mMenuBarController;
 	@FXML private AlgaToolBar mToolBar;
+	@FXML private Label mStatus;
+
 	private Stage mStage;
 
 	private static AlgaTApplication sSingleton;
@@ -85,5 +89,17 @@ public class AlgaTApplication extends Application {
 
 	public void setWindowTitle (String title) {
 		mStage.setTitle(title);
+	}
+
+	public void setStatusMessage (String message) {
+		mStatus.setText(message);
+	}
+
+	public String getStatusMessage () {
+        return mStatus.getText();
+	}
+
+	public StringProperty statusMessageProperty () {
+		return mStatus.textProperty();
 	}
 }
