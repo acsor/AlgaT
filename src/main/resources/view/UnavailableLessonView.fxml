@@ -14,7 +14,7 @@
 				<Image url="@../static/incomplete.png" />
 			</ImageView>
 
-			<Label fx:id="mUnavailable" text="%gui.lessonview.unavailDesc" />
+			<Label fx:id="mUnavailable" text="%gui.lesson.unavailDesc" />
 		</HBox>
 	</center>
 </fx:root>

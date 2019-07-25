@@ -1,11 +1,12 @@
 package unibo.algat.view;
 
 import javafx.fxml.FXMLLoader;
+import unibo.algat.algorithm.SerialAlgorithm;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-public class UnavailableLessonView extends LessonView implements ToolBarUser {
+public class UnavailableLessonView extends LessonView {
 	public UnavailableLessonView() throws IOException {
 		super();
 
@@ -21,11 +22,13 @@ public class UnavailableLessonView extends LessonView implements ToolBarUser {
 	}
 
 	@Override
-	public void onAcquireToolBar(AlgaToolBar toolBar) {
-	}
-
-	@Override
-	public void onReleaseToolBar(AlgaToolBar toolBar) {
+	protected SerialAlgorithm<Void> algorithmFactory() {
+        return new SerialAlgorithm<>() {
+			@Override
+			protected Void call() {
+				return null;
+			}
+		};
 	}
 }
 
