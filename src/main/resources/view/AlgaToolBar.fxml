@@ -20,6 +20,7 @@
 				<Image url="@/static/stop.png" />
 			</ImageView>
 		</graphic>
+		<tooltip><Tooltip text="%gui.algatoolbar.stop" /></tooltip>
 	</Button>
 
 	<Button fx:id="mPrev">
@@ -28,10 +29,12 @@
 				<Image url="@/static/previous.png" />
 			</ImageView>
 		</graphic>
+		<tooltip><Tooltip text="%gui.algatoolbar.previous" /></tooltip>
 	</Button>
 
-	<Button fx:id="mTogglePlay">
+	<Button fx:id="mPlay">
 		<graphic><fx:reference source="mPlayImage" /></graphic>
+		<tooltip><Tooltip text="%gui.algatoolbar.play" /></tooltip>
 	</Button>
 
 	<Button fx:id="mNext">
@@ -40,6 +43,7 @@
 				<Image url="@/static/next.png" />
 			</ImageView>
 		</graphic>
+		<tooltip><Tooltip text="%gui.algatoolbar.next" /></tooltip>
 	</Button>
 
 	<Separator orientation="VERTICAL" />
@@ -50,6 +54,7 @@
 				<Image url="@/static/plus.png" />
 			</ImageView>
 		</graphic>
+		<tooltip><Tooltip text="%gui.algatoolbar.add" /></tooltip>
 	</Button>
 
 	<Button fx:id="mRemove">
@@ -58,6 +63,7 @@
 				<Image url="@/static/minus.png" />
 			</ImageView>
 		</graphic>
+		<tooltip><Tooltip text="%gui.algatoolbar.remove" /></tooltip>
 	</Button>
 
 	<Button fx:id="mRandom">
@@ -66,6 +72,7 @@
 				<Image url="@/static/random.png" />
 			</ImageView>
 		</graphic>
+		<tooltip><Tooltip text="%gui.algatoolbar.random" /></tooltip>
 	</Button>
 
 	<Button fx:id="mClear">
@@ -74,5 +81,6 @@
 				<Image url="@/static/clear.png" />
 			</ImageView>
 		</graphic>
+		<tooltip><Tooltip text="%gui.algatoolbar.clear" /></tooltip>
 	</Button>
 </fx:root>

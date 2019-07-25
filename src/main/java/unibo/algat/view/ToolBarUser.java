@@ -18,7 +18,6 @@ public interface ToolBarUser {
 	 * {@link #onAcquireToolBar} taking into account however that:
 	 * <ul>
 	 *     <li>{@code onAction} callbacks</li>
-	 *     <li>tooltips</li>
 	 *     <li>disable properties</li>
 	 * </ul>
 	 *

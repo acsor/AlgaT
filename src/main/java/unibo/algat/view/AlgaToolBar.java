@@ -4,8 +4,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -13,32 +11,25 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class AlgaToolBar extends ToolBar {
 	private ObjectProperty<ToolBarUser> mUser;
 	private BooleanProperty mPlaying;
 
 	@FXML ImageView mPlayImage, mPauseImage;
-	@FXML Button mStop, mPrev, mTogglePlay, mNext;
+	@FXML Button mStop, mPrev, mPlay, mNext;
 	@FXML Button mAdd, mRemove, mRandom, mClear;
-
-	/**
-	 * <p>Switches the graphic of {@code mTogglePlay} button from play to
-	 * pause statuses, updating the {@code mPlaying} variable as well.</p>
-	 */
-	private final EventHandler<ActionEvent> mToggleHandler = event -> {
-		mPlaying.set(!mPlaying.get());
-
-		mTogglePlay.setGraphic(mPlaying.get() ? mPauseImage: mPlayImage);
-	};
 
 	public AlgaToolBar() throws IOException {
 		FXMLLoader l = new FXMLLoader(
-			getClass().getResource("/view/AlgaToolBar.fxml")
+			getClass().getResource("/view/AlgaToolBar.fxml"),
+			ResourceBundle.getBundle("Interface")
 		);
 
 		mUser = new SimpleObjectProperty<>(this, "user", null);
 		mPlaying = new SimpleBooleanProperty(this, "playing", false);
+
 		l.setRoot(this);
 		l.setController(this);
 
@@ -47,7 +38,9 @@ public class AlgaToolBar extends ToolBar {
 
 	@FXML
 	private void initialize () {
-		mTogglePlay.addEventHandler(ActionEvent.ACTION, mToggleHandler);
+		mPlaying.addListener((observable, oldValue, newValue) ->
+			mPlay.setGraphic(newValue ? mPauseImage: mPlayImage)
+		);
 		reset();
 	}
 
@@ -88,8 +81,8 @@ public class AlgaToolBar extends ToolBar {
 		return mPrev;
 	}
 
-	public Button getTogglePlayButton () {
-		return mTogglePlay;
+	public Button getPlayButton() {
+		return mPlay;
 	}
 
 	public Button getNextButton () {
@@ -112,8 +105,8 @@ public class AlgaToolBar extends ToolBar {
 		return mClear;
 	}
 
-	public void setPlaying (boolean playing) {
-        mPlaying.set(playing);
+	public void setIsPlaying (boolean playing) {
+		mPlaying.set(playing);
 	}
 
 	public boolean isPlaying () {
@@ -133,9 +126,12 @@ public class AlgaToolBar extends ToolBar {
         getItems().stream().filter(n -> n instanceof Button).forEach(
 			n -> {
 				((Button) n).setOnAction(null);
+				n.disableProperty().unbind();
 				n.setDisable(true);
-				((Button) n).setTooltip(null);
 			}
 		);
+
+        mPlaying.unbind();
+		mPlaying.set(false);
 	}
 }
