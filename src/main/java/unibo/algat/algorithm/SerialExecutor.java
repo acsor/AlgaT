@@ -11,6 +11,12 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * <p>Auxiliary class aiding the execution of a {@link SerialAlgorithm},
+ * providing methods such as {@link #next()} and {@link #setAutoRunning}.</p>
+ *
+ * @see SerialAlgorithm
+ */
 public class SerialExecutor {
 	private SerialAlgorithm<?> mAlgorithm;
 	private ScheduledExecutorService mExecutor;
@@ -19,6 +25,12 @@ public class SerialExecutor {
 
 	private BooleanProperty mAutoRun;
 
+	/**
+	 * @param algorithm {@code SerialAlgorithm} to be executed on a background
+	 * thread.
+	 * @param autoStep Delay amount in milliseconds to wait when running the
+	 * algorithm automatically.
+	 */
 	public SerialExecutor (SerialAlgorithm<?> algorithm, long autoStep) {
 		mAlgorithm = algorithm;
 		mExecutor = new ScheduledThreadPoolExecutor(2);
@@ -27,7 +39,10 @@ public class SerialExecutor {
 		mAutoRun = new SimpleBooleanProperty(this, "autoRunning", false);
 
 		mAlgorithm.stoppedProperty().addListener(
-			(observable, wasStopped, stopped) -> pauseRunAuto()
+			(observable, wasStopped, stopped) -> {
+				if (!wasStopped && stopped)
+					setAutoRunning(false);
+			}
 		);
 	}
 
@@ -50,6 +65,12 @@ public class SerialExecutor {
 		}
 	}
 
+	/**
+	 * <p>Invoked by a {@code SerialExecutor} user to progress by one single
+	 * step the algorithm execution.</p>
+	 * <p>This method produces no visible effects if the algorithm is no longer
+	 * running.</p>
+	 */
 	public void next () {
 		Platform.runLater(() -> {
 			// Such calls as mAlgorithm.getState() can only be issued from
@@ -63,6 +84,11 @@ public class SerialExecutor {
 		mAlgorithm.next();
 	}
 
+	/**
+	 * @param autoRunning {@code true} if the executor should advance the
+	 * {@link SerialAlgorithm} automatically by the given delay, {@code false
+	 * } otherwise.
+	 */
 	public void setAutoRunning (boolean autoRunning) {
 		if (autoRunning)
 			runAuto();
@@ -72,6 +98,9 @@ public class SerialExecutor {
 		mAutoRun.set(autoRunning);
 	}
 
+	/**
+	 * @return The value of the {@code autoRunning} property.
+	 */
 	public boolean isAutoRunning () {
 		return mAutoRun.get();
 	}
