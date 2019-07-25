@@ -7,8 +7,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.QuadCurveTo;
 import unibo.algat.graph.EdgeWeight;
 
 /**
@@ -20,12 +22,10 @@ public class EdgeView extends Path {
 	private final ObjectBinding<Point2D> mStart, mEnd;
 	private final ObjectProperty<Point2D> mTop;
 	private final ObjectBinding<QuadCurveTo> mArc;
-	// The angle formed by the start and end graph nodes
+	// The angle formed by the runAuto and end graph nodes
 	private final DoubleProperty mAngle;
 
 	private final ObjectBinding<Point2D> mHeadLeft, mHeadRight;
-
-	private static final double DEFAULT_STROKE_WIDTH = 2;
 
 	/**
 	 * @param u First edge node
@@ -57,7 +57,7 @@ public class EdgeView extends Path {
 			@Override
 			protected Point2D computeValue() {
 				Point2D diff = mTop.get().subtract(u.getCenter()).normalize();
-				// TODO Compute the start and end points as the intersection
+				// TODO Compute the runAuto and end points as the intersection
 				//  between the parabola and the circumferences
 				return u.getCenter().add(diff.multiply(u.getRadius()));
 			}
@@ -141,11 +141,7 @@ public class EdgeView extends Path {
 			);
 		});
 
-		setStrokeWidth(DEFAULT_STROKE_WIDTH);
-		// TODO Choose nicer stroke
-		setStroke(Color.web("#353E4C"));
-		setStrokeLineCap(StrokeLineCap.ROUND);
-		setStrokeLineJoin(StrokeLineJoin.ROUND);
+        getStyleClass().add("edge-view");
 	}
 
 	public ObjectProperty<Point2D> topProperty () {
