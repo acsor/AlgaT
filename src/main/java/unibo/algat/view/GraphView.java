@@ -73,7 +73,7 @@ public class GraphView<T> extends Region {
 		mGraph.addNodeChangeListener(mNodeListener);
 		mGraph.addEdgeChangeListener(mEdgeListener);
 
-		mLayout = new GraphGridLayout(6);
+		mLayout.clear();
 		mWeightViews.clear();
 		setWeightFunction(null);
         mEdges.clear();

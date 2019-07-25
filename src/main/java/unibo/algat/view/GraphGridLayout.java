@@ -21,11 +21,7 @@ public class GraphGridLayout implements GraphLayout {
 	}
 
 	public GraphGridLayout(int columns) {
-		mNodePos = new HashMap<>();
-		mNext = new PriorityQueue<>(1);
-
-		mNext.add(0);
-
+		clear();
 		setColumns(columns);
 	}
 
@@ -56,6 +52,14 @@ public class GraphGridLayout implements GraphLayout {
 
         if (removed != null)
         	mNext.add(removed);
+	}
+
+	@Override
+	public void clear() {
+		mNodePos = new HashMap<>();
+		mNext = new PriorityQueue<>(1);
+
+		mNext.add(0);
 	}
 
 	public void setColumns (int columns) {

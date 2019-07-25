@@ -15,4 +15,10 @@ public interface GraphLayout {
 	 * @param view {@link NodeView} object to remove from this layout.
 	 */
 	void remove (NodeView view);
+
+	/**
+	 * Clears all associations regarding {@link NodeView} positions within a
+	 * {@link GraphView}.
+	 */
+	void clear();
 }
