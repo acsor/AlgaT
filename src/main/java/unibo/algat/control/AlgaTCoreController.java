@@ -178,7 +178,7 @@ public class AlgaTCoreController {
 			new LessonTreeNode(mInterface.getString("gui.algat.treeRoot"))
 		);
 		final Image unavailable = new Image(
-			"/static/lesson-unavailable.png", 16, 16, true, false
+			"/static/lesson-unavailable.png", 14, 14, true, false
 		);
 		TreeItem<LessonTreeNode> curr;
 		boolean found;
