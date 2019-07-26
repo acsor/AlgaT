@@ -1,10 +1,7 @@
 package unibo.algat.view;
 
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -23,8 +20,7 @@ public class NodeView extends Region {
 	private Node<?> mNode;
 
 	private Circle mCircle;
-	private Label mId;
-	private Label mLabel;
+	private Label mText;
 
 	private SimpleDoubleProperty mRadius;
 	private SimpleObjectProperty<Point2D> mCenter;
@@ -52,8 +48,7 @@ public class NodeView extends Region {
 	public NodeView(Node<?> node) {
 		mNode = node;
 		mCircle = new Circle(DEFAULT_RADIUS, DEFAULT_FILL);
-		mId = new Label(String.valueOf(mNode.getId()));
-		mLabel = new Label();
+		mText = new Label();
 
 		mRadius = new SimpleDoubleProperty();
 		mCenter = new SimpleObjectProperty<>();
@@ -62,9 +57,8 @@ public class NodeView extends Region {
 		// TODO Why I cannot apply the .node-view > .circle selector is out
 		//  of me
 		mCircle.getStyleClass().add("node-view-circle");
-		mId.getStyleClass().add("node-view-id");
+		mText.getStyleClass().add("node-view-text");
 
-		mLabel.textProperty().bind(mNode.dataProperty().asString());
 		mCircle.setStrokeType(StrokeType.INSIDE);
 		mRadius.bindBidirectional(mCircle.radiusProperty());
 		mCircle.strokeWidthProperty().bind(mRadius.multiply(0.1));
@@ -88,17 +82,14 @@ public class NodeView extends Region {
 			}
 		});
 
-		// TODO Allow NodeViews to only display one thing -- provide a text
-		//  property and let users of the class choose what to show
-		//  (particularly, either an id or a "weight" value
 		mCircle.setOnMousePressed(mMousePressed);
 		mCircle.setOnMouseDragged(mMouseDrag);
 		mCircle.setOnMouseReleased(mMouseReleased);
-		mId.setOnMousePressed(mMousePressed);
-		mId.setOnMouseDragged(mMouseDrag);
-		mId.setOnMouseReleased(mMouseReleased);
+		mText.setOnMousePressed(mMousePressed);
+		mText.setOnMouseDragged(mMouseDrag);
+		mText.setOnMouseReleased(mMouseReleased);
 
-		getChildren().addAll(mCircle, mId, mLabel);
+		getChildren().addAll(mCircle, mText);
 	}
 
 	public Point2D getCenter () {
@@ -107,6 +98,18 @@ public class NodeView extends Region {
 
 	public SimpleObjectProperty<Point2D> centerProperty () {
 		return mCenter;
+	}
+
+	public void setText (String text) {
+		mText.setText(text);
+	}
+
+	public String getText () {
+		return mText.getText();
+	}
+
+	public StringProperty textProperty () {
+		return mText.textProperty();
 	}
 
 	public void setRadius (double radius) {
@@ -136,6 +139,10 @@ public class NodeView extends Region {
 		return mCircle.fillProperty();
 	}
 
+	public void setOutline (Paint outline) {
+		mCircle.setStroke(outline);
+	}
+
 	public ObjectProperty<Paint> outlineProperty () {
 		return mCircle.strokeProperty();
 	}
@@ -149,9 +156,8 @@ public class NodeView extends Region {
 
 		layoutInArea(mCircle, x, y, width, height, 0, HPos.CENTER, VPos.TOP);
 		layoutInArea(
-			mId, x, y, width, 2 * mRadius.get() , 0, HPos.CENTER, VPos.CENTER
+			mText, x, y, width, 2 * mRadius.get() , 0, HPos.CENTER, VPos.CENTER
 		);
-		layoutInArea(mLabel, x, y, width, height, 0, HPos.CENTER, VPos.BOTTOM);
 	}
 
 	@Override
@@ -165,8 +171,7 @@ public class NodeView extends Region {
 	protected double computePrefHeight (double width) {
 		final Insets insets = getInsets();
 
-		return insets.getTop() + 2 * mRadius.get() + insets.getBottom()
-			+ mLabel.getHeight();
+		return insets.getTop() + 2 * mRadius.get() + insets.getBottom();
 	}
 
 	void setDebug (boolean debug) {

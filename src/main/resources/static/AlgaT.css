@@ -28,7 +28,7 @@
     -fx-fill: radial-gradient(radius 90%, #FFF, #3E86A0);
 }
 
-.node-view-id {
+.node-view-text {
     -fx-content-display: right;
     -fx-text-fill: #EEE;
 }

@@ -195,6 +195,7 @@ public class GraphView<T> extends Region {
 	private void addNodeView (Node<T> node) {
 		final NodeView view = new NodeView(node);
 
+		view.setText(String.valueOf(node.getId()));
 		view.setRadius(mNodeRadius);
 		view.setFill(mNodeFill);
 		view.setPadding(new Insets(mNodeMargin));
