@@ -4,6 +4,7 @@ import unibo.algat.util.ValueFactory;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.BiPredicate;
 
 /**
  * <p>A {@link GraphFactory} subclass, generating {@code Graph} instances
@@ -11,10 +12,15 @@ import java.util.Random;
  */
 public abstract class RandomGraphFactory<T> implements GraphFactory<T> {
 	protected int mNodes, mEdges;
+	private boolean mSelfEdges;
 	protected ValueFactory<T> mValueFactory;
 
 	public RandomGraphFactory(int nodes, int edges) {
 		this(nodes, edges, null);
+	}
+
+	public RandomGraphFactory(int nodes, int edges, ValueFactory<T> factory) {
+		this(nodes, edges, factory, false);
 	}
 
 	/**
@@ -25,8 +31,12 @@ public abstract class RandomGraphFactory<T> implements GraphFactory<T> {
 	 *                   {@link #setValueFactory(ValueFactory)}. A value
 	 *                   of {@code null} indicates that default values of type
 	 *                   {@code T} will be chosen instead.
+	 * @param selfEdges {@code true} if edges of the type {@code (x, x)} are
+	 *                                 to be allowed, {@code false} otherwise.                                 .
 	 */
-	public RandomGraphFactory(int nodes, int edges, ValueFactory<T> factory) {
+	public RandomGraphFactory(
+		int nodes, int edges, ValueFactory<T> factory, boolean selfEdges
+	) {
 		if (nodes < 0 || edges < 0) {
 			throw new IllegalArgumentException(
 				"Either the number of nodes or edges was negative"
@@ -41,6 +51,7 @@ public abstract class RandomGraphFactory<T> implements GraphFactory<T> {
 
 		mNodes = nodes;
 		mEdges = edges;
+		mSelfEdges = selfEdges;
 		mValueFactory = factory;
 	}
 
@@ -57,6 +68,10 @@ public abstract class RandomGraphFactory<T> implements GraphFactory<T> {
 		final Graph<T> instance = getInstance();
         final ArrayList<Node<T>> nodes = new ArrayList<>(mNodes);
         final Random r = new Random(System.currentTimeMillis());
+        // Regulates the insertion of new edges -- are they already present,
+		// is it an (x, x) type of edge?
+        final BiPredicate<Node<T>, Node<T>> mustDiscardEdge = (u, v) ->
+			instance.containsEdge(u, v) || (!mSelfEdges && u.equals(v));
 
         for (int i = 0; i < mNodes; i++) {
             nodes.add(new Node<>(i));
@@ -75,7 +90,7 @@ public abstract class RandomGraphFactory<T> implements GraphFactory<T> {
             do {
 				u = nodes.get(r.nextInt(mNodes));
 				v = nodes.get(r.nextInt(mNodes));
-			} while (instance.containsEdge(u, v));
+			} while (mustDiscardEdge.test(u, v));
 
             instance.insertEdge(u, v);
 		}
