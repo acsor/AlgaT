@@ -37,7 +37,7 @@ test {
 
 jar {
 	manifest {
-		attributes 'Main-Class': 'unibo.algat.Main'
+		attributes 'Main-Class': 'unibo.algat.AlgaT'
 	}
 }
 
@@ -46,4 +46,4 @@ shadowJar {
 	classifier = null // No suffix
 }
 
-mainClassName = 'unibo.algat.Main'
+mainClassName = 'unibo.algat.AlgaT'
