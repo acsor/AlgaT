@@ -253,7 +253,6 @@ public class AlgaTCoreController {
 
 		LessonTreeNode(Lesson lesson) {
 			this.lesson = lesson;
-			topic = lesson.getName();
 		}
 
 		@Override
@@ -263,7 +262,9 @@ public class AlgaTCoreController {
 			if (other instanceof LessonTreeNode) {
 				o = (LessonTreeNode) other;
 
-				return topic.equals(o.topic) && lesson == o.lesson;
+				return
+					String.valueOf(topic).equals(String.valueOf(o.topic))
+					&& lesson == o.lesson;
 			}
 
 			return false;
@@ -286,10 +287,9 @@ public class AlgaTCoreController {
 			TreeItem<LessonTreeNode> n, TreeItem<LessonTreeNode> m
 		) {
 			if (n.getValue().topic != null && m.getValue().topic == null) {
-				return 1;
-			} else if (n.getValue().topic == null && m.getValue().topic != null)
-			{
 				return -1;
+			} else if (n.getValue().topic == null && m.getValue().topic != null) {
+				return 1;
 			} else {
 				return n.toString().compareTo(m.toString());
 			}
