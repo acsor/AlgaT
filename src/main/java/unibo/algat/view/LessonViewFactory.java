@@ -20,7 +20,7 @@ public class LessonViewFactory {
 	 * @return The graphical object the lesson is associated to
 	 */
 	public static LessonView lessonView (Lesson lesson) throws Exception {
-		LessonLoader l = new LessonLoader(
+		final LessonLoader loader = new LessonLoader(
 			AlgaTApplication.LESSONS_DIR, Locale.getDefault()
 		);
         Class<LessonView> toLoad;
@@ -30,7 +30,7 @@ public class LessonViewFactory {
 		try {
 			// TODO Remove cast and use instanceof operator
 			toLoad = (Class<LessonView>) Class.forName(
-				l.lessonBundle(lesson).getString(KEY_VIEW)
+				loader.lessonBundle(lesson).getString(KEY_VIEW)
 			);
 			defaultConstructor = toLoad.getConstructor();
 			view = defaultConstructor.newInstance();
@@ -42,5 +42,18 @@ public class LessonViewFactory {
 		view.setLesson(lesson);
 
 		return view;
+	}
+
+	/**
+	 * @param lesson Lesson whose view existence is to be tested
+	 * @return {@code true} if the given {@link Lesson} has a view associated
+	 * to it, {@code false} otherwise.
+	 */
+	public static boolean isAvailable (Lesson lesson) {
+		final LessonLoader loader = new LessonLoader(
+			AlgaTApplication.LESSONS_DIR, Locale.getDefault()
+		);
+
+		return !loader.lessonBundle(lesson).getString(KEY_VIEW).isBlank();
 	}
 }

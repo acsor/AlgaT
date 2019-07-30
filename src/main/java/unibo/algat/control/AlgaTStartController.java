@@ -1,5 +1,6 @@
 package unibo.algat.control;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -8,8 +9,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
@@ -99,11 +99,13 @@ public class AlgaTStartController {
 			String description;
 
 			// If we have a lesson node, i.e. a leaf:
-			if (newValue != null && newValue.getValue().lesson != null) {
+			if (newValue != null && newValue.getValue().isLesson()) {
 				mSelectedLesson = newValue.getValue().lesson;
 				description = mSelectedLesson.getDescription();
 
-				mStartLesson.setDisable(false);
+				mStartLesson.setDisable(
+					!LessonViewFactory.isAvailable(newValue.getValue().lesson)
+				);
 				// Update the bottom text field with the lesson description
 				mBottomText.setText(
 					description == null || description.isBlank() ?
@@ -142,6 +144,7 @@ public class AlgaTStartController {
 			mSelectedTabListener
 		);
 		mMainMenuController.mCloseTab.setOnAction(mOnCloseTabHandler);
+		mTreeView.setCellFactory(treeView -> new CustomTreeCell());
 		mTreeView.getSelectionModel().selectedItemProperty().addListener(
 			mSelectedLessonListener
 		);
@@ -177,9 +180,6 @@ public class AlgaTStartController {
 		final TreeItem<LessonTreeNode> root = new TreeItem<>(
 			new LessonTreeNode(mInterface.getString("gui.algat.treeRoot"))
 		);
-		final Image unavailable = new Image(
-			"/static/lesson-unavailable.png", 14, 14, true, false
-		);
 		TreeItem<LessonTreeNode> curr;
 		boolean found;
 		LessonTreeNode lookedFor;
@@ -212,12 +212,7 @@ public class AlgaTStartController {
 			}
 
 			// Add the leaf node
-			if (l.isAvailable())
-				curr.getChildren().add(new TreeItem<>(new LessonTreeNode(l)));
-			else
-				curr.getChildren().add(new TreeItem<>(
-					new LessonTreeNode(l), new ImageView(unavailable)
-				));
+			curr.getChildren().add(new TreeItem<>(new LessonTreeNode(l)));
 		}
 
 		return root;
@@ -231,6 +226,34 @@ public class AlgaTStartController {
 		while (!toOrder.isEmpty()) {
             toOrder.peek().getChildren().sort(order);
             toOrder.addAll(toOrder.remove().getChildren());
+		}
+	}
+
+	/**
+	 * <p>Custom {@link TreeCell} implementation which self-disables (via
+	 * {@link #setDisable}) when a given {@link Lesson} is unavailable.</p>
+	 */
+	private static class CustomTreeCell extends TreeCell<LessonTreeNode> {
+		@Override
+		protected void updateItem (LessonTreeNode item, boolean empty) {
+			super.updateItem(item, empty);
+
+			if (item == null || empty) {
+				setText(null);
+				setGraphic(null);
+			} else {
+				setText(String.valueOf(item));
+				// Note that by default it does not suffice to invoke
+				// setDisable(). For some mysterious reason, no default graphic
+				// behavior is triggered to display a disabled TreeCell --
+				// hence the .tree-cell:disabled rule in AlgaT.css for
+				// displaying disabled entries
+				setDisable(
+					item.isLesson() && !LessonViewFactory.isAvailable(
+						item.lesson
+					)
+				);
+			}
 		}
 	}
 
@@ -253,6 +276,14 @@ public class AlgaTStartController {
 
 		LessonTreeNode(Lesson lesson) {
 			this.lesson = lesson;
+		}
+
+		boolean isTopic () {
+			return topic != null;
+		}
+
+		boolean isLesson () {
+			return lesson != null;
 		}
 
 		@Override
@@ -286,9 +317,9 @@ public class AlgaTStartController {
 		public int compare(
 			TreeItem<LessonTreeNode> n, TreeItem<LessonTreeNode> m
 		) {
-			if (n.getValue().topic != null && m.getValue().topic == null) {
+			if (n.getValue().isTopic() && !m.getValue().isTopic()) {
 				return -1;
-			} else if (n.getValue().topic == null && m.getValue().topic != null) {
+			} else if (!n.getValue().isTopic() && m.getValue().isTopic()) {
 				return 1;
 			} else {
 				return n.toString().compareTo(m.toString());
