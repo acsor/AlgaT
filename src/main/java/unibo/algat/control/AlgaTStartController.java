@@ -19,7 +19,7 @@ import unibo.algat.view.ToolBarUser;
 
 import java.util.*;
 
-public class AlgaTCoreController {
+public class AlgaTStartController {
 	private TreeItem<LessonTreeNode> mTree;
 	private ResourceBundle mInterface;
 	private Lesson mSelectedLesson;
@@ -120,7 +120,7 @@ public class AlgaTCoreController {
 		}
 	};
 
-	public AlgaTCoreController() {
+	public AlgaTStartController() {
 		final LessonLoader l = new LessonLoader(
 			AlgaTApplication.LESSONS_DIR, Locale.getDefault()
 		);

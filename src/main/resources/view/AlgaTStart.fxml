@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <TabPane
 		xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-		fx:id="mTabPane" fx:controller="unibo.algat.control.AlgaTCoreController"
+		fx:id="mTabPane" fx:controller="unibo.algat.control.AlgaTStartController"
 		prefHeight="1000.0" tabClosingPolicy="ALL_TABS"
 >
 	<!-- mLessonsTab is later added through code to the tab pane to have one of
