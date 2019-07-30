@@ -13,7 +13,6 @@ import java.util.Locale;
  */
 public class LessonViewFactory {
 	static final String KEY_VIEW = "lesson.view";
-	static final String VIEW_PATH = "/view/";
 
 	/**
 	 * @param lesson Lesson to produce a view for

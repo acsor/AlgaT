@@ -1,15 +1,12 @@
 package unibo.algat.control;
 
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import unibo.algat.AlgaTApplication;
 import unibo.algat.lesson.Lesson;
 import unibo.algat.lesson.LessonLoader;
@@ -38,87 +35,70 @@ public class AlgaTStartController {
 	 * <p>Monitors the lessons (main, non-closeable) tab, deactivating the
 	 * "Close active tab" menu item when the former is visible.</p>
 	 */
-	private final ChangeListener<Tab> mSelectedTabListener
-		= new ChangeListener<> () {
-		@Override
-		public void changed (
-			ObservableValue<? extends Tab> observable, Tab oldValue,
-			Tab newValue
-		) {
-			String windowTitle;
-			final Node content = newValue.getContent();
+	private final ChangeListener<Tab>
+		mSelectedTabListener = (observable, oldValue, newValue) -> {
+		String windowTitle;
+		final Node content = newValue.getContent();
 
-			if (newValue == mLessonsTab) {
-				// Deactivate or activate the "Close tab" menu item
-				mMainMenuController.mCloseTab.setDisable(true);
-				windowTitle = mInterface.getString("gui.app.title");
-			} else {
-				mMainMenuController.mCloseTab.setDisable(false);
-				windowTitle = String.format(
-					"%s - %s", newValue.getText(),
-					mInterface.getString("gui.app.title")
-				);
-			}
-
-			mToolBar.setUser(
-				content instanceof ToolBarUser ? (ToolBarUser) content : null
+		if (newValue == mLessonsTab) {
+			// Deactivate or activate the "Close tab" menu item
+			mMainMenuController.mCloseTab.setDisable(true);
+			windowTitle = mInterface.getString("gui.app.title");
+		} else {
+			mMainMenuController.mCloseTab.setDisable(false);
+			windowTitle = String.format(
+				"%s - %s", newValue.getText(),
+				mInterface.getString("gui.app.title")
 			);
-
-			// Set the updated window title
-			AlgaTApplication.getInstance().setWindowTitle(windowTitle);
 		}
+
+		mToolBar.setUser(
+			content instanceof ToolBarUser ? (ToolBarUser) content : null
+		);
+
+		// Set the updated window title
+		AlgaTApplication.getInstance().setWindowTitle(windowTitle);
 	};
 	/**
 	 * <p>Handles closing of lessons tab when the Cltr+W combination, or
 	 * "Close active tab" menu item, is issued.</p>
 	 */
-	private final EventHandler<ActionEvent> mOnCloseTabHandler =
-		new EventHandler<>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Tab selected = mTabPane.getSelectionModel().getSelectedItem();
+	private final EventHandler<ActionEvent> mOnCloseTabHandler = event -> {
+		Tab selected = mTabPane.getSelectionModel().getSelectedItem();
 
-				// I want to assume selected will not be null. If it turns out
-				// to be, one might exploit the occasion to fix a bug
-				if (selected != mLessonsTab) {
-					mTabPane.getTabs().remove(selected);
-				}
-			}
-		};
+		// I want to assume selected will not be null. If it turns out
+		// to be, one might exploit the occasion to fix a bug
+		if (selected != mLessonsTab) {
+			mTabPane.getTabs().remove(selected);
+		}
+	};
 	/**
 	 * <p>Handles the selection of a new lesson in the lesson tree view.</p>
 	 */
 	private final ChangeListener<TreeItem<LessonTreeNode>>
-		mSelectedLessonListener = new ChangeListener<>() {
-		@Override
-		public void changed(
-			ObservableValue<? extends TreeItem<LessonTreeNode>> observable,
-			TreeItem<LessonTreeNode> oldValue,
-			TreeItem<LessonTreeNode> newValue
-		) {
-			String description;
+		mSelectedLessonListener = (observable, oldValue, newValue) -> {
+		String description;
 
-			// If we have a lesson node, i.e. a leaf:
-			if (newValue != null && newValue.getValue().isLesson()) {
-				mSelectedLesson = newValue.getValue().lesson;
-				description = mSelectedLesson.getDescription();
+		// If we have a lesson node, i.e. a leaf:
+		if (newValue != null && newValue.getValue().isLesson()) {
+			mSelectedLesson = newValue.getValue().lesson;
+			description = mSelectedLesson.getDescription();
 
-				mStartLesson.setDisable(
-					!LessonViewFactory.isAvailable(newValue.getValue().lesson)
-				);
-				// Update the bottom text field with the lesson description
-				mBottomText.setText(
-					description == null || description.isBlank() ?
-						mSelectedLesson.getName(): description
-				);
-			} else {
-				mSelectedLesson = null;
-				// Otherwise, either the newValue variable is null or we find
-				// ourselves at an interior node of the lesson tree
-				mStartLesson.setDisable(true);
-				// Set the bottom text field back to the original value
-				mBottomText.setText(mInterface.getString("gui.algat.welcome"));
-			}
+			mStartLesson.setDisable(
+				!LessonViewFactory.isAvailable(newValue.getValue().lesson)
+			);
+			// Update the bottom text field with the lesson description
+			mBottomText.setText(
+				description == null || description.isBlank() ?
+					mSelectedLesson.getName(): description
+			);
+		} else {
+			mSelectedLesson = null;
+			// Otherwise, either the newValue variable is null or we find
+			// ourselves at an interior node of the lesson tree
+			mStartLesson.setDisable(true);
+			// Set the bottom text field back to the original value
+			mBottomText.setText(mInterface.getString("gui.algat.welcome"));
 		}
 	};
 
