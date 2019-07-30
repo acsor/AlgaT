@@ -1,6 +1,6 @@
 # AlgaT
 
-![AlgaT Logo][logo]
+<img alt="AlgaT Logo" src="src/main/resources/res/static/logo.png" width="256" />
 
 AlgaT is an interactive simulator whereby apprentice students can familiarize
 themselves with common algorithmic solutions. This project was developed as an
@@ -16,10 +16,16 @@ AlgaT can be run by downloading the precompiled .jar file and doing
 java -jar algat.jar
 ```
 
-on a terminal console.
+on a terminal console. Alternatively, using Gradle
+
+```
+./gradlew run
+```
 
 ## Testing
 AlgaT provides a unit testing suite, written in JUnit 5. We suppose it to be
-easily runnable from terminal or IDE tools.
+easily runnable from popular IDEs or, again, with Gradle
 
-[logo]: src/res/static/logo-medium.png "Logo"
+```
+./gradlew test
+```

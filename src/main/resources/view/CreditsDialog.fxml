@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.WebView?>
+<!-- TODO Remove the hard-coded values for maxWidth/Height. Don't auto-adapting
+ attribute options exist? -->
+<WebView xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+         fx:id="creditsView"
+		 fx:controller="unibo.algat.control.CreditsDialogController"
+         maxWidth="500" maxHeight="500"
+>
+</WebView>
