@@ -1,0 +1,99 @@
+.root {
+    -fx-font-family: Arial;
+    -fx-font-size: 13;
+}
+
+
+#status-bar {
+    -fx-padding: 10px;
+    -fx-opacity: 0.70;
+}
+
+#status-bar .label {
+    -fx-font-size: 14px;
+}
+
+
+#lessons-tab .label {
+     -fx-font-size: 14.5px;
+     -fx-wrap-text: true;
+     -fx-pref-height: 300;
+     -fx-padding: 20 40 20 20;
+}
+
+
+/* TODO I'd like to apply the .node-view > .circle syntax, but something
+    prevented it */
+.node-view-circle {
+    -fx-fill: radial-gradient(radius 90%, #FFF, #3E86A0);
+}
+
+.node-view-text {
+    -fx-content-display: right;
+    -fx-text-fill: #EEE;
+}
+
+
+.edge-view {
+    -fx-stroke: #999;
+    -fx-stroke-width: 2px;
+    -fx-stroke-line-cap: round;
+    -fx-stroke-line-join: round;
+}
+
+.weight-view {
+    -fx-background-color: #DDD;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #343434;
+    -fx-font-size: 14;
+
+    -fx-label-padding: 5px;
+}
+
+
+.lesson-view {
+    -fx-padding: 16;
+}
+
+.lesson-view-title {
+    -fx-font-size: 20;
+}
+
+.unavailable-lesson-view .center {
+    -fx-alignment: center;
+    -fx-padding: 10px;
+}
+
+.unavailable-lesson-view .center > .label {
+    -fx-font-size: 15px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+
+    -fx-padding: 20px;
+}
+
+.shortest-path-lesson-view .graph-view {
+    -fx-padding: 10px;
+}
+
+
+.quiz-view {
+    -fx-padding: 0 20 0 20;
+    -fx-spacing: 20;
+    -fx-pref-height: 1000;
+}
+
+.quiz-view-title {
+    -fx-font-size: 20;
+    -fx-alignment: center-left;
+}
+
+.quiz-view-text {
+    -fx-font-size: 16;
+    -fx-font-style: italic;
+}
+
+.quiz-view-choices {
+    -fx-spacing: 10;
+}

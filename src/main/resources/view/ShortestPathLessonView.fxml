@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import unibo.algat.view.GraphGridLayout?>
+<?import unibo.algat.view.GraphView?>
+<?import unibo.algat.view.LessonView?>
+<fx:root
+	type="unibo.algat.view.LessonView" xmlns="http://javafx.com/javafx"
+	xmlns:fx="http://javafx.com/fxml"
+>
+	<center>
+		<ScrollPane fx:id="mScrollPane" fitToHeight="true" fitToWidth="true">
+            <GraphView fx:id="mGraphView" nodeRadius="25" nodeMargin="30">
+				<graphLayout><GraphGridLayout columns="4" /></graphLayout>
+			</GraphView>
+		</ScrollPane>
+	</center>
+</fx:root>
