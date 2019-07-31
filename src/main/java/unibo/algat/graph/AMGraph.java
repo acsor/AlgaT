@@ -1,6 +1,7 @@
 package unibo.algat.graph;
 
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -11,24 +12,26 @@ public class AMGraph<T> implements Graph<T> {
 
 	public AMGraph (int capacity) {
 		if (capacity > 0) {
-			mNodes = (Node<T>[]) new Object[capacity];
+			mNodes = (Node<T>[]) new Node[capacity];
 			mEdges = new short[capacity][capacity];
+
+			for (int i = 0; i < capacity; i++)
+				mEdges[i] = new short[capacity];
 		} else {
 			throw new IllegalArgumentException("capacity needs to be positive");
 		}
 	}
 
 	@Override
-	public void insertNode(Node<T> node) {
-		int id;
-
+	public boolean insertNode(Node<T> node) {
 		if (node != null) {
-			id = node.getId();
+			final int id = node.getId();
 
-			if (0 <= id && id < mEdges.length) {
-                // If not already present
-				if (mEdges[id] == null)
-					mEdges[id] = new short[mEdges.length];
+			if (0 <= id && id < mNodes.length) {
+				Node<T> old = mNodes[id];
+				mNodes[id] = node;
+
+				return old == null;
 			} else {
 				throw new IllegalArgumentException(
                     "The given node had an inappropriate id: " + id
@@ -40,30 +43,21 @@ public class AMGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public void deleteNode(Node<T> node) {
-		int id;
-
+	public boolean deleteNode(Node<T> node) {
 		if (node != null) {
-            id = node.getId();
+            int id = node.getId();
 
-            if (0 <= id && id < mEdges.length) {
-            	if (mEdges[id] != null) {
-					// Deletes associated edges going out from the deleted
-					// node -- plausibly more useful for avoiding memory leaks
-					// and circular references
-					for (int col = 0; col < mEdges.length; col++) {
-						if (mEdges[id][col] != null)
-							mEdges[id][col] = null;
-					}
+            if (0 <= id && id < mNodes.length) {
+            	final Node<T> old = mNodes[id];
 
-					mEdges[id] = null;
+				mNodes[id] = null;
+				mEdges[id] = new short[mNodes.length];
 
-					// Deletes associated edges going into the deleted node
-					for (int row = 0; row < mEdges.length; row++) {
-						if (mEdges[row] != null)
-							mEdges[row][id] = null;
-					}
-				}
+				// Clear the deleted node from edges to which it was the end
+				for (int row = 0; row < mNodes.length; row++)
+					mEdges[row][id] = 0;
+
+				return old != null;
 			} else {
 				throw new IllegalArgumentException(
 					"The given node had an inappropriate id: " + id
@@ -77,30 +71,44 @@ public class AMGraph<T> implements Graph<T> {
 	@Override
 	public boolean containsNode(Node<T> needle) {
 		if (needle != null) {
-			// TODO Implement -- you basically need to check that the node id
-			//  is valid and that the associated matrix row is not null.
-			//  Nothing more, nothing less
-			throw new UnsupportedOperationException("Not implemented");
+			final int id = needle.getId();
+
+			if (0 <= id && id < mNodes.length) {
+				return mNodes[id] != null;
+			} else {
+				throw new IllegalArgumentException(
+					"The given node had an inappropriate id: " + id
+				);
+			}
 		} else {
 			throw new NullPointerException("needle was null");
 		}
 	}
 
 	@Override
-	public Set<Node<T>> vertices() {
-		throw new UnsupportedOperationException("Not implemented");
+	public Set<Node<T>> nodes() {
+		final HashSet<Node<T>> out = new HashSet<>(mNodes.length);
+
+		for (Node<T> v: mNodes) {
+			if (v != null)
+				out.add(v);
+		}
+
+		return out;
 	}
 
 	@Override
 	public Set<Node<T>> adjacents(Node<T> node) {
-		int id;
-		HashSet<Node<T>> a = new HashSet<>();
+		final HashSet<Node<T>> a = new HashSet<>();
 
 		if (node != null) {
-			id = node.getId();
+			final int id = node.getId();
 
             if (containsNode(node)) {
-				throw new UnsupportedOperationException("Not implemented");
+				for (int i = 0; i < mNodes.length; i++) {
+					if (mEdges[id][i] == 1)
+						a.add(mNodes[i]);
+				}
 			} else {
 				throw new NoSuchElementException("node is not in this graph");
 			}
@@ -112,30 +120,40 @@ public class AMGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public void insertEdge(Node<T> a, Node<T> b) {
+	public boolean insertEdge(Node<T> a, Node<T> b) {
 		if (a != null && b != null) {
-			if (containsNode(a) && containsNode(b))
-				throw new UnsupportedOperationException("Not implemented");
-			else
+			if (containsNode(a) && containsNode(b)) {
+				final int old = mEdges[a.getId()][b.getId()];
+
+				mEdges[a.getId()][b.getId()] = 1;
+
+				return old == 0;
+			} else {
 				throw new NoSuchElementException(
 					"either a or b are not in graph"
 				);
+			}
 		} else {
-			throw new NullPointerException("either a or b are null");
+			throw new NullPointerException("Either a or b was null");
 		}
 	}
 
 	@Override
-	public void deleteEdge(Node<T> a, Node<T> b) {
+	public boolean deleteEdge(Node<T> a, Node<T> b) {
 		if (a != null && b != null) {
-			if (containsNode(a) && containsNode(b))
-				throw new UnsupportedOperationException("Not implemented");
-			else
+			if (containsNode(a) && containsNode(b)) {
+				final int old = mEdges[a.getId()][b.getId()];
+
+				mEdges[a.getId()][b.getId()] = 0;
+
+				return old == 1;
+			} else {
 				throw new NoSuchElementException(
 					"either a or b are not in graph"
 				);
+			}
 		} else {
-			throw new NullPointerException("either a or b are null");
+			throw new NullPointerException("Either a or b was null");
 		}
 	}
 
@@ -143,38 +161,33 @@ public class AMGraph<T> implements Graph<T> {
 	public boolean containsEdge(Node<T> a, Node<T> b) {
 		if (a != null && b != null) {
 			if (containsNode(a) && containsNode(b))
-				throw new UnsupportedOperationException("Not implemented");
+				return mEdges[a.getId()][b.getId()] == 1;
 			else
 				throw new NoSuchElementException(
 					"either a or b are not in graph"
 				);
 		} else {
-			throw new NullPointerException("either a or b were null");
+			throw new NullPointerException("Either a or b was null");
 		}
 	}
 
     @Override
     public String toString() {
-        final StringBuilder b = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
 
-        for (int row = 0; row < mEdges.length; row++) {
-            if (mEdges[row][row] != null) {
-                b.append(
-                	String.format("[%d] %s -> [", row, mEdges[row][row])
-				);
+		sb.append(getClass().getName()).append("\n");
 
-                for (int col = 0; col < mEdges[row].length; col++) {
-                	// TODO Remove the last trailing comma
-                	if (col != row && mEdges[row][col] != null) {
-                		b.append(mEdges[row][col]).append(", ");
-					}
-				}
+		for (int row = 0; row < mNodes.length; row++) {
+			sb.append(mNodes[row]).append(" -> [");
 
-                b.append("]\n");
+			for (int col = 0; col < mNodes.length; col++) {
+				if (mEdges[row][col] == 1)
+					sb.append(mNodes[col]);
 			}
+
+			sb.append("]\n");
 		}
 
-        return b.toString();
+        return sb.toString();
 	}
-
 }
