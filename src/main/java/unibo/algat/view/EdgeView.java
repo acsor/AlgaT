@@ -20,8 +20,9 @@ import unibo.algat.graph.EdgeWeight;
  */
 public class EdgeView extends Path {
 	private final ObjectBinding<Point2D> mStart, mEnd;
-	private final ObjectProperty<Point2D> mTop;
+	private final ObjectProperty<Point2D> mControlPoint;
 	private final ObjectBinding<QuadCurveTo> mArc;
+	private final ObjectBinding<Point2D> mMidPoint;
 	// The angle formed by the runAuto and end graph nodes
 	private final DoubleProperty mAngle;
 
@@ -32,8 +33,8 @@ public class EdgeView extends Path {
 	 * @param v Second edge node
 	 */
 	public EdgeView(NodeView u, NodeView v) {
-		mTop = new SimpleObjectProperty<>(this, "top");
-		mTop.bind(
+		mControlPoint = new SimpleObjectProperty<>(this, "top");
+		mControlPoint.bind(
 			new ObjectBinding<>() {
 				{ bind(u.centerProperty(), v.centerProperty()); }
 
@@ -52,44 +53,58 @@ public class EdgeView extends Path {
 		);
 
 		mStart = new ObjectBinding<>() {
-			{ bind(u.centerProperty(), u.radiusProperty(), mTop); }
+			{ bind(u.centerProperty(), u.radiusProperty(), mControlPoint); }
 
 			@Override
 			protected Point2D computeValue() {
-				Point2D diff = mTop.get().subtract(u.getCenter()).normalize();
+				Point2D diff = mControlPoint.get().subtract(u.getCenter()).normalize();
 				// TODO Compute the runAuto and end points as the intersection
 				//  between the parabola and the circumferences
 				return u.getCenter().add(diff.multiply(u.getRadius()));
 			}
 		};
 		mEnd = new ObjectBinding<>() {
-			{ bind(v.centerProperty(), v.radiusProperty(), mTop); }
+			{ bind(v.centerProperty(), v.radiusProperty(), mControlPoint); }
 
 			@Override
 			protected Point2D computeValue() {
-                Point2D diff = mTop.get().subtract(v.getCenter()).normalize();
+                Point2D diff = mControlPoint.get().subtract(v.getCenter()).normalize();
 
 				return v.getCenter().add(diff.multiply(v.getRadius()));
 			}
 		};
 		mArc = new ObjectBinding<>() {
-			{ bind(mStart, mTop, mEnd); }
+			{ bind(mStart, mControlPoint, mEnd); }
 
 			@Override
 			protected QuadCurveTo computeValue () {
                 return new QuadCurveTo(
-                    mTop.get().getX(), mTop.get().getY(),
+                    mControlPoint.get().getX(), mControlPoint.get().getY(),
 					mEnd.get().getX(), mEnd.get().getY()
+				);
+			}
+		};
+		mMidPoint = new ObjectBinding<>() {
+			{ bind(mStart, mControlPoint, mEnd);}
+
+			@Override
+			protected Point2D computeValue() {
+				double t = 0.5;
+				return new Point2D(
+						(1-t) * (1-t) * mStart.get().getX() +
+								2 * (1-t) * t * mControlPoint.get().getX() + t * t * mEnd.get().getX(),
+						(1-t) * (1-t) * mStart.get().getY() +
+								2 * (1-t) * t * mControlPoint.get().getY() + t * t * mEnd.get().getY()
 				);
 			}
 		};
 		mAngle = new SimpleDoubleProperty(this, "angle");
 		mHeadLeft = new ObjectBinding<>() {
-			{ bind(mTop, mEnd); }
+			{ bind(mControlPoint, mEnd); }
 
 			@Override
 			protected Point2D computeValue() {
-				Point2D diff = mTop.get().subtract(mEnd.get()).normalize();
+				Point2D diff = mControlPoint.get().subtract(mEnd.get()).normalize();
 				// Get diff angle and add 30 degrees to it
 				final double newAngle = Math.atan2(
 					diff.getY(), diff.getX()
@@ -101,11 +116,11 @@ public class EdgeView extends Path {
 			}
 		};
 		mHeadRight = new ObjectBinding<>() {
-			{ bind(mTop, mEnd); }
+			{ bind(mControlPoint, mEnd); }
 
 			@Override
 			protected Point2D computeValue() {
-				Point2D diff = mTop.get().subtract(mEnd.get()).normalize();
+				Point2D diff = mControlPoint.get().subtract(mEnd.get()).normalize();
 				// Get diff angle and subtract 30 degrees to it
 				final double newAngle = Math.atan2(
 					diff.getY(), diff.getX()
@@ -145,10 +160,14 @@ public class EdgeView extends Path {
 	}
 
 	public ObjectProperty<Point2D> topProperty () {
-		return mTop;
+		return mControlPoint;
 	}
 
 	public DoubleProperty angleProperty () {
 		return mAngle;
+	}
+
+	public Point2D getMidpoint() {
+		return mMidPoint.get();
 	}
 }
