@@ -46,6 +46,7 @@
     -fx-background-radius: 6px;
     -fx-text-fill: #343434;
     -fx-font-size: 14;
+    -fx-opacity: 0.85;
 
     -fx-label-padding: 5px;
 }
