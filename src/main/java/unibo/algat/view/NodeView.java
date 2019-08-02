@@ -82,6 +82,9 @@ public class NodeView extends Region {
 			}
 		});
 
+		// TODO Allow NodeViews to only display one thing -- provide a text
+		//  property and let users of the class choose what to show
+		//  (particularly, either an id or a "weight" value
 		mCircle.setOnMousePressed(mMousePressed);
 		mCircle.setOnMouseDragged(mMouseDrag);
 		mCircle.setOnMouseReleased(mMouseReleased);

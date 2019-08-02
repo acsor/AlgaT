@@ -26,14 +26,14 @@ public class LessonLoaderTests {
         Lesson e;
 
 		expected.put(
-			0, new Lesson(0, "Shortest Path Problem", "AAA", true, "Graph")
+			0, new Lesson(0, "Shortest Path Problem", "AAA", "Graph")
 		);
 		expected.put(
-			1, new Lesson(1, "Minimum Spanning Tree", "BBB", false, "Graph")
+			1, new Lesson(1, "Minimum Spanning Tree", "BBB", "Graph")
 		);
 		expected.put(
 			2, new Lesson(
-				2, "Sample lesson name", "CCC", true, "A", "B", "C", "D", "E",
+				2, "Sample lesson name", "CCC", "A", "B", "C", "D", "E",
 				"F", "...", "Z"
 			)
 		);
@@ -44,7 +44,6 @@ public class LessonLoaderTests {
             assertEquals(e.getId(), actual.getId());
 			assertEquals(e.getName(), actual.getName());
 			assertEquals(e.getDescription(), actual.getDescription());
-			assertEquals(e.isAvailable(), actual.isAvailable());
 			assertIterableEquals(e.getTopics(), actual.getTopics());
 		}
 	}

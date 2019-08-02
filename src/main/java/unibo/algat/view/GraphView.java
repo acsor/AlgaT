@@ -1,5 +1,7 @@
 package unibo.algat.view;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -17,7 +19,7 @@ import java.util.Map;
  * <p>A view class responsible for displaying a {@link Graph} object.</p>
  */
 public class GraphView<T> extends Region {
-	private ObservableGraph<T> mGraph;
+	private ObjectProperty<ObservableGraph<T>> mGraph;
 	private WeightFunction<T> mWeights;
 
 	private Map<Node<T>, NodeView> mNodes;
@@ -50,6 +52,7 @@ public class GraphView<T> extends Region {
 	};
 
 	public GraphView () {
+		mGraph = new SimpleObjectProperty<>(this, "graph");
 		mNodes = new HashMap<>();
 		mEdges = new HashMap<>();
 		mWeightViews = new HashMap<>();
@@ -64,33 +67,40 @@ public class GraphView<T> extends Region {
 	}
 
 	public void setGraph(Graph<T> graph) {
-		if (mGraph != null) {
-			mGraph.removeNodeChangeListener(mNodeListener);
-			mGraph.removeEdgeChangeListener(mEdgeListener);
+		if (mGraph.get() != null) {
+			mGraph.get().removeNodeChangeListener(mNodeListener);
+			mGraph.get().removeEdgeChangeListener(mEdgeListener);
 		}
-
-		mGraph = new ObservableGraph<>(graph);
-		mGraph.addNodeChangeListener(mNodeListener);
-		mGraph.addEdgeChangeListener(mEdgeListener);
 
 		mLayout.clear();
 		mWeightViews.clear();
 		setWeightFunction(null);
-        mEdges.clear();
+		mEdges.clear();
 		mNodes.clear();
-
 		getChildren().clear();
 
-        for (Node<T> u: mGraph.nodes())
-			addNodeView(u);
+		if (graph != null) {
+			mGraph.set(new ObservableGraph<>(graph));
+			mGraph.get().addNodeChangeListener(mNodeListener);
+			mGraph.get().addEdgeChangeListener(mEdgeListener);
 
-		for (Node<T> u: mGraph.nodes()) {
-            for (Node<T> v: mGraph.adjacents(u))
-            	addEdgeView(u, v);
+			for (Node<T> u: mGraph.get().nodes())
+				addNodeView(u);
+
+			for (Node<T> u: mGraph.get().nodes()) {
+				for (Node<T> v: mGraph.get().adjacents(u))
+					addEdgeView(u, v);
+			}
+		} else {
+			mGraph.set(null);
 		}
 	}
 
 	public Graph<T> getGraph () {
+		return mGraph.get();
+	}
+
+	public ObjectProperty<ObservableGraph<T>> graphProperty () {
 		return mGraph;
 	}
 

@@ -7,7 +7,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-// TODO Rewrite the ObservableGraph system by relying on the java.beans package
+/**
+ * <p>A wrapper {@link Graph} implementation capable of transmitting changes to
+ * interested parties. {@code ObservableGraph} doesn't define its own ways of
+ * storing a {@code Graph} data but only wraps already existing {@code Graph}
+ * implementations (except, of course, another {@code ObservableGraph}).</p>
+ * <p>Instances of this class have {@code synchronized} primitives, making
+ * them safe for use in background threads.</p>
+ * @param <T>
+ */
 public final class ObservableGraph<T> implements Graph<T> {
 	private Graph<T> mGraph;
 
@@ -28,7 +36,7 @@ public final class ObservableGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public boolean insertNode(Node<T> node) {
+	public synchronized boolean insertNode(Node<T> node) {
 		final NodeChangeEvent<T> e = new NodeChangeEvent<>(this, node, true);
 
 		// ObservableGraph does not abide to the specification by raising the
@@ -47,7 +55,7 @@ public final class ObservableGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public boolean deleteNode(Node<T> node) {
+	public synchronized boolean deleteNode(Node<T> node) {
 		final Set<Pair<Node<T>, Node<T>>> edges = new HashSet<>();
 		final NodeChangeEvent<T> nodeChanged = new NodeChangeEvent<>(
 			this, node, false
@@ -83,22 +91,22 @@ public final class ObservableGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public boolean containsNode(Node<T> needle) {
+	public synchronized boolean containsNode(Node<T> needle) {
 		return mGraph.containsNode(needle);
 	}
 
 	@Override
-	public Set<Node<T>> nodes() {
+	public synchronized Set<Node<T>> nodes() {
 		return mGraph.nodes();
 	}
 
 	@Override
-	public Set<Node<T>> adjacents(Node<T> node) {
+	public synchronized Set<Node<T>> adjacents(Node<T> node) {
 		return mGraph.adjacents(node);
 	}
 
 	@Override
-	public boolean insertEdge(Node<T> a, Node<T> b) {
+	public synchronized boolean insertEdge(Node<T> a, Node<T> b) {
 		final EdgeChangeEvent<T> e = new EdgeChangeEvent<>(this, a, b, true);
 
 		if (mGraph.insertEdge(a, b)) {
@@ -112,7 +120,7 @@ public final class ObservableGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public boolean deleteEdge(Node<T> a, Node<T> b) {
+	public synchronized boolean deleteEdge(Node<T> a, Node<T> b) {
 		final EdgeChangeEvent<T> e = new EdgeChangeEvent<>(this, a, b, false);
 
 		if (mGraph.deleteEdge(a, b)) {
@@ -126,28 +134,32 @@ public final class ObservableGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public boolean containsEdge(Node<T> a, Node<T> b) {
+	public synchronized boolean containsEdge(Node<T> a, Node<T> b) {
 		return mGraph.containsEdge(a, b);
 	}
 
-	public void addNodeChangeListener (NodeChangeListener<T> l) {
+	public synchronized void addNodeChangeListener (NodeChangeListener<T> l) {
 		mNodeListeners.add(l);
 	}
 
-	public void removeNodeChangeListener (NodeChangeListener<T> l) {
+	public synchronized void removeNodeChangeListener (
+		NodeChangeListener<T> l
+	) {
 		mNodeListeners.remove(l);
 	}
 
-	public void addEdgeChangeListener (EdgeChangeListener<T> l) {
+	public synchronized void addEdgeChangeListener (EdgeChangeListener<T> l) {
 		mEdgeListeners.add(l);
 	}
 
-	public void removeEdgeChangeListener (EdgeChangeListener<T> l) {
+	public synchronized void removeEdgeChangeListener (
+		EdgeChangeListener<T> l
+	) {
 		mEdgeListeners.remove(l);
 	}
 
 	@Override
-	public String toString () {
+	public synchronized String toString () {
 		return mGraph.toString();
 	}
 }

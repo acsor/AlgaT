@@ -3,6 +3,11 @@
     -fx-font-size: 13;
 }
 
+/* See AlgaTStartController.CustomTreeCell for how this is utilized. */
+.tree-cell:disabled {
+    -fx-opacity: 0.4;
+}
+
 
 #status-bar {
     -fx-padding: 10px;
