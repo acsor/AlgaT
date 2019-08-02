@@ -6,10 +6,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Worker;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * <p>Auxiliary class aiding the execution of a {@link SerialAlgorithm},
@@ -25,6 +22,19 @@ public class SerialExecutor {
 
 	private BooleanProperty mAutoRun;
 
+	private static final ThreadFactory sThreadFactory = r -> {
+		final Thread t = new Thread(r);
+
+		t.setDaemon(true);
+
+		if (r instanceof AutoRunTask)
+			t.setName("Auto run task");
+		else if (r instanceof SerialAlgorithm)
+			t.setName("Serial algorithm");
+
+		return t;
+	};
+
 	/**
 	 * @param algorithm {@code SerialAlgorithm} to be executed on a background
 	 * thread.
@@ -33,7 +43,7 @@ public class SerialExecutor {
 	 */
 	public SerialExecutor (SerialAlgorithm<?> algorithm, long autoStep) {
 		mAlgorithm = algorithm;
-		mExecutor = new ScheduledThreadPoolExecutor(2);
+		mExecutor = new ScheduledThreadPoolExecutor(2, sThreadFactory);
 		mAutoStep = autoStep;
 
 		mAutoRun = new SimpleBooleanProperty(this, "autoRunning", false);
@@ -41,7 +51,7 @@ public class SerialExecutor {
 		mAlgorithm.stoppedProperty().addListener(
 			(observable, wasStopped, stopped) -> {
 				if (!wasStopped && stopped)
-					setAutoRunning(false);
+					mExecutor.shutdown();
 			}
 		);
 	}
