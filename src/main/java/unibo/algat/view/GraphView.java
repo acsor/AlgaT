@@ -178,7 +178,7 @@ public class GraphView<T> extends Region {
 
 		// Layout edge weight labels
 		for (WeightView view: mWeightViews.values()) {
-			Point2D location = view.getEdgeView().getMidpoint();
+			Point2D location = view.getEdgeView().getTop();
 			layoutInArea(
                 view,
 				bounds.getLeft() + location.getX(),
