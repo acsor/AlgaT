@@ -178,10 +178,7 @@ public class GraphView<T> extends Region {
 
 		// Layout edge weight labels
 		for (WeightView view: mWeightViews.values()) {
-			Point2D location = view.getEdgeView().topProperty().get();
-
-			// TODO Important: labels need to be aligned more tightly to the
-			//  top point of the parabola
+			Point2D location = view.getEdgeView().getTop();
 			layoutInArea(
                 view,
 				bounds.getLeft() + location.getX(),

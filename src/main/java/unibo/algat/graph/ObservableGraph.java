@@ -48,22 +48,22 @@ public final class ObservableGraph<T> implements Graph<T> {
 
 	@Override
 	public boolean deleteNode(Node<T> node) {
-		// TODO Test
 		final Set<Pair<Node<T>, Node<T>>> edges = new HashSet<>();
 		final NodeChangeEvent<T> nodeChanged = new NodeChangeEvent<>(
 			this, node, false
 		);
 
-		for (Node<T> v: mGraph.adjacents(node))
-			edges.add(new Pair<>(node, v));
+		if (mGraph.containsNode(node)) {
+			for (Node<T> v: mGraph.adjacents(node))
+				edges.add(new Pair<>(node, v));
 
-		for (Node<T> u: mGraph.nodes()) {
-			if (mGraph.containsEdge(u, node))
-				edges.add(new Pair<>(u, node));
-		}
+			for (Node<T> u: mGraph.nodes()) {
+				if (mGraph.containsEdge(u, node))
+					edges.add(new Pair<>(u, node));
+			}
 
-		// If the node was actually deleted, listeners need to be notified
-		if (mGraph.deleteNode(node)) {
+			mGraph.deleteNode(node);
+
 			for (NodeChangeListener<T> l : mNodeListeners)
 				l.nodeChanged(nodeChanged);
 
@@ -77,9 +77,9 @@ public final class ObservableGraph<T> implements Graph<T> {
 			}
 
 			return true;
+		} else {
+			return false;
 		}
-
-		return false;
 	}
 
 	@Override
