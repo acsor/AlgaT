@@ -5,6 +5,7 @@ import unibo.algat.algorithm.SerialAlgorithm;
 import unibo.algat.graph.Node;
 
 import java.io.IOException;
+import java.util.TreeSet;
 
 public class ShortestPathLessonView extends GraphLessonView {
 	public ShortestPathLessonView() throws IOException {
@@ -14,7 +15,7 @@ public class ShortestPathLessonView extends GraphLessonView {
 		return new SerialAlgorithm<Void>() {
 			@Override
 			protected Void call() {
-				for (Node<Integer> node: mGraph.get().nodes()) {
+				for (Node<Integer> node: new TreeSet<>(mGraph.get().nodes())) {
 					try {
 						setBreakpoint();
 					} catch (InterruptedException ignored) {

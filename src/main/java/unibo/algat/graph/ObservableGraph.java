@@ -2,10 +2,7 @@ package unibo.algat.graph;
 
 import unibo.algat.util.Pair;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>A wrapper {@link Graph} implementation capable of transmitting changes to
@@ -96,12 +93,12 @@ public final class ObservableGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public synchronized Set<Node<T>> nodes() {
+	public synchronized SortedSet<Node<T>> nodes() {
 		return mGraph.nodes();
 	}
 
 	@Override
-	public synchronized Set<Node<T>> adjacents(Node<T> node) {
+	public synchronized SortedSet<Node<T>> adjacents(Node<T> node) {
 		return mGraph.adjacents(node);
 	}
 

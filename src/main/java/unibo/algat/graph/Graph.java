@@ -1,6 +1,6 @@
 package unibo.algat.graph;
 
-import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * A Graph interface, designed to provide a baseline contract for concrete
@@ -38,9 +38,10 @@ public interface Graph<T> {
 
     /**
      * @return The set of nodes contained in the graph, empty if none are
-     * present.
+     * present. This set will be ordered according to the natural ordering of
+     * {@link Node}, i.e. its {@code id} field.
      */
-    Set<Node<T>> nodes ();
+    SortedSet<Node<T>> nodes ();
     /**
      * @param node Node value of which a list of adjacent nodes is queried for.
      * @return A set of nodes v such that, if u is the current node, then the
@@ -51,7 +52,7 @@ public interface Graph<T> {
      * @throws java.lang.NullPointerException if {@code node} is {@code
      * null}.
      */
-    Set<Node<T>> adjacents(Node<T> node);
+    SortedSet<Node<T>> adjacents(Node<T> node);
 
     /**
      * Inserts an {@code (a, b)} edge into the graph. Produces no change if

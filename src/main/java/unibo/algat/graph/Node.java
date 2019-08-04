@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
  * specified by the user) and that any associated data is irrelevant in
  * determining equality with another.</p>
  */
-public class Node<T> {
+public class Node<T> implements Comparable<Node<T>> {
 	private int mId;
 	private ObjectProperty<T> mData;
 
@@ -66,5 +66,10 @@ public class Node<T> {
 	@Override
 	public String toString() {
 		return String.format("[%d] %s", mId, mData.get());
+	}
+
+	@Override
+	public int compareTo(Node<T> o) {
+		return mId - o.mId;
 	}
 }

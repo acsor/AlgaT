@@ -1,10 +1,9 @@
 package unibo.algat.graph;
 
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class AMGraph<T> implements Graph<T> {
 	private Node<T>[] mNodes;
@@ -86,8 +85,8 @@ public class AMGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public Set<Node<T>> nodes() {
-		final HashSet<Node<T>> out = new HashSet<>(mNodes.length);
+	public SortedSet<Node<T>> nodes() {
+		final TreeSet<Node<T>> out = new TreeSet<>();
 
 		for (Node<T> v: mNodes) {
 			if (v != null)
@@ -98,8 +97,8 @@ public class AMGraph<T> implements Graph<T> {
 	}
 
 	@Override
-	public Set<Node<T>> adjacents(Node<T> node) {
-		final HashSet<Node<T>> a = new HashSet<>();
+	public SortedSet<Node<T>> adjacents(Node<T> node) {
+		final TreeSet<Node<T>> a = new TreeSet<>();
 
 		if (node != null) {
 			final int id = node.getId();

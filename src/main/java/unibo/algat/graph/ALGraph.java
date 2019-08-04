@@ -3,20 +3,19 @@ package unibo.algat.graph;
 import java.util.*;
 
 /**
- * An adjacency list implementation of a generic Graph.
+ * <p>An adjacency list nodeimplementation of a generic Graph.</p>
  */
 public class ALGraph<T> implements Graph<T> {
-    private Map<Node<T>, Set<Node<T>>> mEntries;
+    private SortedMap<Node<T>, SortedSet<Node<T>>> mEntries;
 
     public ALGraph() {
-        // TODO Refine the choice of the backing data structure for the graph
-        mEntries = new Hashtable<>();
+        mEntries = new TreeMap<>();
     }
 
     @Override
     public boolean insertNode(Node<T> node) {
         if (node != null)
-            return mEntries.putIfAbsent(node, new HashSet<>()) == null;
+            return mEntries.putIfAbsent(node, new TreeSet<>()) == null;
         else
             throw new NullPointerException("node argument was null");
     }
@@ -47,12 +46,12 @@ public class ALGraph<T> implements Graph<T> {
     }
 
     @Override
-    public Set<Node<T>> nodes() {
-         return new HashSet<>(mEntries.keySet());
+    public SortedSet<Node<T>> nodes() {
+         return (SortedSet<Node<T>>) mEntries.keySet();
     }
 
     @Override
-    public Set<Node<T>> adjacents(Node<T> node) {
+    public SortedSet<Node<T>> adjacents(Node<T> node) {
         if (node != null) {
             if (mEntries.containsKey(node))
                 return mEntries.get(node);
