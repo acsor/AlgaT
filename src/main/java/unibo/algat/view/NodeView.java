@@ -2,45 +2,27 @@ package unibo.algat.view;
 
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 import unibo.algat.graph.Node;
+import unibo.algat.util.DragFactory;
 
 public class NodeView extends Region {
 	private Node<?> mNode;
 
-	private Circle mCircle;
-	private Label mText;
+	private final Circle mCircle;
+	private final Label mText;
 
 	private SimpleDoubleProperty mRadius;
 	private SimpleObjectProperty<Point2D> mCenter;
-	private Point2D mDragStart;
-
-	private final EventHandler<MouseEvent> mMousePressed = event -> {
-		mDragStart = new Point2D(event.getX(), event.getY());
-		setOpacity(getOpacity() - 0.5);
-	};
-	private final EventHandler<MouseEvent> mMouseDrag = event -> {
-		Point2D diff = new Point2D(event.getX(), event.getY()).subtract(
-			mDragStart
-		);
-
-		setTranslateX(getTranslateX() + diff.getX());
-		setTranslateY(getTranslateY() + diff.getY());
-	};
-	private final EventHandler<MouseEvent> mMouseReleased = event -> {
-		setOpacity(getOpacity() + 0.5);
-	};
 
 	private static final double DEFAULT_RADIUS = 4.0;
 	private static final Paint DEFAULT_FILL = Color.rgb(62, 134, 160);
@@ -73,24 +55,16 @@ public class NodeView extends Region {
 
 			@Override
 			protected Point2D computeValue() {
-				final Insets bounds = getInsets();
+				final Insets b = getInsets();
 
 				return new Point2D(
-					getLayoutX() + getTranslateX() + mRadius.get() + bounds.getLeft(),
-					getLayoutY() + getTranslateY() + mRadius.get() + bounds.getTop()
+					getLayoutX() + getTranslateX() + mRadius.get() + b.getLeft(),
+					getLayoutY() + getTranslateY() + mRadius.get() + b.getTop()
 				);
 			}
 		});
 
-		// TODO Allow NodeViews to only display one thing -- provide a text
-		//  property and let users of the class choose what to show
-		//  (particularly, either an id or a "weight" value
-		mCircle.setOnMousePressed(mMousePressed);
-		mCircle.setOnMouseDragged(mMouseDrag);
-		mCircle.setOnMouseReleased(mMouseReleased);
-		mText.setOnMousePressed(mMousePressed);
-		mText.setOnMouseDragged(mMouseDrag);
-		mText.setOnMouseReleased(mMouseReleased);
+		DragFactory.makeDraggable(this, mCircle, mText);
 
 		getChildren().addAll(mCircle, mText);
 	}
