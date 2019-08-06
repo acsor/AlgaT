@@ -10,6 +10,14 @@ public interface GraphLayout {
 	Point2D layout (NodeView node);
 
 	/**
+	 * @param view {@link NodeView} to query the position for.
+	 * @return The cell position this view was associated to.
+	 * @throws IllegalArgumentException if {@code view} hasn't yet been laid
+	 * out.
+	 */
+	int getPosition(NodeView view);
+
+	/**
 	 * Removes the given {@link NodeView} from the layout, recycling its
 	 * position for a later node view.
 	 * @param view {@link NodeView} object to remove from this layout.

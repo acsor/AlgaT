@@ -22,29 +22,29 @@ public class GraphView<T> extends Region {
 	private ObjectProperty<ObservableGraph<T>> mGraph;
 	private WeightFunction<T> mWeights;
 
-	private Map<Node<T>, NodeView> mNodes;
+	Map<Node<T>, NodeView> mNodes;
 	private Map<Pair<Node<T>, Node<T>>, EdgeView> mEdges;
 	private Map<Pair<Node<T>, Node<T>>, WeightView> mWeightViews;
-	private GraphLayout mLayout;
+	GraphLayout mLayout;
+	private GraphNodeSelectionModel mNodeSelection;
 
 	private double mNodeRadius, mNodeMargin;
 	private Paint mNodeFill;
 
 	private static final double DEFAULT_NODE_RADIUS = 1;
 	private static final double DEFAULT_NODE_MARGIN = 1;
-	private static final double DEFAULT_NODE_OPACITY = 0.95;
 
 	private static final double NODE_VIEW_ORDER = 1;
 	private static final double WEIGHT_LABEL_VIEW_ORDER = 2;
 	private static final double EDGE_VIEW_ORDER = 3;
 
-	private NodeChangeListener<T> mNodeListener = e -> {
+	private final NodeChangeListener<T> mNodeListener = e -> {
 		if (e.wasInserted())
 			addNodeView(e.getNode());
 		else if (e.wasDeleted())
 			removeNodeView(e.getNode());
 	};
-	private EdgeChangeListener<T> mEdgeListener = e -> {
+	private final EdgeChangeListener<T> mEdgeListener = e -> {
 		if (e.wasInserted())
 			addEdgeView(e.getFirst(), e.getSecond());
 		else if (e.wasDeleted())
@@ -58,6 +58,8 @@ public class GraphView<T> extends Region {
 		mWeightViews = new HashMap<>();
 
 		mLayout = new GraphGridLayout(6);
+		mNodeSelection = new GraphNodeSelectionModel(this);
+
 		mNodeRadius = DEFAULT_NODE_RADIUS;
 		mNodeMargin = DEFAULT_NODE_MARGIN;
 	}
@@ -72,6 +74,7 @@ public class GraphView<T> extends Region {
 			mGraph.get().removeEdgeChangeListener(mEdgeListener);
 		}
 
+		mNodeSelection.clearSelection();
 		mLayout.clear();
 		mWeightViews.clear();
 		setWeightFunction(null);
@@ -151,8 +154,9 @@ public class GraphView<T> extends Region {
 	}
 
 	public void setGraphLayout (GraphLayout layout) {
-		mLayout = layout;
+		mNodeSelection.clearSelection();
 
+		mLayout = layout;
         requestLayout();
 	}
 
@@ -165,9 +169,8 @@ public class GraphView<T> extends Region {
 		final Insets bounds = getInsets();
 
 		for (NodeView view: mNodes.values()) {
-			Point2D location = mLayout.layout(view);
+			final Point2D location = mLayout.layout(view);
 
-			// TODO Ensure this is correct
 			setPrefWidth(Math.max(
 				getPrefWidth(), bounds.getLeft() + bounds.getLeft() +
 					location.getX() + view.getWidth()
@@ -206,17 +209,25 @@ public class GraphView<T> extends Region {
 		view.setRadius(mNodeRadius);
 		view.setFill(mNodeFill);
 		view.setPadding(new Insets(mNodeMargin));
-		view.setOpacity(DEFAULT_NODE_OPACITY);
 		view.setViewOrder(NODE_VIEW_ORDER);
+
+		// When a NodeView is selected by a click, add it to the selection model
+		view.selectedProperty().addListener((o, wasSelected, isSelected) -> {
+			if (!wasSelected && isSelected)
+				mNodeSelection.select(view);
+			else if (wasSelected && !isSelected)
+				mNodeSelection.clearSelection(view);
+		});
 
         mNodes.put(node, view);
         getChildren().add(view);
 	}
 
 	private void removeNodeView (Node<T> node) {
-		NodeView removed = mNodes.remove(node);
+		final NodeView removed = mNodes.remove(node);
 
 		if (removed != null) {
+			mNodeSelection.clearSelection(removed);
 			mLayout.remove(removed);
 			getChildren().remove(removed);
 		}
