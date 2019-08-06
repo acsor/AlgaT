@@ -26,7 +26,7 @@ public class GraphView<T> extends Region {
 	private Map<Pair<Node<T>, Node<T>>, EdgeView> mEdges;
 	private Map<Pair<Node<T>, Node<T>>, WeightView> mWeightViews;
 	GraphLayout mLayout;
-	private GraphNodeSelectionModel mNodeSelection;
+	GraphNodeSelectionModel mNodeSelection;
 
 	private double mNodeRadius, mNodeMargin;
 	private Paint mNodeFill;

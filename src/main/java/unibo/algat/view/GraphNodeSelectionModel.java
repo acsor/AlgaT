@@ -1,10 +1,15 @@
 package unibo.algat.view;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MultipleSelectionModel;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>A {@link MultipleSelectionModel} implementation for a {@code
@@ -16,12 +21,27 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 
 	private ObservableList<Integer> mIndices;
 	private ObservableList<NodeView> mItems;
+	private IntegerProperty mItemCount;
 
 	GraphNodeSelectionModel (GraphView<?> graphView) {
 		mGraphV = graphView;
 
 		mIndices = FXCollections.observableList(new LinkedList<>());
 		mItems = FXCollections.observableList(new LinkedList<>());
+		mItemCount = new SimpleIntegerProperty(this, "itemCount");
+
+		// Safer code at the expense of some memory
+		mIndices.addListener(
+			(InvalidationListener) o -> mItemCount.set(mItems.size())
+		);
+	}
+
+	public int getItemCount () {
+		return mItemCount.get();
+	}
+
+	public ReadOnlyIntegerProperty itemCountProperty () {
+		return mItemCount;
 	}
 
 	@Override
@@ -44,14 +64,8 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 
 	@Override
 	public void selectAll() {
-		int index;
-
-		for (NodeView v: mGraphV.mNodes.values()) {
-			index = mGraphV.mLayout.getPosition(v);
-
-			if (!mIndices.contains(index))
-				select(index);
-		}
+		for (NodeView v: mGraphV.mNodes.values())
+			select(v);
 	}
 
 	@Override
@@ -113,7 +127,7 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 
 	@Override
 	public void clearSelection() {
-		mItems.forEach(v -> v.setSelected(false));
+		List.copyOf(mItems).forEach(v -> v.setSelected(false));
 
 		mIndices.clear();
 		mItems.clear();

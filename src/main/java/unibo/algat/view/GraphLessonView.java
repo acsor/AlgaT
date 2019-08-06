@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import unibo.algat.graph.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -34,7 +35,7 @@ public abstract class GraphLessonView extends LessonView {
 		);
 	};
 	private final EventHandler<ActionEvent> mClearAction = event -> {
-		mGraph.get().nodes().forEach(mGraph.get()::deleteNode);
+		List.copyOf(mGraph.get().nodes()) .forEach(mGraph.get()::deleteNode);
 		mMaxId = 0;
 		mGraphView.setGraph((Graph<Integer>) null);
 	};
@@ -84,6 +85,19 @@ public abstract class GraphLessonView extends LessonView {
 		toolBar.getAddButton().setOnAction(
 			event -> mGraph.get().insertNode(new Node<>(++mMaxId))
 		);
+
+		toolBar.getRemoveButton().disableProperty().bind(
+			mGraphView.mNodeSelection.itemCountProperty().lessThanOrEqualTo(0)
+		);
+		toolBar.getRemoveButton().setOnAction(e -> {
+			List<NodeView> toDelete = List.copyOf(
+				mGraphView.mNodeSelection.getSelectedItems()
+			);
+
+			toDelete.forEach(
+				v -> mGraph.get().deleteNode((Node<Integer>) v.getNode())
+			);
+		});
 
 		toolBar.getRandomButton().disableProperty().bind(
 			mAlgo.stoppedProperty()
