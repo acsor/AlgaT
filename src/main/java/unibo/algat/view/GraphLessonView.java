@@ -87,7 +87,9 @@ public abstract class GraphLessonView extends LessonView {
 		);
 
 		toolBar.getRemoveButton().disableProperty().bind(
-			mGraphView.mNodeSelection.itemCountProperty().lessThanOrEqualTo(0)
+			mAlgo.stoppedProperty().or(
+				mGraphView.mNodeSelection.itemCountProperty().lessThanOrEqualTo(0)
+			)
 		);
 		toolBar.getRemoveButton().setOnAction(e -> {
 			List<NodeView> toDelete = List.copyOf(
