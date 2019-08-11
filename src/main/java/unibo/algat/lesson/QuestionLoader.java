@@ -1,11 +1,13 @@
 package unibo.algat.lesson;
 
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Scanner;
-import java.util.Set;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * The {@code QuestionLoader} takes care of loading question-related data from
@@ -37,31 +39,33 @@ public class QuestionLoader {
 	 * @return A list of available questions related to the lesson identified
 	 * by {@code lessonId}.
 	 */
-	public Set<Question> questions (Lesson lesson) {
+	public Set<Question> questions (Lesson lesson) throws IOException, URISyntaxException {
 		// TODO The Lesson and Question classes are too loosely coupled, do
 		//  something to strengthen their relationship
 		// TODO Urgent! Ensure this code works with .jar files, else find
-		//  a workaround to the issue!
-		Set<Question> questions = new HashSet<>();
-		Scanner in = new Scanner(getClass().getResourceAsStream(mBasePath));
+		//  a workaround to the issue! <-- solved(?)
+		URI uri = LessonLoader.class.getResource(mBasePath).toURI();
+		Path myPath;
+		HashSet<Question> questions = new HashSet<>();
 		Matcher m;
-
-		while (in.hasNextLine()) {
-			m = FILE_PATTERN.matcher(in.nextLine());
-
-			if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId()) {
-				questions.add(load(
-					Integer.valueOf(m.group(1)),
-					Integer.valueOf(m.group(2))
-				));
-			}
+		if (uri.getScheme().equals("jar")) {
+			FileSystem fileSystemQ = FileSystems.newFileSystem(uri, Collections.emptyMap());
+			myPath = fileSystemQ.getPath(mBasePath);
+		} else {
+			myPath = Paths.get(uri);
 		}
-
-		in.close();
+		Stream<Path> walk = Files.walk(myPath, 1);
+		for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
+			m = FILE_PATTERN.matcher(it.next().getFileName().toString());
+			if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId())
+				questions.add(load(
+						Integer.valueOf(m.group(1)),
+						Integer.valueOf(m.group(2))
+				));
+		}
 
 		return questions;
 	}
-
 	/**
 	 * @param lessonId Id of the lesson the question is associated to
 	 * @param questionId Id of the question

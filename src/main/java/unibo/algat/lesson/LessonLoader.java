@@ -1,8 +1,14 @@
 package unibo.algat.lesson;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * <p>{@code LessonLoader} takes as input directory class paths, looks for
@@ -49,27 +55,29 @@ public class LessonLoader {
     /**
      * @return The set of available lessons stored in the specified location.
      */
-    public Set<Lesson> lessons () {
+    public Set<Lesson> lessons () throws IOException, URISyntaxException {
     	// TODO Check for other ways to get a listing of .properties files
-        //  out of a "resource directory"
-        final Set<Lesson> lessons = new HashSet<>();
-        final Scanner in = new Scanner(
-            getClass().getResourceAsStream(mBasePath)
-        );
+        //      out of a "resource directory"
+        URI uri = LessonLoader.class.getResource(mBasePath).toURI();
+        Path myPath;
+        HashSet<Lesson> lessons = new HashSet<>();
         Matcher m;
-
-        while (in.hasNextLine()) {
-            m = FILE_PATTERN.matcher(in.nextLine());
-
-            if (m.matches()) {
-                lessons.add(load(Integer.parseInt(m.group(1))));
-            }
+        if (uri.getScheme().equals("jar")) {
+            FileSystem fileSystemL = FileSystems.newFileSystem(uri, Collections.emptyMap());
+            myPath = fileSystemL.getPath(mBasePath);
+        } else {
+            myPath = Paths.get(uri);
         }
-
-        in.close();
+        Stream<Path> walk = Files.walk(myPath, 1);
+        for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
+            m = FILE_PATTERN.matcher(it.next().getFileName().toString());
+            if (m.matches())
+            lessons.add(load(Integer.parseInt(m.group(1))));
+        }
 
         return lessons;
     }
+
 
     /**
      * @param lessonId Id of the lesson to fetch.

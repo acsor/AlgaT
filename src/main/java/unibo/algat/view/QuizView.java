@@ -16,6 +16,7 @@ import unibo.algat.lesson.Question;
 import unibo.algat.lesson.QuestionLoader;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -131,8 +132,14 @@ public class QuizView extends VBox {
 		mLesson = lesson;
 
 		if (mLesson != null) {
-			mQuestions = new ArrayList<>(mQLoader.questions(mLesson));
-			setShownQuestion(0);
+			try {
+				mQuestions = new ArrayList<>(mQLoader.questions(mLesson));
+				setShownQuestion(0);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
