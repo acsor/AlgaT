@@ -63,19 +63,40 @@ public class LessonLoader {
         HashSet<Lesson> lessons = new HashSet<>();
         Matcher m;
         if (uri.getScheme().equals("jar")) {
-            FileSystem fileSystemL = FileSystems.newFileSystem(uri, Collections.emptyMap());
-            myPath = fileSystemL.getPath(mBasePath);
+            lessons = jarWalk(uri);
         } else {
             myPath = Paths.get(uri);
-        }
-        Stream<Path> walk = Files.walk(myPath, 1);
-        for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-            m = FILE_PATTERN.matcher(it.next().getFileName().toString());
-            if (m.matches())
-            lessons.add(load(Integer.parseInt(m.group(1))));
+            Stream<Path> walk = Files.walk(myPath, 1);
+            for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
+                m = FILE_PATTERN.matcher(it.next().getFileName().toString());
+                if (m.matches())
+                    lessons.add(load(Integer.parseInt(m.group(1))));
+            }
         }
 
         return lessons;
+    }
+
+    private HashSet<Lesson> jarWalk(URI uri) throws IOException{
+        HashSet<Lesson> lessons = new HashSet<>();
+        // this'll close the FileSystem object at the end
+        try (FileSystem fs = getFileSystem(uri)) {
+            Stream<Path> walk = Files.walk(fs.getPath(mBasePath));
+            for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
+                Matcher m = FILE_PATTERN.matcher(it.next().getFileName().toString());
+                if (m.matches())
+                    lessons.add(load(Integer.parseInt(m.group(1))));
+            }
+        }
+        return lessons;
+    }
+
+    private FileSystem getFileSystem(URI uri) throws IOException {
+        try {
+            return FileSystems.getFileSystem(uri);
+        } catch (FileSystemNotFoundException e) {
+            return FileSystems.newFileSystem(uri, Collections.<String, String>emptyMap());
+        }
     }
 
 

@@ -42,29 +42,51 @@ public class QuestionLoader {
 	public Set<Question> questions (Lesson lesson) throws IOException, URISyntaxException {
 		// TODO The Lesson and Question classes are too loosely coupled, do
 		//  something to strengthen their relationship
-		// TODO Urgent! Ensure this code works with .jar files, else find
-		//  a workaround to the issue! <-- solved(?)
-		URI uri = LessonLoader.class.getResource(mBasePath).toURI();
+		URI uri = QuestionLoader.class.getResource(mBasePath).toURI();
 		Path myPath;
 		HashSet<Question> questions = new HashSet<>();
 		Matcher m;
 		if (uri.getScheme().equals("jar")) {
-			FileSystem fileSystemQ = FileSystems.newFileSystem(uri, Collections.emptyMap());
-			myPath = fileSystemQ.getPath(mBasePath);
+			questions = jarWalk(uri, lesson);
 		} else {
 			myPath = Paths.get(uri);
-		}
-		Stream<Path> walk = Files.walk(myPath, 1);
-		for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-			m = FILE_PATTERN.matcher(it.next().getFileName().toString());
-			if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId())
-				questions.add(load(
-						Integer.valueOf(m.group(1)),
-						Integer.valueOf(m.group(2))
-				));
+			Stream<Path> walk = Files.walk(myPath, 1);
+			for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
+				m = FILE_PATTERN.matcher(it.next().getFileName().toString());
+				if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId())
+					questions.add(load(
+							Integer.valueOf(m.group(1)),
+							Integer.valueOf(m.group(2))
+					));
+			}
 		}
 
 		return questions;
+	}
+	private HashSet<Question> jarWalk(URI uri, Lesson lesson) throws IOException{
+		HashSet<Question> questions = new HashSet<>();
+		// this'll close the FileSystem object at the end
+		try (FileSystem fs = getFileSystem(uri)) {
+			Stream<Path> walk = Files.walk(fs.getPath(mBasePath));
+			for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
+				Matcher m = FILE_PATTERN.matcher(it.next().getFileName().toString());
+				if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId())
+					questions.add(load(
+							Integer.valueOf(m.group(1)),
+							Integer.valueOf(m.group(2))
+					));
+			}
+		}
+		return questions;
+	}
+
+
+	private FileSystem getFileSystem(URI uri) throws IOException {
+		try {
+			return FileSystems.getFileSystem(uri);
+		} catch (FileSystemNotFoundException e){
+			return FileSystems.newFileSystem(uri, Collections.<String, String>emptyMap());
+		}
 	}
 	/**
 	 * @param lessonId Id of the lesson the question is associated to
