@@ -13,7 +13,7 @@
     <fx:include fx:id="mMenuBar" source="MainMenu.fxml" />
     <AlgaToolBar fx:id="mToolBar" />
 
-    <fx:include source="AlgaTCore.fxml" />
+    <fx:include source="AlgaTStart.fxml" />
 
 	<Separator />
 

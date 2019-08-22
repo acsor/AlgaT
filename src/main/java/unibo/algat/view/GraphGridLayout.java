@@ -47,6 +47,15 @@ public class GraphGridLayout implements GraphLayout {
 	}
 
 	@Override
+	public int getPosition(NodeView view) {
+		if (mNodePos.containsKey(view)) {
+			return mNodePos.get(view);
+		} else {
+			throw new IllegalArgumentException("View not yet laid out");
+		}
+	}
+
+	@Override
 	public void remove (NodeView view) {
         Integer removed = mNodePos.remove(view);
 

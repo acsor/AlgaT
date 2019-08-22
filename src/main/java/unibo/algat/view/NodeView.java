@@ -2,6 +2,7 @@ package unibo.algat.view;
 
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
+import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -13,39 +14,38 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.StrokeType;
 import unibo.algat.graph.Node;
+import unibo.algat.util.DragFactory;
 
-public class NodeView extends Region {
+class NodeView extends Region {
 	private Node<?> mNode;
 
-	private Circle mCircle;
-	private Label mText;
+	private final Circle mCircle;
+	private final Label mText;
 
 	private SimpleDoubleProperty mRadius;
 	private SimpleObjectProperty<Point2D> mCenter;
-	private Point2D mDragStart;
 
-	private final EventHandler<MouseEvent> mMousePressed = event -> {
-		mDragStart = new Point2D(event.getX(), event.getY());
-		setOpacity(getOpacity() - 0.5);
+	private static final PseudoClass PSEUDO_CLASS_SELECTED = PseudoClass.
+		getPseudoClass("selected");
+	private BooleanProperty mSelected = new SimpleBooleanProperty(
+		this, "selected"
+	) {
+		@Override
+		protected void invalidated () {
+			pseudoClassStateChanged(PSEUDO_CLASS_SELECTED, get());
+		}
 	};
-	private final EventHandler<MouseEvent> mMouseDrag = event -> {
-		Point2D diff = new Point2D(event.getX(), event.getY()).subtract(
-			mDragStart
-		);
 
-		setTranslateX(getTranslateX() + diff.getX());
-		setTranslateY(getTranslateY() + diff.getY());
-	};
-	private final EventHandler<MouseEvent> mMouseReleased = event -> {
-		setOpacity(getOpacity() + 0.5);
+	private final EventHandler<MouseEvent> mToggleSelected = e -> {
+		if (e.isControlDown())
+			mSelected.set(!mSelected.get());
 	};
 
 	private static final double DEFAULT_RADIUS = 4.0;
 	private static final Paint DEFAULT_FILL = Color.rgb(62, 134, 160);
 
-	public NodeView(Node<?> node) {
+	NodeView(Node<?> node) {
 		mNode = node;
 		mCircle = new Circle(DEFAULT_RADIUS, DEFAULT_FILL);
 		mText = new Label();
@@ -54,15 +54,11 @@ public class NodeView extends Region {
 		mCenter = new SimpleObjectProperty<>();
 
 		getStyleClass().add("node-view");
-		// TODO Why I cannot apply the .node-view > .circle selector is out
-		//  of me
 		mCircle.getStyleClass().add("node-view-circle");
 		mText.getStyleClass().add("node-view-text");
 
-		mCircle.setStrokeType(StrokeType.INSIDE);
 		mRadius.bindBidirectional(mCircle.radiusProperty());
 		mCircle.strokeWidthProperty().bind(mRadius.multiply(0.1));
-
 		mCenter.bind(new ObjectBinding<>() {
 			{
 				bind(
@@ -73,31 +69,44 @@ public class NodeView extends Region {
 
 			@Override
 			protected Point2D computeValue() {
-				final Insets bounds = getInsets();
+				final Insets b = getInsets();
 
 				return new Point2D(
-					getLayoutX() + getTranslateX() + mRadius.get() + bounds.getLeft(),
-					getLayoutY() + getTranslateY() + mRadius.get() + bounds.getTop()
+					getLayoutX() + getTranslateX() + mRadius.get() + b.getLeft(),
+					getLayoutY() + getTranslateY() + mRadius.get() + b.getTop()
 				);
 			}
 		});
 
-		mCircle.setOnMousePressed(mMousePressed);
-		mCircle.setOnMouseDragged(mMouseDrag);
-		mCircle.setOnMouseReleased(mMouseReleased);
-		mText.setOnMousePressed(mMousePressed);
-		mText.setOnMouseDragged(mMouseDrag);
-		mText.setOnMouseReleased(mMouseReleased);
+		mCircle.setOnMouseClicked(mToggleSelected);
+		mText.setOnMouseClicked(mToggleSelected);
+		DragFactory.makeDraggable(this, mCircle, mText);
 
 		getChildren().addAll(mCircle, mText);
 	}
 
-	public Point2D getCenter () {
+	public Node<?> getNode () {
+		return mNode;
+	}
+
+	Point2D getCenter () {
 		return mCenter.get();
 	}
 
-	public SimpleObjectProperty<Point2D> centerProperty () {
+	ReadOnlyObjectProperty<Point2D> centerProperty () {
 		return mCenter;
+	}
+
+	void setSelected (boolean selected) {
+		mSelected.set(selected);
+	}
+
+	public boolean isSelected () {
+		return mSelected.get();
+	}
+
+	public BooleanProperty selectedProperty () {
+		return mSelected;
 	}
 
 	public void setText (String text) {
@@ -112,19 +121,19 @@ public class NodeView extends Region {
 		return mText.textProperty();
 	}
 
-	public void setRadius (double radius) {
+	void setRadius (double radius) {
 		mRadius.set(radius);
 	}
 
-	public double getRadius () {
+	double getRadius () {
         return mRadius.get();
 	}
 
-	public DoubleProperty radiusProperty () {
+	DoubleProperty radiusProperty () {
 		return mRadius;
 	}
 
-	public void setFill (Paint paint){
+	void setFill (Paint paint){
 		mCircle.setFill(paint);
 
 		if (paint instanceof Color)
@@ -141,6 +150,10 @@ public class NodeView extends Region {
 
 	public void setOutline (Paint outline) {
 		mCircle.setStroke(outline);
+	}
+
+	public Paint getOutline () {
+		return mCircle.getStroke();
 	}
 
 	public ObjectProperty<Paint> outlineProperty () {

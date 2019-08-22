@@ -24,7 +24,6 @@ public class LessonLoader {
     static final String KEY_PREFIX = "lesson";
     static final String KEY_NAME = "name";
     static final String KEY_DESCRIPTION = "description";
-    static final String KEY_AVAILABLE = "available";
     static final String KEY_TOPICS = "topics";
 
     static final String FILE_FORMAT = "Lesson%d";
@@ -63,7 +62,7 @@ public class LessonLoader {
             m = FILE_PATTERN.matcher(in.nextLine());
 
             if (m.matches()) {
-                lessons.add(load(Integer.valueOf(m.group(1))));
+                lessons.add(load(Integer.parseInt(m.group(1))));
             }
         }
 
@@ -84,9 +83,6 @@ public class LessonLoader {
             lessonId,
             r.getString(String.join(".", KEY_PREFIX, KEY_NAME)),
             r.getString(String.join(".", KEY_PREFIX, KEY_DESCRIPTION)),
-            Boolean.valueOf(
-                r.getString(String.join(".", KEY_PREFIX, KEY_AVAILABLE))
-            ),
             r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
         );
     }
