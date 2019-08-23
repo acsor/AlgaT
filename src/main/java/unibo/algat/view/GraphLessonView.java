@@ -1,51 +1,42 @@
 package unibo.algat.view;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import unibo.algat.graph.*;
+import unibo.algat.graph.Graph;
+import unibo.algat.graph.Node;
+import unibo.algat.graph.WeightFunction;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 /**
- * <p>Common base class implemented by all those {@link LessonView}s having
- * to deal with a {@link Graph} data structure.</p>
+ * <p>Common abstract base class implemented by all those {@link LessonView}s
+ * having to deal with a {@link Graph} data structure.</p>
  */
-public abstract class GraphLessonView extends LessonView {
-	protected ObjectProperty<ObservableGraph<Integer>> mGraph;
-	private int mMaxId;
-	private Random mRandom;
+public abstract class GraphLessonView<T> extends LessonView {
+	@FXML protected GraphView<T> mGraphV;
+	protected WeightFunction<T> mWeight;
+	/**
+	 * Used by the "add node" functionality, to track the next node id to
+	 * insert into the graph.
+	 */
+	private int mNextId = 0;
 
-	@FXML protected GraphView<Integer> mGraphView;
-
-	private final EventHandler<ActionEvent> mRandomAction = event -> {
-		RandomGraphFactory<Integer> factory = new RandomALGraphFactory<>(20, 10);
-		mMaxId = 20;
-
-		factory.setValueFactory(() -> mRandom.nextInt(50));
-		mGraphView.setGraph(factory);
-		mGraphView.setWeightFunction(
-			new DifferentialWeightFunction<>(mGraphView.getGraph())
+	private final EventHandler<ActionEvent> mRemoveAction = e -> {
+		final List<NodeView> toDelete = List.copyOf(
+			mGraphV.mNodeSelection.getSelectedItems()
 		);
-	};
-	private final EventHandler<ActionEvent> mClearAction = event -> {
-		List.copyOf(mGraph.get().nodes()) .forEach(mGraph.get()::deleteNode);
-		mMaxId = 0;
-		mGraphView.setGraph((Graph<Integer>) null);
+		final Graph<T> g = mGraphV.getGraph();
+
+		toDelete.forEach(v -> g.deleteNode((Node<T>) v.getNode()));
 	};
 
 	public GraphLessonView () throws IOException {
 		super();
-
-		mGraph = new SimpleObjectProperty<>(this, "graph");
-		mMaxId = 0;
-		mRandom = new Random(System.currentTimeMillis());
 
 		FXMLLoader l = new FXMLLoader(
 			getClass().getResource("/view/GraphLessonView.fxml"),
@@ -60,57 +51,37 @@ public abstract class GraphLessonView extends LessonView {
 
 	@FXML
 	protected void initialize () {
-		mGraph.bind(mGraphView.graphProperty());
+		// Reset the next id value to 0 when the graph is set to null, or to
+		// the least possible id when it changes
+		mGraphV.graphProperty().addListener(graph -> {
+			if (mGraphV.getGraph() == null) {
+				mNextId = 0;
+			} else {
+				mNextId = mGraphV.getGraph().nodes().size();
+			}
+		});
 	}
 
 	@Override
 	public void onAcquireToolBar(AlgaToolBar toolBar) {
 		super.onAcquireToolBar(toolBar);
-
-		toolBar.getStopButton().disableProperty().bind(
-			mAlgo.stoppedProperty().or(mGraph.isNull())
-		);
-		toolBar.getPlayButton().disableProperty().bind(
-			mAlgo.stoppedProperty().or(mGraph.isNull())
-		);
-		toolBar.getNextButton().disableProperty().bind(
-			mAlgo.stoppedProperty().or(mExecutor.autoRunningProperty()).or(
-				mGraph.isNull()
-			)
+		// Common condition disabling a number of toolbar buttons
+		final BooleanBinding baseStop = mGraphV.graphProperty().isNull().or(
+			mAlgo.runningProperty().or(mAlgo.stoppedProperty())
 		);
 
-        toolBar.getAddButton().disableProperty().bind(
-        	mGraph.isNull().or(mAlgo.stoppedProperty())
-		);
-		toolBar.getAddButton().setOnAction(
-			event -> mGraph.get().insertNode(new Node<>(++mMaxId))
-		);
+		// Disable properties section
+        toolBar.getAddButton().disableProperty().bind(baseStop);
+		toolBar.getRemoveButton().disableProperty().bind(baseStop.or(
+			mGraphV.mNodeSelection.itemCountProperty().lessThanOrEqualTo(0)
+		));
+		toolBar.getClearButton().disableProperty().bind(baseStop);
 
-		toolBar.getRemoveButton().disableProperty().bind(
-			mAlgo.stoppedProperty().or(
-				mGraphView.mNodeSelection.itemCountProperty().lessThanOrEqualTo(0)
-			)
+		// Button actions section
+		toolBar.getAddButton().setOnAction(e ->
+			mGraphV.getGraph().insertNode(new Node<>(mNextId++))
 		);
-		toolBar.getRemoveButton().setOnAction(e -> {
-			List<NodeView> toDelete = List.copyOf(
-				mGraphView.mNodeSelection.getSelectedItems()
-			);
-
-			toDelete.forEach(
-				v -> mGraph.get().deleteNode((Node<Integer>) v.getNode())
-			);
-		});
-
-		toolBar.getRandomButton().disableProperty().bind(
-			mAlgo.stoppedProperty()
-		);
-		toolBar.getRandomButton().setOnAction(mRandomAction);
-
-		// TODO Add number of vertices property in Graph, so that one can be
-		//  notified about their number
-		toolBar.getClearButton().disableProperty().bind(
-			mGraph.isNull().or(mAlgo.stoppedProperty())
-		);
-		toolBar.getClearButton().setOnAction(mClearAction);
+		toolBar.getRemoveButton().setOnAction(mRemoveAction);
+		toolBar.getClearButton().setOnAction(e -> mGraphV.getGraph().clear());
 	}
 }

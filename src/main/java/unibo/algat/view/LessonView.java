@@ -1,5 +1,6 @@
 package unibo.algat.view;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Label;
@@ -68,23 +69,29 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 
 	@Override
 	public void onAcquireToolBar(AlgaToolBar toolBar) {
+		// Common condition disabling a number of tool bar buttons
+		final BooleanBinding baseStop = mAlgo.readyProperty().not().or(
+			mAlgo.stoppedProperty()
+		);
+
 		toolBar.playingProperty().bind(mExecutor.autoRunningProperty());
 
-		toolBar.getStopButton().disableProperty().bind(mAlgo.stoppedProperty());
-		toolBar.getStopButton().setOnAction(e -> mAlgo.cancel());
+		// Button disable property section
+		toolBar.getStopButton().disableProperty().bind(baseStop);
+		toolBar.getPlayButton().disableProperty().bind(baseStop);
+		toolBar.getNextButton().disableProperty().bind(
+			baseStop.or(mExecutor.autoRunningProperty())
+		);
 
-		toolBar.getPlayButton().disableProperty().bind(mAlgo.stoppedProperty());
+		// Button actions section
+		toolBar.getStopButton().setOnAction(e -> mAlgo.cancel());
 		toolBar.getPlayButton().setOnAction(
 			e -> mExecutor.setAutoRunning(!mExecutor.isAutoRunning())
 		);
-
-		// Disable the next button if it simply cannot execute due to the
-		// background thread or because the auto run feature is on
-		toolBar.getNextButton().disableProperty().bind(
-			mAlgo.stoppedProperty().or(mExecutor.autoRunningProperty())
-		);
 		toolBar.getNextButton().setOnAction(event -> mExecutor.next());
 
+		// TODO This binding should not happen during the toolbar acquisition.
+		//  Another callback method should be defined for intents such as this
 		mApp.statusMessageProperty().bind(mAlgo.messageProperty());
 	}
 

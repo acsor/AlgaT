@@ -36,7 +36,7 @@
     /* -fx-stroke-width: 15px; */
 }
 
-/* TODO I'd like to apply the .node-view > .circle syntax, but something
+/* TODO I'd like to apply the .node-view > .circle selector, but something
     prevented it */
 .node-view-circle {
     -fx-fill: radial-gradient(radius 90%, #FFF, #3E86A0);

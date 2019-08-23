@@ -10,7 +10,7 @@
 >
 	<center>
 		<ScrollPane fx:id="mScrollPane" fitToHeight="true" fitToWidth="true">
-            <GraphView fx:id="mGraphView" nodeRadius="25" nodeMargin="30">
+            <GraphView fx:id="mGraphV" nodeRadius="26" nodeMargin="35">
 				<graphLayout><GraphGridLayout columns="4" /></graphLayout>
 			</GraphView>
 		</ScrollPane>
