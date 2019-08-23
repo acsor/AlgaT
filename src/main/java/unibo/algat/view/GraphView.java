@@ -112,7 +112,7 @@ public class GraphView<T> extends Region {
 
         if (w != null)
 			mWeightViews.forEach((pair, view) ->
-				view.setWeight(w.weight(pair.getFirst(), pair.getSecond()))
+				view.setWeight(w.weightBinding(pair.getFirst(), pair.getSecond()))
 			);
 	}
 
@@ -236,7 +236,7 @@ public class GraphView<T> extends Region {
 	private void addEdgeView(Node<T> u, Node<T> v) {
 		final EdgeView edge = new EdgeView(mNodes.get(u), mNodes.get(v));
 		final WeightView weightView = new WeightView(
-			edge, mWeights != null ? mWeights.weight(u, v): null
+			edge, mWeights != null ? mWeights.weightBinding(u, v): null
 		);
 
 		edge.setViewOrder(EDGE_VIEW_ORDER);

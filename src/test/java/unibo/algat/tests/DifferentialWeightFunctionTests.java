@@ -15,7 +15,7 @@ public class DifferentialWeightFunctionTests extends WeightFunctionTest {
 		for (Node<Integer> u: mGraph.nodes()) {
             for (Node<Integer> v: mGraph.adjacents(u)) {
                 assertEquals(
-                	v.getData() - u.getData(), w.weight(u, v).get()
+                	v.getData() - u.getData(), w.weight(u, v)
 				);
 			}
 		}

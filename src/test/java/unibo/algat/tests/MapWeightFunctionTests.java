@@ -17,7 +17,7 @@ class MapWeightFunctionTests extends WeightFunctionTest {
 	@Test
 	void testNoEdge () {
 		MapWeightFunction<Integer> w = new MapWeightFunction<>(mGraph);
-		final Executable computeWeight = () -> w.weight(
+		final Executable computeWeight = () -> w.weightBinding(
 			mNodes.get(0), mNodes.get(2)
 		);
 
@@ -32,7 +32,7 @@ class MapWeightFunctionTests extends WeightFunctionTest {
 		for (double def: defaultValues) {
 			w = new MapWeightFunction<>(mGraph, def);
 			assertEquals(
-				def, w.weight(mNodes.get(0), mNodes.get(1)).get()
+				def, w.weightBinding(mNodes.get(0), mNodes.get(1)).get()
 			);
 		}
 	}
@@ -49,9 +49,7 @@ class MapWeightFunctionTests extends WeightFunctionTest {
 		for (double weight: weights) {
 			w.assign(mNodes.get(0), mNodes.get(1), weight);
 
-			assertEquals(
-				weight, w.weight(mNodes.get(0), mNodes.get(1)).get()
-			);
+			assertEquals(weight, w.weight(mNodes.get(0), mNodes.get(1)));
 		}
 	}
 }

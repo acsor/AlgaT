@@ -29,7 +29,7 @@ public class MapWeightFunction<T> extends WeightFunction<T> {
 	}
 
 	@Override
-	public EdgeWeight<T> weight(Node<T> a, Node<T> b) {
+	public EdgeWeight<T> weightBinding(Node<T> a, Node<T> b) {
 		final Pair<Node<T>, Node<T>> key = new Pair<>(a, b);
 
 		if (mGraph.containsEdge(a, b)) {

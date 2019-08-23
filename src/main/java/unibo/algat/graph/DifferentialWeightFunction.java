@@ -20,7 +20,7 @@ public class DifferentialWeightFunction<T extends Number>
 	}
 
 	@Override
-	public DifferentialEdgeWeight<T> weight(Node<T> a, Node<T> b) {
+	public DifferentialEdgeWeight<T> weightBinding(Node<T> a, Node<T> b) {
 		if (mGraph.containsEdge(a, b))
             return new DifferentialEdgeWeight<>(a, b);
 		else
