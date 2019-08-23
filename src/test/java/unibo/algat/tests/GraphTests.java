@@ -211,6 +211,20 @@ public abstract class GraphTests {
 	}
 
 	/**
+	 * Tests {@link Graph#clear()} method.
+	 */
+	@Test
+	void testClear () {
+		for (int i = 0; i < 10; i++)
+			mGraph.insertNode(new Node<Void>(i));
+
+		assertEquals(mGraph.nodes().size(), 10);
+
+		mGraph.clear();
+		assertEquals(mGraph.nodes().size(), 0);
+	}
+
+	/**
 	 * <p>Overridden by derived {@code GraphTests} classes to let test one
 	 * specific implementation of {@link Graph}.</p>
 	 * @return A {@link Graph} instance to be tested.

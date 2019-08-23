@@ -135,6 +135,15 @@ public final class ObservableGraph<T> implements Graph<T> {
 		return mGraph.containsEdge(a, b);
 	}
 
+	@Override
+	public synchronized void clear() {
+		final List<Node<T>> nodesCopy = List.copyOf(mGraph.nodes());
+
+		for (Node<T> node: nodesCopy) {
+			deleteNode(node);
+		}
+	}
+
 	public synchronized void addNodeChangeListener (NodeChangeListener<T> l) {
 		mNodeListeners.add(l);
 	}

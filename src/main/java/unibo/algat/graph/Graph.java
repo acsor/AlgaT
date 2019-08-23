@@ -85,4 +85,9 @@ public interface Graph<T> {
      * {@code b} was {@code null}.
      */
     boolean containsEdge(Node<T> a, Node<T> b);
+
+    /**
+     * Clears out all nodes and edges contained in this graph.
+     */
+    void clear();
 }

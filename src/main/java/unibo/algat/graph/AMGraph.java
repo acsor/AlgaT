@@ -5,6 +5,9 @@ import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * An adjacency-matrix implementation of a {@link Graph}.
+ */
 public class AMGraph<T> implements Graph<T> {
 	private Node<T>[] mNodes;
 	private short[][] mEdges;
@@ -170,7 +173,15 @@ public class AMGraph<T> implements Graph<T> {
 		}
 	}
 
-    @Override
+	@Override
+	public void clear() {
+		for (int row = 0; row < mNodes.length; row++) {
+			mNodes[row] = null;
+			mEdges[row] = new short[mNodes.length];
+		}
+	}
+
+	@Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
 

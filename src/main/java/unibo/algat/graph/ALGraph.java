@@ -3,7 +3,7 @@ package unibo.algat.graph;
 import java.util.*;
 
 /**
- * <p>An adjacency list nodeimplementation of a generic Graph.</p>
+ * <p>An adjacency list implementation of a {@link Graph}.</p>
  */
 public class ALGraph<T> implements Graph<T> {
     private SortedMap<Node<T>, SortedSet<Node<T>>> mEntries;
@@ -96,6 +96,11 @@ public class ALGraph<T> implements Graph<T> {
         } else {
             throw new NullPointerException("Either a or b was null");
         }
+    }
+
+    @Override
+    public void clear() {
+        mEntries.clear();
     }
 
     @Override
