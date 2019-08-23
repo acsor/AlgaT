@@ -119,6 +119,42 @@ public class SerialExecutor {
 		return mAutoRun;
 	}
 
+	/**
+	 * <p></p>Utility method intended to submit small, <i>synchronous</i> tasks to
+	 * the JavaFX UI thread.</p>
+	 * <p>This might be chosen as an alternative to {@link Platform#runLater}
+	 * when it is necessary to wait for a task to complete, differently to
+	 * {@link Platform#runLater} which runs the task in parallel to the
+	 * thread submitting it.
+	 *
+	 * @param action Code to invoke on the UI thread.
+	 */
+	public static void runAndWait (Runnable action) {
+		final CountDownLatch doneLatch = new CountDownLatch(1);
+
+		if (action != null) {
+			if (Platform.isFxApplicationThread()) {
+				action.run();
+			} else {
+				Platform.runLater(() -> {
+					try {
+						action.run();
+					} finally {
+						doneLatch.countDown();
+					}
+				});
+
+				try {
+					doneLatch.await();
+				} catch (InterruptedException e) {
+					// Ignore exception
+				}
+			}
+		} else {
+			throw new NullPointerException("action was null");
+		}
+	}
+
 	private class AutoRunTask implements Runnable {
 		@Override
 		public void run() {
