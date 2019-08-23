@@ -64,10 +64,6 @@ public class GraphView<T> extends Region {
 		mNodeMargin = DEFAULT_NODE_MARGIN;
 	}
 
-	public void setGraph(GraphFactory<T> factory) {
-		setGraph(factory.makeGraph());
-	}
-
 	public void setGraph(Graph<T> graph) {
 		if (mGraph.get() != null) {
 			mGraph.get().removeNodeChangeListener(mNodeListener);

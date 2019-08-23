@@ -26,7 +26,7 @@ public abstract class ShortestPathLessonView extends GraphLessonView<Double> {
 	 * Callback invoked during the press of the toolbar "random button".
 	 */
 	private final EventHandler<ActionEvent> mRandomAction = event -> {
-		mGraphV.setGraph(new RandomALGraphFactory<>(15, 10));
+		mGraphV.setGraph(new RandomALGraphFactory<Double>(15, 10).make());
 		mGraphV.setWeightFunction(
 			new RandomMWFFactory<Double>(0, 25).make(mGraphV.getGraph())
 		);

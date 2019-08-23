@@ -64,7 +64,7 @@ public abstract class RandomGraphFactory<T> implements GraphFactory<T> {
 	 * @return A randomly-makeValue {@link Graph} instance.
 	 */
 	@Override
-	public final Graph<T> makeGraph() {
+	public final Graph<T> make() {
 		final Graph<T> instance = getInstance();
         final ArrayList<Node<T>> nodes = new ArrayList<>(mNodes);
         final Random r = new Random(System.currentTimeMillis());
