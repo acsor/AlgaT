@@ -14,7 +14,7 @@ public class WeightView extends Label {
 		mEdgeView = edgeView;
 
 		setWeight(weight);
-		textProperty().bind(mWeight.asString());
+		textProperty().bind(mWeight.asString("%.2f"));
 		// Add a layout offset in such a way to center the weight view
 		translateXProperty().bind(widthProperty().divide(-2.0));
 		translateYProperty().bind(heightProperty().divide(-2.0));

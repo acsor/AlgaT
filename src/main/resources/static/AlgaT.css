@@ -44,8 +44,8 @@
 }
 
 .node-view-text {
-    -fx-content-display: right;
-    -fx-text-fill: #EEE;
+    -fx-text-alignment: center;
+    -fx-fill: #EEE;
 }
 
 

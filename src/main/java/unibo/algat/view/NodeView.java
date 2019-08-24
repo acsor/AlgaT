@@ -8,12 +8,13 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import unibo.algat.graph.Node;
 import unibo.algat.util.DragFactory;
 
@@ -21,13 +22,13 @@ class NodeView extends Region {
 	private Node<?> mNode;
 
 	private final Circle mCircle;
-	private final Label mText;
+	private final Text mText;
 
 	private SimpleDoubleProperty mRadius;
 	private SimpleObjectProperty<Point2D> mCenter;
 
-	private static final PseudoClass PSEUDO_CLASS_SELECTED = PseudoClass.
-		getPseudoClass("selected");
+	private static final PseudoClass PSEUDO_CLASS_SELECTED =
+		PseudoClass.getPseudoClass("selected");
 	private BooleanProperty mSelected = new SimpleBooleanProperty(
 		this, "selected"
 	) {
@@ -48,7 +49,7 @@ class NodeView extends Region {
 	NodeView(Node<?> node) {
 		mNode = node;
 		mCircle = new Circle(DEFAULT_RADIUS, DEFAULT_FILL);
-		mText = new Label();
+		mText = new Text();
 
 		mRadius = new SimpleDoubleProperty();
 		mCenter = new SimpleObjectProperty<>();

@@ -1,16 +1,15 @@
 package unibo.algat.view;
 
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import unibo.algat.algorithm.ShortestPathAlgorithm;
-import unibo.algat.graph.ALGraph;
-import unibo.algat.graph.Node;
-import unibo.algat.graph.RandomALGraphFactory;
-import unibo.algat.graph.RandomMWFFactory;
+import unibo.algat.graph.*;
 
 import java.io.IOException;
+import java.util.function.Function;
 
 /**
  * <p>Common abstract base class implemented by all those
@@ -22,14 +21,44 @@ import java.io.IOException;
 public abstract class ShortestPathLessonView extends GraphLessonView<Double> {
 	protected ShortestPathAlgorithm mSPAlgo;
 
+	// Better cache these
+	private final GraphFactory<Double> mGraphFactory =
+		new RandomALGraphFactory<>(15, 20);
+	private final WeightFunctionFactory<Double> mWeightFactory =
+		new RandomMWFFactory<>(0, 25);
+
+	/**
+	 * A node formatter showing a node id on top, and its distance from the
+	 * root node at bottom.
+	 *
+	 * @see GraphView#setNodeFormatter
+	 */
+	private static final Function<Node<Double>, StringBinding> sNodeFormatter =
+		node -> new StringBinding() {
+			{ bind(node.dataProperty()); }
+
+			@Override
+			protected String computeValue() {
+				final Double value = node.getData();
+				String repr;
+
+				if (value == null)
+					repr = "";
+				else if (value == Double.POSITIVE_INFINITY)
+					repr = "\u221e";	// Infinity Unicode code point
+				else
+					repr = String.format("%.2f", value);
+
+				return String.format("%d\n%s", node.getId(), repr);
+			}
+		};
+
 	/**
 	 * Callback invoked during the press of the toolbar "random button".
 	 */
 	private final EventHandler<ActionEvent> mRandomAction = event -> {
-		mGraphV.setGraph(new RandomALGraphFactory<Double>(15, 10).make());
-		mGraphV.setWeightFunction(
-			new RandomMWFFactory<Double>(0, 25).make(mGraphV.getGraph())
-		);
+		mGraphV.setGraph(mGraphFactory.make());
+		mGraphV.setWeightFunction(mWeightFactory.make(mGraphV.getGraph()));
 
 		mSPAlgo.setGraph(mGraphV.getGraph());
 		mSPAlgo.setWeightFunction(mGraphV.getWeightFunction());
@@ -47,7 +76,7 @@ public abstract class ShortestPathLessonView extends GraphLessonView<Double> {
 		super.initialize();
 
 		mGraphV.setGraph(new ALGraph<>());
-		mGraphV.setNodeInfoType(GraphView.NodeInfoType.value);
+		mGraphV.setNodeFormatter(sNodeFormatter);
 		mGraphV.mNodeSelection.itemCountProperty().addListener(o -> {
 			if (mGraphV.mNodeSelection.getItemCount() == 1) {
 				mSPAlgo.setRoot((Node<Double>)

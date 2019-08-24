@@ -1,5 +1,6 @@
 package unibo.algat.view;
 
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
@@ -14,6 +15,7 @@ import unibo.algat.util.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * <p>A view class responsible for displaying a {@link Graph} object.</p>
@@ -30,6 +32,7 @@ public class GraphView<T> extends Region {
 
 	private double mNodeRadius, mNodeMargin;
 	private Paint mNodeFill;
+	private Function<Node<T>, StringBinding> mNodeFormatter;
 
 	private static final double DEFAULT_NODE_RADIUS = 1;
 	private static final double DEFAULT_NODE_MARGIN = 1;
@@ -51,6 +54,19 @@ public class GraphView<T> extends Region {
 			removeEdgeView(e.getFirst(), e.getSecond());
 	};
 
+	/**
+	 * A node formatter associating a {@link Node} to its id.
+	 *
+	 * @see #setNodeFormatter
+	 */
+	public final Function<Node<T>, StringBinding> NODE_ID_FORMATTER = node ->
+		new StringBinding() {
+			@Override
+			protected String computeValue() {
+				return String.valueOf(node.getId());
+			}
+		};
+
 	public GraphView () {
 		mGraph = new SimpleObjectProperty<>(this, "graph");
 		mNodes = new HashMap<>();
@@ -59,6 +75,7 @@ public class GraphView<T> extends Region {
 
 		mLayout = new GraphGridLayout(6);
 		mNodeSelection = new GraphNodeSelectionModel(this);
+		mNodeFormatter = NODE_ID_FORMATTER;
 
 		mNodeRadius = DEFAULT_NODE_RADIUS;
 		mNodeMargin = DEFAULT_NODE_MARGIN;
@@ -149,6 +166,25 @@ public class GraphView<T> extends Region {
 		return mNodeFill;
 	}
 
+	/**
+	 * Specifies a <i>node formatter</i>, that is a function taking in an
+	 * instance of {@link Node} and producing a {@link StringBinding} serving
+	 * as its textual representation within a {@link NodeView}.
+	 */
+	public void setNodeFormatter (Function<Node<T>, StringBinding> formatter) {
+		mNodeFormatter = formatter;
+	}
+
+	/**
+	 * @return The node formatter in current use by this {@code GraphView}
+	 * object.
+	 *
+	 * @see #setNodeFormatter
+	 */
+	public Function<Node<T>, StringBinding> getNodeFormatter () {
+		return mNodeFormatter;
+	}
+
 	public void setGraphLayout (GraphLayout layout) {
 		mNodeSelection.clearSelection();
 
@@ -201,7 +237,7 @@ public class GraphView<T> extends Region {
 	private void addNodeView (Node<T> node) {
 		final NodeView view = new NodeView(node);
 
-		view.setText(String.valueOf(node.getId()));
+		view.textProperty().bind(mNodeFormatter.apply(node));
 		view.setRadius(mNodeRadius);
 		view.setFill(mNodeFill);
 		view.setPadding(new Insets(mNodeMargin));
