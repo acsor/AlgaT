@@ -13,6 +13,15 @@ import unibo.algat.lesson.Lesson;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+/**
+ * <p>Top-most abstract base class for algorithm views. {@code LessonView}
+ * holds a reference to a {@link SerialAlgorithm}, whose instantiation is
+ * defined by concrete classes in {@link #algorithmFactory()}.</p>
+ * <p><b>Note:</b> a user giving an implementation of a
+ * {@link SerialAlgorithm} must take care of setting the
+ * {@link SerialAlgorithm#readyProperty() readyProperty} appropriately, allowing
+ * {@code LessonView} and its subclasses behave accordingly.</p>
+ */
 public abstract class LessonView extends BorderPane implements ToolBarUser {
 	protected ObjectProperty<Lesson> mLesson;
 	protected SerialAlgorithm<?> mAlgo;
@@ -46,7 +55,7 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 
 	/**
 	 * @return A {@link SerialAlgorithm} instance defining the behavior of
-	 * the lesson upon running.
+	 * the simulation upon running.
 	 */
 	protected abstract SerialAlgorithm<?> algorithmFactory();
 

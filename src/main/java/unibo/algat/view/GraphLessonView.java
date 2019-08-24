@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * <p>Common abstract base class implemented by all those {@link LessonView}s
+ * <p>Common abstract base class implemented by {@link LessonView}s
  * having to deal with a {@link Graph} data structure.</p>
  */
 public abstract class GraphLessonView<T> extends LessonView {

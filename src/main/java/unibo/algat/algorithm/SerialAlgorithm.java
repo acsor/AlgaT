@@ -17,8 +17,8 @@ import java.util.ResourceBundle;
  * another thread) is done to {@link #next}.</p>
  * <p>In order to provide your own implementation of a {@code SerialAlgorithm},
  * it is necessary to override the {@link #call} method from {@link Task},
- * placing calls to {@link #setBreakpoint} at those places where you want to
- * halt the algorithm.</p>
+ * placing calls to {@link #setBreakpoint} at those places where an algorithm
+ * halt is wanted.</p>
  *
  * @param <R> This algorithm result value type
  *
@@ -143,8 +143,8 @@ public abstract class SerialAlgorithm<R> extends Task<R> {
 	}
 
 	/**
-	 * Returns the ready state of this {@code SerialAlgorithm}, to not be
-	 * confused with {@link Worker.State}.
+	 * Returns the ready (i.e. whether it can run) state of this {@code
+	 * SerialAlgorithm}, to not be confused with {@link Worker.State}.
 	 * @return A {@code BooleanProperty}, indicating whether this algorithm
 	 * is ready to start.
 	 */
