@@ -1,14 +1,9 @@
 package unibo.algat.lesson;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.*;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  * <p>{@code LessonLoader} takes as input directory class paths, looks for
@@ -18,7 +13,7 @@ import java.util.stream.Stream;
  * @see Lesson
  * @see QuestionLoader
  */
-public class LessonLoader {
+public class LessonLoader extends PropertiesLoader {
     /**
      * The base class path pointing to a directory containing {@code
      * .properties} lessons files.
@@ -55,50 +50,22 @@ public class LessonLoader {
     /**
      * @return The set of available lessons stored in the specified location.
      */
-    public Set<Lesson> lessons () throws IOException, URISyntaxException {
-    	// TODO Check for other ways to get a listing of .properties files
-        //      out of a "resource directory"
-        URI uri = LessonLoader.class.getResource(mBasePath).toURI();
-        Path myPath;
-        HashSet<Lesson> lessons = new HashSet<>();
-        Matcher m;
-        if (uri.getScheme().equals("jar")) {
-            lessons = jarWalk(uri);
-        } else {
-            myPath = Paths.get(uri);
-            Stream<Path> walk = Files.walk(myPath, 1);
-            for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-                m = FILE_PATTERN.matcher(it.next().getFileName().toString());
-                if (m.matches())
-                    lessons.add(load(Integer.parseInt(m.group(1))));
+    public Set<Lesson> lessons () {
+        final Set<Lesson> lessons = new HashSet<>();
+        final Iterator<Path> paths = listProjectDir(mBasePath);
+
+        while (paths.hasNext()) {
+            Matcher m = FILE_PATTERN.matcher(
+                paths.next().getFileName().toString()
+            );
+
+            if (m.matches()) {
+                lessons.add(load(Integer.parseInt(m.group(1))));
             }
         }
 
         return lessons;
     }
-
-    private HashSet<Lesson> jarWalk(URI uri) throws IOException{
-        HashSet<Lesson> lessons = new HashSet<>();
-        // this'll close the FileSystem object at the end
-        try (FileSystem fs = getFileSystem(uri)) {
-            Stream<Path> walk = Files.walk(fs.getPath(mBasePath));
-            for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-                Matcher m = FILE_PATTERN.matcher(it.next().getFileName().toString());
-                if (m.matches())
-                    lessons.add(load(Integer.parseInt(m.group(1))));
-            }
-        }
-        return lessons;
-    }
-
-    private FileSystem getFileSystem(URI uri) throws IOException {
-        try {
-            return FileSystems.getFileSystem(uri);
-        } catch (FileSystemNotFoundException e) {
-            return FileSystems.newFileSystem(uri, Collections.<String, String>emptyMap());
-        }
-    }
-
 
     /**
      * @param lessonId Id of the lesson to fetch.

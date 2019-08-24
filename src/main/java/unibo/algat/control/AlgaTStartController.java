@@ -14,8 +14,6 @@ import unibo.algat.view.AlgaToolBar;
 import unibo.algat.view.LessonViewFactory;
 import unibo.algat.view.ToolBarUser;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.*;
 
 public class AlgaTStartController {
@@ -104,7 +102,7 @@ public class AlgaTStartController {
 		}
 	};
 
-	public AlgaTStartController() throws IOException, URISyntaxException {
+	public AlgaTStartController() {
 		final LessonLoader l = new LessonLoader(
 			AlgaTApplication.LESSONS_DIR, Locale.getDefault()
 		);

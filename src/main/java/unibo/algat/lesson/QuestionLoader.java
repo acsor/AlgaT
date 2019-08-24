@@ -1,13 +1,12 @@
 package unibo.algat.lesson;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  * The {@code QuestionLoader} takes care of loading question-related data from
@@ -15,7 +14,7 @@ import java.util.stream.Stream;
  * path and their file name follows the
  * {@code Question<LessonId>:<QuestionId>_<locale spec>.properties} format.
  */
-public class QuestionLoader {
+public class QuestionLoader extends PropertiesLoader {
 	private final String mBaseRef;
 	private final String mBasePath;
 
@@ -39,55 +38,28 @@ public class QuestionLoader {
 	 * @return A list of available questions related to the lesson identified
 	 * by {@code lessonId}.
 	 */
-	public Set<Question> questions (Lesson lesson) throws IOException, URISyntaxException {
+	public Set<Question> questions (Lesson lesson) {
 		// TODO The Lesson and Question classes are too loosely coupled, do
 		//  something to strengthen their relationship
-		URI uri = QuestionLoader.class.getResource(mBasePath).toURI();
-		Path myPath;
-		HashSet<Question> questions = new HashSet<>();
-		Matcher m;
-		if (uri.getScheme().equals("jar")) {
-			questions = jarWalk(uri, lesson);
-		} else {
-			myPath = Paths.get(uri);
-			Stream<Path> walk = Files.walk(myPath, 1);
-			for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-				m = FILE_PATTERN.matcher(it.next().getFileName().toString());
-				if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId())
-					questions.add(load(
-							Integer.valueOf(m.group(1)),
-							Integer.valueOf(m.group(2))
-					));
+		Set<Question> questions = new HashSet<>();
+		final Iterator<Path> paths = listProjectDir(mBasePath);
+
+		while (paths.hasNext()) {
+			Matcher m = FILE_PATTERN.matcher(
+				paths.next().getFileName().toString()
+			);
+
+			if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId()) {
+				questions.add(load(
+					Integer.valueOf(m.group(1)),
+					Integer.valueOf(m.group(2))
+				));
 			}
 		}
 
 		return questions;
 	}
-	private HashSet<Question> jarWalk(URI uri, Lesson lesson) throws IOException{
-		HashSet<Question> questions = new HashSet<>();
-		// this'll close the FileSystem object at the end
-		try (FileSystem fs = getFileSystem(uri)) {
-			Stream<Path> walk = Files.walk(fs.getPath(mBasePath));
-			for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-				Matcher m = FILE_PATTERN.matcher(it.next().getFileName().toString());
-				if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId())
-					questions.add(load(
-							Integer.valueOf(m.group(1)),
-							Integer.valueOf(m.group(2))
-					));
-			}
-		}
-		return questions;
-	}
 
-
-	private FileSystem getFileSystem(URI uri) throws IOException {
-		try {
-			return FileSystems.getFileSystem(uri);
-		} catch (FileSystemNotFoundException e){
-			return FileSystems.newFileSystem(uri, Collections.<String, String>emptyMap());
-		}
-	}
 	/**
 	 * @param lessonId Id of the lesson the question is associated to
 	 * @param questionId Id of the question
@@ -113,7 +85,7 @@ public class QuestionLoader {
 			if (m.matches()) {
 				out.addChoice(
 					new Question.Choice(
-						Integer.valueOf(m.group(1)), r.getString(key)
+						Integer.parseInt(m.group(1)), r.getString(key)
 					)
 				);
 			}
@@ -121,7 +93,7 @@ public class QuestionLoader {
 
 		out.setCorrectChoice(
 			new Question.Choice(
-				Integer.valueOf(correctChoiceId),
+				Integer.parseInt(correctChoiceId),
 				r.getString(String.format(KEY_CHOICE, correctChoiceId))
 			)
 		);
