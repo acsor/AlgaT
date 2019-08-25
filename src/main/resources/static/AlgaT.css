@@ -44,6 +44,7 @@
 }
 
 .node-view-text {
+    -fx-font-size: 15px;
     -fx-text-alignment: center;
     -fx-fill: #EEE;
 }
