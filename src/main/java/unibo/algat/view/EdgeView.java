@@ -15,7 +15,7 @@ import javafx.util.Duration;
  * <p>A class responsible for tracing a parabola curve between two
  * {@link NodeView}s.</p>
  */
-public class EdgeView extends Path {
+class EdgeView extends Path {
 	private NodeView mU, mV;
 	private final FadeTransition mFadeIn;
 
@@ -49,7 +49,7 @@ public class EdgeView extends Path {
 	 * @param u First edge node
 	 * @param v Second edge node
 	 */
-	public EdgeView(NodeView u, NodeView v) {
+	EdgeView(NodeView u, NodeView v) {
 		mU = u;
 		mV = v;
 		mFadeIn = new FadeTransition(FADE_DURATION, this);
@@ -174,7 +174,7 @@ public class EdgeView extends Path {
 		getStyleClass().add("edge-view");
 	}
 
-	public ReadOnlyDoubleProperty angleProperty () {
+	ReadOnlyDoubleProperty angleProperty () {
 		if (mAngle == null) {
 			mAngle = new SimpleDoubleProperty(this, "angle");
 
@@ -195,7 +195,7 @@ public class EdgeView extends Path {
 		return mAngle;
 	}
 
-	public Point2D getTop () {
+	Point2D getTop () {
 		return mTop.get();
 	}
 
@@ -213,7 +213,7 @@ public class EdgeView extends Path {
 	/**
 	 * @return The top point described by this parabola curve.
 	 */
-	public ReadOnlyObjectProperty<Point2D> topProperty () {
+	ReadOnlyObjectProperty<Point2D> topProperty () {
 		return mTop;
 	}
 }
