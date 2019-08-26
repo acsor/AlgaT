@@ -1,8 +1,8 @@
 package unibo.algat.algorithm;
 
 import unibo.algat.graph.Node;
+
 import java.util.PriorityQueue;
-import static unibo.algat.algorithm.SerialExecutor.runAndWait;
 
 
 /**

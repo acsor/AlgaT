@@ -1,5 +1,6 @@
 package unibo.algat.algorithm;
 
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -8,6 +9,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * <p>A {@code SerialAlgorithm} is an algorithm, typically executed on a
@@ -158,6 +160,42 @@ public abstract class SerialAlgorithm<R> extends Task<R> {
 	 */
 	public ReadOnlyBooleanProperty stoppedProperty () {
 		return mStopped;
+	}
+
+	/**
+	 * <p></p>Utility method intended to submit small, <i>synchronous</i> tasks
+	 * to the JavaFX UI thread.</p>
+	 * <p>This might be chosen as an alternative to {@link Platform#runLater}
+	 * when it is necessary to wait for a task to complete, differently to
+	 * {@link Platform#runLater} which runs the task in parallel to the
+	 * thread submitting it.
+	 *
+	 * @param action Code to invoke on the UI thread.
+	 */
+	public static void runAndWait (Runnable action) {
+		final CountDownLatch doneLatch = new CountDownLatch(1);
+
+		if (action != null) {
+			if (Platform.isFxApplicationThread()) {
+				action.run();
+			} else {
+				Platform.runLater(() -> {
+					try {
+						action.run();
+					} finally {
+						doneLatch.countDown();
+					}
+				});
+
+				try {
+					doneLatch.await();
+				} catch (InterruptedException e) {
+					// Ignore exception
+				}
+			}
+		} else {
+			throw new NullPointerException("action was null");
+		}
 	}
 
 	private class StoppedBinding extends BooleanBinding {

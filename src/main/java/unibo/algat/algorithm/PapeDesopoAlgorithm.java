@@ -5,8 +5,6 @@ import unibo.algat.graph.Node;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import static unibo.algat.algorithm.SerialExecutor.runAndWait;
-
 /**
  * A Pape-D'Esopo shortest path algorithm implementation.
  */
