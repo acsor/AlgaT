@@ -196,6 +196,13 @@ public class GraphView<T> extends Region {
 		return mLayout;
 	}
 
+	/**
+	 * Invokes a fade in animation on edge {@code (u, v)}.
+	 */
+	public void fadeEdge (Node<T> u, Node<T> v) {
+		mEdges.get(new Pair<>(u, v)).fadeIn();
+	}
+
 	@Override
 	protected void layoutChildren () {
 		final Insets bounds = getInsets();

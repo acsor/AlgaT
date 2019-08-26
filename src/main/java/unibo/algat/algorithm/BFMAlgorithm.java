@@ -35,6 +35,8 @@ public class BFMAlgorithm extends ShortestPathAlgorithm {
 			for (Node<Double> v: mGraph.adjacents(u)) {
 				setBreakpoint();
 
+				mOnVisitEdge.accept(u, v);
+
 				if (u.getData() + mWeights.weight(u, v) < v.getData()) {
 					if (!q.contains(v))
 						q.add(v);

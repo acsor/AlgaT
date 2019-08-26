@@ -5,11 +5,14 @@ import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import unibo.algat.algorithm.SerialAlgorithm;
 import unibo.algat.algorithm.ShortestPathAlgorithm;
 import unibo.algat.graph.*;
 
 import java.io.IOException;
 import java.util.function.Function;
+
+import static unibo.algat.algorithm.SerialAlgorithm.runAndWait;
 
 /**
  * <p>Common abstract base class implemented by all those
@@ -67,6 +70,14 @@ public abstract class ShortestPathLessonView extends GraphLessonView<Double> {
 	public ShortestPathLessonView() throws IOException {
 		super();
 		mSPAlgo = (ShortestPathAlgorithm) mAlgo;
+
+		mSPAlgo.setOnVisitEdgeAction(
+			// It looks like removing the runAndWait() part has no effect on
+			// whether the fadeEdge() method is successfully executed on the
+			// background thread. Does this mean that JavaFX transitions have
+			// no need to be offloaded on the UI thread?
+			(u, v) -> runAndWait(() -> mGraphV.fadeEdge(u, v))
+		);
 	}
 
 	protected abstract ShortestPathAlgorithm algorithmFactory();

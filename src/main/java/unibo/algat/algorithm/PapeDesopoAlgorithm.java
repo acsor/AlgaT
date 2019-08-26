@@ -32,6 +32,8 @@ public class PapeDesopoAlgorithm extends ShortestPathAlgorithm {
 			for (Node<Double> v: mGraph.adjacents(u)) {
 				setBreakpoint();
 
+				mOnVisitEdge.accept(u, v);
+
 				if (u.getData() + mWeights.weight(u, v) < v.getData()) {
 					if (!d.contains(v)) {
 						if (v.getData() == Double.POSITIVE_INFINITY)

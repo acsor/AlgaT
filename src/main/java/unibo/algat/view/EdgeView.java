@@ -1,5 +1,6 @@
 package unibo.algat.view;
 
+import javafx.animation.FadeTransition;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
@@ -8,6 +9,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.QuadCurveTo;
+import javafx.util.Duration;
 
 /**
  * <p>A class responsible for tracing a parabola curve between two
@@ -15,6 +17,7 @@ import javafx.scene.shape.QuadCurveTo;
  */
 public class EdgeView extends Path {
 	private NodeView mU, mV;
+	private final FadeTransition mFadeIn;
 
 	private final ObjectBinding<Point2D> mStart, mEnd;
 	/**
@@ -39,6 +42,9 @@ public class EdgeView extends Path {
 
 	private final ObjectBinding<Point2D> mHeadLeft, mHeadRight;
 
+	private static final Duration FADE_DURATION = Duration.millis(2000);
+	private static final double FADE_START = 0.4;
+
 	/**
 	 * @param u First edge node
 	 * @param v Second edge node
@@ -46,6 +52,7 @@ public class EdgeView extends Path {
 	public EdgeView(NodeView u, NodeView v) {
 		mU = u;
 		mV = v;
+		mFadeIn = new FadeTransition(FADE_DURATION, this);
 
 		mControl = new ObjectBinding<>() {
 			{ bind(u.centerProperty(), v.centerProperty()); }
@@ -162,7 +169,9 @@ public class EdgeView extends Path {
 			);
 		});
 
-        getStyleClass().add("edge-view");
+        mFadeIn.setFromValue(FADE_START);
+
+		getStyleClass().add("edge-view");
 	}
 
 	public ReadOnlyDoubleProperty angleProperty () {
@@ -188,6 +197,17 @@ public class EdgeView extends Path {
 
 	public Point2D getTop () {
 		return mTop.get();
+	}
+
+
+	/**
+	 * Begins the execution of a fade in animation.
+	 */
+	void fadeIn () {
+		// The target opacity level is not statically set, but changes
+		// according to the current level during invocation time
+		mFadeIn.setToValue(getOpacity());
+		mFadeIn.play();
 	}
 
 	/**
