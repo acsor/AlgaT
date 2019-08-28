@@ -4,6 +4,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import com.sun.javafx.scene.control.WebColorField?>
 <fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx"
 		 xmlns:fx="http://javafx.com/fxml" styleClass="quiz-view"
 >
@@ -26,20 +27,19 @@
 		<ImageView
 			fx:id="mAnswerIndicator" fitWidth="32" preserveRatio="true"
 		/>
-		<Button
-			fx:id="mAccept" text="%gui.quizview.accept" disable="true"
-			alignment="BASELINE_CENTER"
-		/>
 	</HBox>
 
-	<HBox VBox.vgrow="ALWAYS" spacing="15" alignment="CENTER_LEFT">
-        <Button
-			fx:id="mPrev" text="%gui.quizview.prev" alignment="BOTTOM_LEFT"
-		/>
-		<Button
-			fx:id="mNext" text="%gui.quizview.next" alignment="CENTER_RIGHT"
-		/>
-
-		<Label fx:id="mPos" />
+	<HBox VBox.vgrow="ALWAYS" spacing="15" alignment="BOTTOM_LEFT">
+		<ToolBar HBox.hgrow="ALWAYS" style="-fx-background-color: linear-gradient(#DDD,#FFF);">
+			<Button fx:id="mPrev" text="%gui.quizview.prev"/>
+			<Pane HBox.hgrow="ALWAYS"/>
+			<Button
+				fx:id="mAccept" text="%gui.quizview.accept" disable="true"
+			/>
+			<Pane HBox.hgrow="ALWAYS"/>
+			<Button fx:id="mNext" text="%gui.quizview.next"/>
+			<Separator />
+			<Label fx:id="mPos"/>
+		</ToolBar>
 	</HBox>
 </fx:root>

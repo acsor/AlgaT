@@ -43,6 +43,7 @@ public class QuizView extends VBox {
 	@FXML private Button mAccept;
 	@FXML private Button mPrev, mNext;
 	@FXML private Label mPos;
+	@FXML private ToolBar mNavigate;
 
 	/**
 	 * Handles reactions to the presses {@link #mPrev} and {@link #mNext}
