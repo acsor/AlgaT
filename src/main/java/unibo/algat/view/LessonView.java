@@ -51,6 +51,8 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 
 		setTop(mTitle);
 		setRight(mQuizView);
+
+		mQuizView.prefWidthProperty().bind(widthProperty().multiply(0.25));
 	}
 
 	/**

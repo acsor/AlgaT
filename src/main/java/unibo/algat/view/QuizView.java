@@ -205,6 +205,8 @@ public class QuizView extends VBox {
 
             for (Question.Choice c: selected.choices()) {
             	RadioButton option = new RadioButton(c.getText());
+
+            	option.getStyleClass().add("quiz-view-choice");
             	option.setToggleGroup(mChoiceGroup);
             	// Associates the current Question.Choice instance to the
 				// button, to be later retrieved when the user submits their
