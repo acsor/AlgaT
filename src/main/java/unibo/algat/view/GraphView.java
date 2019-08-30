@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * <p>A view class responsible for displaying a {@link Graph} object.</p>
+ * <p>A view class responsible of displaying a {@link Graph} object.</p>
  */
 public class GraphView<T> extends Region {
 	private ObjectProperty<ObservableGraph<T>> mGraph;
@@ -31,6 +31,9 @@ public class GraphView<T> extends Region {
 	GraphNodeSelectionModel mNodeSelection;
 
 	private double mNodeRadius, mNodeMargin;
+	// Width and height values to return in computePrefWidth() and
+	// computePrefHeight()
+	private double mPrefWidth, mPrefHeight;
 	private Paint mNodeFill;
 	private Function<Node<T>, StringBinding> mNodeFormatter;
 
@@ -207,17 +210,10 @@ public class GraphView<T> extends Region {
 	protected void layoutChildren () {
 		final Insets bounds = getInsets();
 
+		mPrefWidth = mPrefHeight = 0;
+
 		for (NodeView view: mNodes.values()) {
 			final Point2D location = mLayout.layout(view);
-
-			setPrefWidth(Math.max(
-				getPrefWidth(), bounds.getLeft() + bounds.getLeft() +
-					location.getX() + view.getWidth()
-			));
-			setPrefHeight(Math.max(
-				getPrefHeight(), bounds.getTop() + bounds.getBottom() +
-					location.getY() + view.getHeight()
-			));
 
 			layoutInArea(
 				view,
@@ -225,6 +221,15 @@ public class GraphView<T> extends Region {
 				location.getY() + bounds.getTop(),
 				view.computePrefWidth(-1), view.computePrefHeight(-1),
 				0, HPos.CENTER, VPos.CENTER
+			);
+
+			mPrefWidth = Math.max(
+				mPrefWidth, bounds.getLeft() + bounds.getRight() +
+					location.getX() + view.getWidth()
+			);
+			mPrefHeight = Math.max(
+				mPrefHeight, bounds.getTop() + bounds.getBottom() +
+					location.getY() + view.getHeight()
 			);
 		}
 
@@ -239,6 +244,16 @@ public class GraphView<T> extends Region {
 				0, HPos.CENTER, VPos.CENTER
 			);
 		}
+	}
+
+	@Override
+	protected double computePrefWidth (double height) {
+		return mPrefWidth;
+	}
+
+	@Override
+	protected double computePrefHeight (double width) {
+		return mPrefHeight;
 	}
 
 	private void addNodeView (Node<T> node) {
