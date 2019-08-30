@@ -4,7 +4,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import com.sun.javafx.scene.control.WebColorField?>
+
+
 <fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx"
 		 xmlns:fx="http://javafx.com/fxml" styleClass="quiz-view"
 >
@@ -15,31 +16,54 @@
 		<Image fx:id="mWrongImage" url="@/static/wrong.png" />
 	</fx:define>
 
-	<Label text="%gui.quizview.title" styleClass="quiz-view-title" />
+	<Label text="%gui.quizview.title" styleClass="quiz-view-title">
+		<graphic>
+			<ImageView fitWidth="30" preserveRatio="true">
+				<Image url="@/static/quiz-title.png" />
+			</ImageView>
+		</graphic>
+	</Label>
+	<Separator />
+
 	<Label fx:id="mText" styleClass="quiz-view-text" />
+	<VBox
+		fx:id="mChoiceView" VBox.vgrow="ALWAYS" styleClass="quiz-view-choices"
+	/>
 
-	<fx:define>
-		<Label fx:id="mEmpty" text="%gui.quizview.empty" />
-	</fx:define>
-	<VBox fx:id="mChoiceView" styleClass="quiz-view-choices" spacing="5" />
-
-	<HBox VBox.vgrow="SOMETIMES" spacing="5" alignment="CENTER">
-		<ImageView
-			fx:id="mAnswerIndicator" fitWidth="32" preserveRatio="true"
-		/>
+	<HBox spacing="5" alignment="CENTER">
+		<ImageView fx:id="mAnswerIndicator" fitWidth="32" preserveRatio="true" />
 	</HBox>
+	<HBox spacing="5" alignment="CENTER_RIGHT">
+		<Label fx:id="mPos" styleClass="quiz-view-pos" />
+	</HBox>
+	<Separator />
 
-	<HBox VBox.vgrow="ALWAYS" spacing="15" alignment="BOTTOM_LEFT">
-		<ToolBar HBox.hgrow="ALWAYS" style="-fx-background-color: linear-gradient(#DDD,#FFF);">
-			<Button fx:id="mPrev" text="%gui.quizview.prev"/>
-			<Pane HBox.hgrow="ALWAYS"/>
-			<Button
-				fx:id="mAccept" text="%gui.quizview.accept" disable="true"
-			/>
-			<Pane HBox.hgrow="ALWAYS"/>
-			<Button fx:id="mNext" text="%gui.quizview.next"/>
-			<Separator />
-			<Label fx:id="mPos"/>
-		</ToolBar>
+	<!-- Footer buttons -->
+	<HBox>
+		<Button fx:id="mPrev" text="%gui.quizview.prev">
+			<graphic>
+				<ImageView fitWidth="20" preserveRatio="true">
+					<Image url="@/static/quiz-back.png" />
+				</ImageView>
+			</graphic>
+		</Button>
+		<Pane HBox.hgrow="ALWAYS"/>
+
+		<Button fx:id="mAccept" text="%gui.quizview.accept" disable="true">
+			<graphic>
+				<ImageView fitWidth="20" preserveRatio="true">
+					<Image url="@/static/quiz-confirm.png" />
+				</ImageView>
+			</graphic>
+		</Button>
+
+		<Pane HBox.hgrow="ALWAYS"/>
+		<Button fx:id="mNext" text="%gui.quizview.next" contentDisplay="RIGHT">
+			<graphic>
+				<ImageView fitWidth="20" preserveRatio="true">
+					<Image url="@/static/quiz-next.png" />
+				</ImageView>
+			</graphic>
+		</Button>
 	</HBox>
 </fx:root>

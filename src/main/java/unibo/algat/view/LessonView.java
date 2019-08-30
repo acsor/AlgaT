@@ -3,6 +3,7 @@ package unibo.algat.view;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import unibo.algat.AlgaTApplication;
@@ -51,6 +52,7 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 
 		setTop(mTitle);
 		setRight(mQuizView);
+		setMargin(mQuizView, new Insets(0, 0, 0, 20));
 
 		mQuizView.prefWidthProperty().bind(widthProperty().multiply(0.25));
 	}

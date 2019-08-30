@@ -36,7 +36,6 @@ public class QuizView extends VBox {
 
 	@FXML private Image mCorrectImage, mWrongImage;
 	@FXML private Label mText;
-	@FXML private Label mEmpty;
 	@FXML private VBox mChoiceView;
 	private ToggleGroup mChoiceGroup;
 	@FXML private ImageView mAnswerIndicator;
@@ -234,8 +233,8 @@ public class QuizView extends VBox {
 				mAnswerIndicator.setImage(null);
 			}
 		} else {
-			mChoiceView.getChildren().add(mEmpty);
-			mPos.setText("*/*");
+			mText.setText(mInterface.getString("gui.quizview.empty"));
+			mPos.setText("0/0");
 		}
 	}
 
