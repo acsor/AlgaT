@@ -13,10 +13,10 @@ import javafx.util.Duration;
 
 /**
  * <p>A class responsible for tracing a parabola curve between two
- * {@link NodeView}s.</p>
+ * {@link VertexView}s.</p>
  */
 class EdgeView extends Path {
-	private NodeView mU, mV;
+	private VertexView mU, mV;
 	private final FadeTransition mFadeIn;
 
 	private final ObjectBinding<Point2D> mStart, mEnd;
@@ -37,7 +37,7 @@ class EdgeView extends Path {
 	private final ObjectProperty<Point2D> mTop = new SimpleObjectProperty<>(
 		this, "top"
 	);
-	// The angle formed by the start and end graph nodes
+	// The angle formed by the start and end graph vertex
 	private DoubleProperty mAngle;
 
 	private final ObjectBinding<Point2D> mHeadLeft, mHeadRight;
@@ -46,10 +46,10 @@ class EdgeView extends Path {
 	private static final double FADE_START = 0.4;
 
 	/**
-	 * @param u First edge node
-	 * @param v Second edge node
+	 * @param u First edge vertex
+	 * @param v Second edge vertex
 	 */
-	EdgeView(NodeView u, NodeView v) {
+	EdgeView(VertexView u, VertexView v) {
 		mU = u;
 		mV = v;
 		mFadeIn = new FadeTransition(FADE_DURATION, this);

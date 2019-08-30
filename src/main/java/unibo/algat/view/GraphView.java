@@ -24,31 +24,31 @@ public class GraphView<T> extends Region {
 	private ObjectProperty<ObservableGraph<T>> mGraph;
 	private WeightFunction<T> mWeights;
 
-	Map<Node<T>, NodeView> mNodes;
-	private Map<Pair<Node<T>, Node<T>>, EdgeView> mEdges;
-	private Map<Pair<Node<T>, Node<T>>, WeightView> mWeightViews;
+	Map<Vertex<T>, VertexView> mVertices;
+	private Map<Pair<Vertex<T>, Vertex<T>>, EdgeView> mEdges;
+	private Map<Pair<Vertex<T>, Vertex<T>>, WeightView> mWeightViews;
 	GraphLayout mLayout;
-	GraphNodeSelectionModel mNodeSelection;
+	GraphVertexSelectionModel mVertexSelection;
 
-	private double mNodeRadius, mNodeMargin;
+	private double mVertexRadius, mVertexMargin;
 	// Width and height values to return in computePrefWidth() and
 	// computePrefHeight()
 	private double mPrefWidth, mPrefHeight;
-	private Paint mNodeFill;
-	private Function<Node<T>, StringBinding> mNodeFormatter;
+	private Paint mVertexFill;
+	private Function<Vertex<T>, StringBinding> mVertexFormatter;
 
-	private static final double DEFAULT_NODE_RADIUS = 1;
-	private static final double DEFAULT_NODE_MARGIN = 1;
+	private static final double DEFAULT_VERTEX_RADIUS = 1;
+	private static final double DEFAULT_VERTEX_MARGIN = 1;
 
-	private static final double NODE_VIEW_ORDER = 1;
+	private static final double VERTEX_VIEW_ORDER = 1;
 	private static final double WEIGHT_LABEL_VIEW_ORDER = 2;
 	private static final double EDGE_VIEW_ORDER = 3;
 
-	private final NodeChangeListener<T> mNodeListener = e -> {
+	private final VertexChangeListener<T> mVertexListener = e -> {
 		if (e.wasInserted())
-			addNodeView(e.getNode());
+			addVertexView(e.getVertex());
 		else if (e.wasDeleted())
-			removeNodeView(e.getNode());
+			removeVertexView(e.getVertex());
 	};
 	private final EdgeChangeListener<T> mEdgeListener = e -> {
 		if (e.wasInserted())
@@ -58,56 +58,56 @@ public class GraphView<T> extends Region {
 	};
 
 	/**
-	 * A node formatter associating a {@link Node} to its id.
+	 * A vertex formatter associating a {@link Vertex} to its id.
 	 *
-	 * @see #setNodeFormatter
+	 * @see #setVertexFormatter
 	 */
-	public final Function<Node<T>, StringBinding> NODE_ID_FORMATTER = node ->
+	public final Function<Vertex<T>, StringBinding> VERTEX_ID_FORMATTER = v ->
 		new StringBinding() {
 			@Override
 			protected String computeValue() {
-				return String.valueOf(node.getId());
+				return String.valueOf(v.getId());
 			}
 		};
 
 	public GraphView () {
 		mGraph = new SimpleObjectProperty<>(this, "graph");
-		mNodes = new HashMap<>();
+		mVertices = new HashMap<>();
 		mEdges = new HashMap<>();
 		mWeightViews = new HashMap<>();
 
 		mLayout = new GraphGridLayout(6);
-		mNodeSelection = new GraphNodeSelectionModel(this);
-		mNodeFormatter = NODE_ID_FORMATTER;
+		mVertexSelection = new GraphVertexSelectionModel(this);
+		mVertexFormatter = VERTEX_ID_FORMATTER;
 
-		mNodeRadius = DEFAULT_NODE_RADIUS;
-		mNodeMargin = DEFAULT_NODE_MARGIN;
+		mVertexRadius = DEFAULT_VERTEX_RADIUS;
+		mVertexMargin = DEFAULT_VERTEX_MARGIN;
 	}
 
 	public void setGraph(Graph<T> graph) {
 		if (mGraph.get() != null) {
-			mGraph.get().removeNodeChangeListener(mNodeListener);
+			mGraph.get().removeVertexChangeListener(mVertexListener);
 			mGraph.get().removeEdgeChangeListener(mEdgeListener);
 		}
 
-		mNodeSelection.clearSelection();
+		mVertexSelection.clearSelection();
 		mLayout.clear();
 		mWeightViews.clear();
 		setWeightFunction(null);
 		mEdges.clear();
-		mNodes.clear();
+		mVertices.clear();
 		getChildren().clear();
 
 		if (graph != null) {
 			mGraph.set(new ObservableGraph<>(graph));
-			mGraph.get().addNodeChangeListener(mNodeListener);
+			mGraph.get().addVertexChangeListener(mVertexListener);
 			mGraph.get().addEdgeChangeListener(mEdgeListener);
 
-			for (Node<T> u: mGraph.get().nodes())
-				addNodeView(u);
+			for (Vertex<T> u: mGraph.get().vertices())
+				addVertexView(u);
 
-			for (Node<T> u: mGraph.get().nodes()) {
-				for (Node<T> v: mGraph.get().adjacents(u))
+			for (Vertex<T> u: mGraph.get().vertices()) {
+				for (Vertex<T> v: mGraph.get().adjacents(u))
 					addEdgeView(u, v);
 			}
 		} else {
@@ -136,60 +136,60 @@ public class GraphView<T> extends Region {
 		return mWeights;
 	}
 
-	public void setNodeRadius(double radius) {
-		mNodeRadius = radius;
+	public void setVertexRadius(double radius) {
+		mVertexRadius = radius;
 
-		for (NodeView v: mNodes.values())
+		for (VertexView v: mVertices.values())
 			v.setRadius(radius);
 	}
 
-	public double getNodeRadius() {
-		return mNodeRadius;
+	public double getVertexRadius() {
+		return mVertexRadius;
 	}
 
-	public void setNodeMargin (double margin) {
-		mNodeMargin = margin;
+	public void setVertexMargin(double margin) {
+		mVertexMargin = margin;
 
-		for (NodeView v: mNodes.values())
+		for (VertexView v: mVertices.values())
 			v.setPadding(new Insets(margin));
 	}
 
-	public double getNodeMargin() {
-		return mNodeMargin;
+	public double getVertexMargin() {
+		return mVertexMargin;
 	}
 
-	public void setNodeFill (Paint nodeFill) {
-		mNodeFill = nodeFill;
+	public void setVertexFill(Paint vertexFill) {
+		mVertexFill = vertexFill;
 
-		for (NodeView v: mNodes.values())
-			v.setFill(nodeFill);
+		for (VertexView v: mVertices.values())
+			v.setFill(vertexFill);
 	}
 
-	public Paint getNodeFill () {
-		return mNodeFill;
+	public Paint getVertexFill() {
+		return mVertexFill;
 	}
 
 	/**
-	 * Specifies a <i>node formatter</i>, that is a function taking in an
-	 * instance of {@link Node} and producing a {@link StringBinding} serving
-	 * as its textual representation within a {@link NodeView}.
+	 * Specifies a <i>vertex formatter</i>, that is a function taking in an
+	 * instance of {@link Vertex} and producing a {@link StringBinding} serving
+	 * as its textual representation within a {@link VertexView}.
 	 */
-	public void setNodeFormatter (Function<Node<T>, StringBinding> formatter) {
-		mNodeFormatter = formatter;
+	public void setVertexFormatter(Function<Vertex<T>, StringBinding> formatter) {
+		mVertexFormatter = formatter;
 	}
 
 	/**
-	 * @return The node formatter in current use by this {@code GraphView}
+	 * @return The vertex formatter in current use by this {@code GraphView}
 	 * object.
 	 *
-	 * @see #setNodeFormatter
+	 * @see #setVertexFormatter
 	 */
-	public Function<Node<T>, StringBinding> getNodeFormatter () {
-		return mNodeFormatter;
+	public Function<Vertex<T>, StringBinding> getVertexFormatter() {
+		return mVertexFormatter;
 	}
 
 	public void setGraphLayout (GraphLayout layout) {
-		mNodeSelection.clearSelection();
+		mVertexSelection.clearSelection();
 
 		mLayout = layout;
         requestLayout();
@@ -202,7 +202,7 @@ public class GraphView<T> extends Region {
 	/**
 	 * Invokes a fade in animation on edge {@code (u, v)}.
 	 */
-	public void fadeEdge (Node<T> u, Node<T> v) {
+	public void fadeEdge (Vertex<T> u, Vertex<T> v) {
 		mEdges.get(new Pair<>(u, v)).fadeIn();
 	}
 
@@ -212,7 +212,7 @@ public class GraphView<T> extends Region {
 
 		mPrefWidth = mPrefHeight = 0;
 
-		for (NodeView view: mNodes.values()) {
+		for (VertexView view: mVertices.values()) {
 			final Point2D location = mLayout.layout(view);
 
 			layoutInArea(
@@ -256,39 +256,40 @@ public class GraphView<T> extends Region {
 		return mPrefHeight;
 	}
 
-	private void addNodeView (Node<T> node) {
-		final NodeView view = new NodeView(node);
+	private void addVertexView(Vertex<T> vertex) {
+		final VertexView view = new VertexView(vertex);
 
-		view.textProperty().bind(mNodeFormatter.apply(node));
-		view.setRadius(mNodeRadius);
-		view.setFill(mNodeFill);
-		view.setPadding(new Insets(mNodeMargin));
-		view.setViewOrder(NODE_VIEW_ORDER);
+		view.textProperty().bind(mVertexFormatter.apply(vertex));
+		view.setRadius(mVertexRadius);
+		view.setFill(mVertexFill);
+		view.setPadding(new Insets(mVertexMargin));
+		view.setViewOrder(VERTEX_VIEW_ORDER);
 
-		// When a NodeView is selected by a click, add it to the selection model
+		// When a VertexView is selected by a click, add it to the selection
+		// model
 		view.selectedProperty().addListener((o, wasSelected, isSelected) -> {
 			if (!wasSelected && isSelected)
-				mNodeSelection.select(view);
+				mVertexSelection.select(view);
 			else if (wasSelected && !isSelected)
-				mNodeSelection.clearSelection(view);
+				mVertexSelection.clearSelection(view);
 		});
 
-        mNodes.put(node, view);
+        mVertices.put(vertex, view);
         getChildren().add(view);
 	}
 
-	private void removeNodeView (Node<T> node) {
-		final NodeView removed = mNodes.remove(node);
+	private void removeVertexView(Vertex<T> vertex) {
+		final VertexView removed = mVertices.remove(vertex);
 
 		if (removed != null) {
-			mNodeSelection.clearSelection(removed);
+			mVertexSelection.clearSelection(removed);
 			mLayout.remove(removed);
 			getChildren().remove(removed);
 		}
 	}
 
-	private void addEdgeView(Node<T> u, Node<T> v) {
-		final EdgeView edge = new EdgeView(mNodes.get(u), mNodes.get(v));
+	private void addEdgeView(Vertex<T> u, Vertex<T> v) {
+		final EdgeView edge = new EdgeView(mVertices.get(u), mVertices.get(v));
 		final WeightView weightView = new WeightView(
 			edge, mWeights != null ? mWeights.weightBinding(u, v): null
 		);
@@ -302,7 +303,7 @@ public class GraphView<T> extends Region {
 		getChildren().addAll(edge, weightView);
 	}
 
-	private void removeEdgeView(Node<T> u, Node<T> v) {
+	private void removeEdgeView(Vertex<T> u, Vertex<T> v) {
 		EdgeView edge = mEdges.remove(new Pair<>(u, v));
 		WeightView weight = mWeightViews.remove(new Pair<>(u, v));
 
@@ -319,12 +320,12 @@ public class GraphView<T> extends Region {
 
 		b.append(String.format(
 			"[%s vertices=%d, edges=%d]\n",getClass().getSimpleName(),
-			mNodes == null ? 0: mNodes.keySet().size(),
+			mVertices == null ? 0: mVertices.keySet().size(),
 			mEdges == null ? 0: mEdges.keySet().size()
 		));
 
 		b.append(String.format("getChildren() = %d\n", getChildren().size()));
-        b.append(String.format("mNodes = %s\n", String.valueOf(mNodes)));
+        b.append(String.format("mVertices = %s\n", String.valueOf(mVertices)));
 		b.append(String.format("mEdges = %s\n", String.valueOf(mEdges)));
 		b.append(
 			String.format("mWeightViews = %s\n", String.valueOf(mWeightViews))

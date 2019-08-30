@@ -25,8 +25,8 @@ public class RandomMWFFactory<T> implements WeightFunctionFactory<T> {
 		final MapWeightFunction<T> f = new MapWeightFunction<T>(graph);
 		final double diff = mHigh - mLow;
 
-		for (Node<T> u: graph.nodes()) {
-			for (Node<T> v: graph.adjacents(u))
+		for (Vertex<T> u: graph.vertices()) {
+			for (Vertex<T> v: graph.adjacents(u))
 				f.assign(u, v, mLow + diff * mRandom.nextDouble());
 		}
 

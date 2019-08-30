@@ -1,6 +1,6 @@
 package unibo.algat.algorithm;
 
-import unibo.algat.graph.Node;
+import unibo.algat.graph.Vertex;
 
 import java.util.PriorityQueue;
 
@@ -13,14 +13,14 @@ public final class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	protected Void call() {
 		// TODO Update with a priority queue such as it was in actual use during
 		//  Dijkstra's times.
-		final PriorityQueue<Node<Double>> q = new PriorityQueue<>(
-			mGraph.nodes().size()
+		final PriorityQueue<Vertex<Double>> q = new PriorityQueue<>(
+			mGraph.vertices().size()
 		);
 
 		// The UI thread prefers to receive as few as possible (and as small
 		// as possible) tasks
 		runAndWait(() -> {
-			for (Node<Double> u: mGraph.nodes()) {
+			for (Vertex<Double> u: mGraph.vertices()) {
 				if (!u.equals(mRoot))
 					u.setData(Double.POSITIVE_INFINITY);
 			}
@@ -33,9 +33,9 @@ public final class DijkstraAlgorithm extends ShortestPathAlgorithm {
 		setBreakpoint();
 
 		while (!q.isEmpty()) {
-			Node<Double> u = q.remove();
+			Vertex<Double> u = q.remove();
 
-			for (Node<Double> v: mGraph.adjacents(u)) {
+			for (Vertex<Double> v: mGraph.adjacents(u)) {
 				setBreakpoint();
 
 				mOnVisitEdge.accept(u, v);

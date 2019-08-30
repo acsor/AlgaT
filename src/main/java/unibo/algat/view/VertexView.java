@@ -16,11 +16,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import unibo.algat.graph.Node;
+import unibo.algat.graph.Vertex;
 import unibo.algat.util.DragFactory;
 
-class NodeView extends Region {
-	private Node<?> mNode;
+class VertexView extends Region {
+	private Vertex<?> mVertex;
 
 	private final Circle mCircle;
 	private final Text mText;
@@ -52,8 +52,8 @@ class NodeView extends Region {
 	private static final Color FADE_START = Color.rgb(255, 171, 38, 0.9);
 	private static final Color FADE_END = Color.rgb(255, 255, 255, 0);
 
-	NodeView(Node<?> node) {
-		mNode = node;
+	VertexView(Vertex<?> vertex) {
+		mVertex = vertex;
 		mCircle = new Circle(DEFAULT_RADIUS, DEFAULT_FILL);
 		mText = new Text();
 		mStrokeFade = new StrokeTransition(
@@ -63,9 +63,9 @@ class NodeView extends Region {
 		mRadius = new SimpleDoubleProperty();
 		mCenter = new SimpleObjectProperty<>();
 
-		getStyleClass().add("node-view");
-		mCircle.getStyleClass().add("node-view-circle");
-		mText.getStyleClass().add("node-view-text");
+		getStyleClass().add("vertex-view");
+		mCircle.getStyleClass().add("vertex-view-circle");
+		mText.getStyleClass().add("vertex-view-text");
 
 		mRadius.bindBidirectional(mCircle.radiusProperty());
 		mCircle.strokeWidthProperty().bind(mRadius.multiply(0.15));
@@ -90,14 +90,14 @@ class NodeView extends Region {
 
 		mCircle.setOnMouseClicked(mToggleSelected);
 		mText.setOnMouseClicked(mToggleSelected);
-		mNode.dataProperty().addListener(o -> mStrokeFade.play());
+		mVertex.dataProperty().addListener(o -> mStrokeFade.play());
 		DragFactory.makeDraggable(this, mCircle, mText);
 
 		getChildren().addAll(mCircle, mText);
 	}
 
-	Node<?> getNode () {
-		return mNode;
+	Vertex<?> getVertex() {
+		return mVertex;
 	}
 
 	Point2D getCenter () {

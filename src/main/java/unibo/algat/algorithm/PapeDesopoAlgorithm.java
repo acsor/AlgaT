@@ -1,6 +1,6 @@
 package unibo.algat.algorithm;
 
-import unibo.algat.graph.Node;
+import unibo.algat.graph.Vertex;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -11,10 +11,10 @@ import java.util.LinkedList;
 public class PapeDesopoAlgorithm extends ShortestPathAlgorithm {
 	@Override
 	protected Void call() throws Exception {
-		final Deque<Node<Double>> d = new LinkedList<>();
+		final Deque<Vertex<Double>> d = new LinkedList<>();
 
 		runAndWait(() -> {
-			for (Node<Double> u: mGraph.nodes()) {
+			for (Vertex<Double> u: mGraph.vertices()) {
 				if (!u.equals(mRoot))
 					u.setData(Double.POSITIVE_INFINITY);
 			}
@@ -27,9 +27,9 @@ public class PapeDesopoAlgorithm extends ShortestPathAlgorithm {
 		setBreakpoint();
 
 		while (!d.isEmpty()) {
-			Node<Double> u = d.removeFirst();
+			Vertex<Double> u = d.removeFirst();
 
-			for (Node<Double> v: mGraph.adjacents(u)) {
+			for (Vertex<Double> v: mGraph.adjacents(u)) {
 				setBreakpoint();
 
 				mOnVisitEdge.accept(u, v);

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public class GraphGridLayout implements GraphLayout {
-	private Map<NodeView, Integer> mNodePos;
+	private Map<VertexView, Integer> mVertexPos;
 	private int mCols;
 	/**
 	 * A priority queue, indicating at which slot place the next element.
@@ -26,38 +26,38 @@ public class GraphGridLayout implements GraphLayout {
 	}
 
 	@Override
-	public Point2D layout (NodeView node) {
+	public Point2D layout (VertexView vertex) {
 		int row, col;
-		Integer position = mNodePos.get(node);
+		Integer position = mVertexPos.get(vertex);
 
 		if (position == null) {
 			position = mNext.poll();
-			mNodePos.put(node, position);
+			mVertexPos.put(vertex, position);
 
 			if (mNext.isEmpty())
-                mNext.add(mNodePos.size());
+                mNext.add(mVertexPos.size());
 		}
 
 		row = position / mCols;
 		col = position % mCols;
 
 		return new Point2D(
-			col * node.computePrefWidth(-1), row * node.computePrefHeight(-1)
+			col * vertex.computePrefWidth(-1), row * vertex.computePrefHeight(-1)
 		);
 	}
 
 	@Override
-	public int getPosition(NodeView view) {
-		if (mNodePos.containsKey(view)) {
-			return mNodePos.get(view);
+	public int getPosition(VertexView view) {
+		if (mVertexPos.containsKey(view)) {
+			return mVertexPos.get(view);
 		} else {
 			throw new IllegalArgumentException("View not yet laid out");
 		}
 	}
 
 	@Override
-	public void remove (NodeView view) {
-        Integer removed = mNodePos.remove(view);
+	public void remove (VertexView view) {
+        Integer removed = mVertexPos.remove(view);
 
         if (removed != null)
         	mNext.add(removed);
@@ -65,7 +65,7 @@ public class GraphGridLayout implements GraphLayout {
 
 	@Override
 	public void clear() {
-		mNodePos = new HashMap<>();
+		mVertexPos = new HashMap<>();
 		mNext = new PriorityQueue<>(1);
 
 		mNext.add(0);

@@ -5,7 +5,6 @@ import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import unibo.algat.algorithm.SerialAlgorithm;
 import unibo.algat.algorithm.ShortestPathAlgorithm;
 import unibo.algat.graph.*;
 
@@ -31,18 +30,18 @@ public abstract class ShortestPathLessonView extends GraphLessonView<Double> {
 		new RandomMWFFactory<>(0, 25);
 
 	/**
-	 * A node formatter showing a node id on top, and its distance from the
-	 * root node at bottom.
+	 * A vertex formatter showing a vertex id on top, and its distance from the
+	 * root vertex at bottom.
 	 *
-	 * @see GraphView#setNodeFormatter
+	 * @see GraphView#setVertexFormatter
 	 */
-	private static final Function<Node<Double>, StringBinding> sNodeFormatter =
-		node -> new StringBinding() {
-			{ bind(node.dataProperty()); }
+	private static final Function<Vertex<Double>, StringBinding> sVertexFormat =
+		vertex -> new StringBinding() {
+			{ bind(vertex.dataProperty()); }
 
 			@Override
 			protected String computeValue() {
-				final Double value = node.getData();
+				final Double value = vertex.getData();
 				String repr;
 
 				if (value == null)
@@ -52,7 +51,7 @@ public abstract class ShortestPathLessonView extends GraphLessonView<Double> {
 				else
 					repr = String.format("%.2f", value);
 
-				return String.format("%d\n%s", node.getId(), repr);
+				return String.format("%d\n%s", vertex.getId(), repr);
 			}
 		};
 
@@ -87,11 +86,11 @@ public abstract class ShortestPathLessonView extends GraphLessonView<Double> {
 		super.initialize();
 
 		mGraphV.setGraph(new ALGraph<>());
-		mGraphV.setNodeFormatter(sNodeFormatter);
-		mGraphV.mNodeSelection.itemCountProperty().addListener(o -> {
-			if (mGraphV.mNodeSelection.getItemCount() == 1) {
-				mSPAlgo.setRoot((Node<Double>)
-					mGraphV.mNodeSelection.getSelectedItems().get(0).getNode()
+		mGraphV.setVertexFormatter(sVertexFormat);
+		mGraphV.mVertexSelection.itemCountProperty().addListener(o -> {
+			if (mGraphV.mVertexSelection.getItemCount() == 1) {
+				mSPAlgo.setRoot((Vertex<Double>)
+					mGraphV.mVertexSelection.getSelectedItems().get(0).getVertex()
 				);
 			} else {
 				mSPAlgo.setRoot(null);

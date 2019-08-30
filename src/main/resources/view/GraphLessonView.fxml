@@ -12,7 +12,7 @@
 		<ScrollPane
 			fx:id="mScrollPane" vbarPolicy="AS_NEEDED" hbarPolicy="AS_NEEDED"
 		>
-            <GraphView fx:id="mGraphV" nodeRadius="30" nodeMargin="70">
+            <GraphView fx:id="mGraphV" vertexRadius="30" vertexMargin="70">
 				<graphLayout><GraphGridLayout columns="4" /></graphLayout>
 			</GraphView>
 		</ScrollPane>

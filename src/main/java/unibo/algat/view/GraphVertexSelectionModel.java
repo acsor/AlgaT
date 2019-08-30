@@ -13,17 +13,17 @@ import java.util.List;
 
 /**
  * <p>A {@link MultipleSelectionModel} implementation for a {@code
- * GraphView} nodes, where indices correspond to the position assigned
+ * GraphView} vertices, where indices correspond to the position assigned
  * by the current {@link GraphLayout}.</p>
  */
-public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
+public class GraphVertexSelectionModel extends MultipleSelectionModel<VertexView> {
 	private GraphView<?> mGraphV;
 
 	private ObservableList<Integer> mIndices;
-	private ObservableList<NodeView> mItems;
+	private ObservableList<VertexView> mItems;
 	private IntegerProperty mItemCount;
 
-	GraphNodeSelectionModel (GraphView<?> graphView) {
+	GraphVertexSelectionModel(GraphView<?> graphView) {
 		mGraphV = graphView;
 
 		mIndices = FXCollections.observableList(new LinkedList<>());
@@ -50,7 +50,7 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 	}
 
 	@Override
-	public ObservableList<NodeView> getSelectedItems() {
+	public ObservableList<VertexView> getSelectedItems() {
 		return FXCollections.unmodifiableObservableList(mItems);
 	}
 
@@ -64,7 +64,7 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 
 	@Override
 	public void selectAll() {
-		for (NodeView v: mGraphV.mNodes.values())
+		for (VertexView v: mGraphV.mVertices.values())
 			select(v);
 	}
 
@@ -79,7 +79,7 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 	@Override
 	public void select(int index) {
 		if (!mIndices.contains(index)) {
-			for (NodeView v: mGraphV.mNodes.values()) {
+			for (VertexView v: mGraphV.mVertices.values()) {
 				if (mGraphV.mLayout.getPosition(v) == index) {
 					mItems.add(v);
 					mIndices.add(index);
@@ -93,7 +93,7 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 	}
 
 	@Override
-	public void select(NodeView obj) {
+	public void select(VertexView obj) {
 		if (!mItems.contains(obj)) {
 			mItems.add(obj);
 			mIndices.add(mGraphV.mLayout.getPosition(obj));
@@ -105,7 +105,7 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 	@Override
 	public void clearSelection(int index) {
 		if (mIndices.contains(index)) {
-			for (NodeView v: mGraphV.mNodes.values()) {
+			for (VertexView v: mGraphV.mVertices.values()) {
 				if (mGraphV.mLayout.getPosition(v) == index) {
 					v.setSelected(false);
 					mItems.remove(v);
@@ -118,7 +118,7 @@ public class GraphNodeSelectionModel extends MultipleSelectionModel<NodeView> {
 		}
 	}
 
-	public void clearSelection (NodeView obj) {
+	public void clearSelection (VertexView obj) {
 		if (mItems.contains(obj)) {
 			mItems.remove(obj);
 			mIndices.remove(Integer.valueOf(mGraphV.mLayout.getPosition(obj)));

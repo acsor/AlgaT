@@ -2,7 +2,7 @@ package unibo.algat.algorithm;
 
 import javafx.application.Platform;
 import unibo.algat.graph.Graph;
-import unibo.algat.graph.Node;
+import unibo.algat.graph.Vertex;
 import unibo.algat.graph.WeightFunction;
 
 import java.util.function.BiConsumer;
@@ -10,8 +10,8 @@ import java.util.function.BiConsumer;
 public abstract class ShortestPathAlgorithm extends SerialAlgorithm<Void> {
 	protected Graph<Double> mGraph;
 	protected WeightFunction<Double> mWeights;
-	protected Node<Double> mRoot;
-	protected BiConsumer<Node<Double>, Node<Double>> mOnVisitEdge = (u, v) -> {
+	protected Vertex<Double> mRoot;
+	protected BiConsumer<Vertex<Double>, Vertex<Double>> mOnVisitEdge = (u, v) -> {
 	};
 
 	public void setGraph (Graph<Double> graph) {
@@ -32,12 +32,12 @@ public abstract class ShortestPathAlgorithm extends SerialAlgorithm<Void> {
 		return mWeights;
 	}
 
-	public void setRoot (Node<Double> root) {
+	public void setRoot (Vertex<Double> root) {
 		mRoot = root;
 		mReady.set(computeReady());
 	}
 
-	public Node<Double> getRoot () {
+	public Vertex<Double> getRoot () {
 		return mRoot;
 	}
 
@@ -48,7 +48,7 @@ public abstract class ShortestPathAlgorithm extends SerialAlgorithm<Void> {
 	 * {@link Platform#runLater} or {@link SerialAlgorithm#runAndWait}.</p>
 	 */
 	public void setOnVisitEdgeAction (
-		BiConsumer<Node<Double>, Node<Double>> action
+		BiConsumer<Vertex<Double>, Vertex<Double>> action
 	) {
 		mOnVisitEdge = action;
 	}
@@ -57,7 +57,7 @@ public abstract class ShortestPathAlgorithm extends SerialAlgorithm<Void> {
 	 * @return The action to perform while visiting the {@code (u, v)} edge.
 	 * It is an empty action (no-op) by default.
 	 */
-	public BiConsumer<Node<Double>, Node<Double>>getOnVisitEdgeAction () {
+	public BiConsumer<Vertex<Double>, Vertex<Double>>getOnVisitEdgeAction () {
 		return mOnVisitEdge;
 	}
 

@@ -42,7 +42,7 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 		mInterface = ResourceBundle.getBundle("Interface");
 		mApp = AlgaTApplication.getInstance();
 
-		// Node that LessonView doesn't load any FXML file -- apparently,
+		// Note that LessonView doesn't load any FXML file -- apparently,
 		// Java FX wasn't making this possible for some reason
 		mTitle = new Label();
 		mQuizView = new QuizView();

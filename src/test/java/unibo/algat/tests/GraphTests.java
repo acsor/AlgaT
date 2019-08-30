@@ -7,7 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import unibo.algat.graph.Graph;
-import unibo.algat.graph.Node;
+import unibo.algat.graph.Vertex;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,62 +31,62 @@ public abstract class GraphTests {
 	}
 
 	/**
-	 * <p>Ensures that inserting/deleting null-valued nodes into a graph raises
-	 * an exception.</p>
+	 * <p>Ensures that inserting/deleting null-valued vertices into a graph
+	 * raises an exception.</p>
 	 */
 	@ParameterizedTest
 	@NullSource
-	void testInsertDeleteNodeExceptions (Node<Void> n) {
-		Executable insertNull = () -> mGraph.insertNode(n);
-		Executable deleteNull = () -> mGraph.deleteNode(n);
+	void testInsertDeleteVertexExceptions (Vertex<Void> n) {
+		Executable insertNull = () -> mGraph.insertVertex(n);
+		Executable deleteNull = () -> mGraph.deleteVertex(n);
 
 		assertThrows(NullPointerException.class, insertNull);
 		assertThrows(NullPointerException.class, deleteNull);
 	}
 
 	/**
-	 * <p>Ensures {@link Graph#insertNode} and {@link Graph#deleteNode} work as
+	 * <p>Ensures {@link Graph#insertVertex} and {@link Graph#deleteVertex} work as
 	 * intended when fed admissible values.</p>
 	 */
 	@ParameterizedTest
 	@ValueSource(ints = {0, 3, 4})
-	void testInsertDeleteNode(Integer id) {
-		assertTrue(mGraph.insertNode(new Node<>(id)));
-		assertFalse(mGraph.insertNode(new Node<>(id)));
+	void testInsertDeleteVertex(Integer id) {
+		assertTrue(mGraph.insertVertex(new Vertex<>(id)));
+		assertFalse(mGraph.insertVertex(new Vertex<>(id)));
 
-		assertTrue(mGraph.deleteNode(new Node<>(id)));
-		assertFalse(mGraph.deleteNode(new Node<>(id)));
+		assertTrue(mGraph.deleteVertex(new Vertex<>(id)));
+		assertFalse(mGraph.deleteVertex(new Vertex<>(id)));
 	}
 
 	/**
-	 * Ensures that invoking {@link Graph#containsNode} on a null-valued
+	 * Ensures that invoking {@link Graph#containsVertex} on a null-valued
 	 * argument produces an exception.
 	 */
 	@ParameterizedTest
 	@NullSource
-	void testContainsNodeExceptions (Node<Void> n) {
-		Executable containsNull = () -> mGraph.containsNode(n);
+	void testContainsVertexExceptions (Vertex<Void> n) {
+		Executable containsNull = () -> mGraph.containsVertex(n);
 
 		assertThrows(NullPointerException.class, containsNull);
 	}
 
 	/**
-	 * <p>Ensures {@link Graph#containsNode} works as intended when fed
+	 * <p>Ensures {@link Graph#containsVertex} works as intended when fed
 	 * admissible values.</p>
 	 */
 	@ParameterizedTest
 	@ValueSource(ints = {0, 3, 4})
-	void testContainsNode (int id) {
+	void testContainsVertex (int id) {
 		// Double insertion/removals are inserted to guarantee extra reliability
-		mGraph.insertNode(new Node<>(id));
-		mGraph.insertNode(new Node<>(id));
-		assertTrue(mGraph.containsNode(new Node<>(id)));
-		assertEquals(1, mGraph.nodes().size());
+		mGraph.insertVertex(new Vertex<>(id));
+		mGraph.insertVertex(new Vertex<>(id));
+		assertTrue(mGraph.containsVertex(new Vertex<>(id)));
+		assertEquals(1, mGraph.vertices().size());
 
-		mGraph.deleteNode(new Node<>(id));
-		mGraph.deleteNode(new Node<>(id));
-		assertFalse(mGraph.containsNode(new Node<>(id)));
-		assertEquals(0, mGraph.nodes().size());
+		mGraph.deleteVertex(new Vertex<>(id));
+		mGraph.deleteVertex(new Vertex<>(id));
+		assertFalse(mGraph.containsVertex(new Vertex<>(id)));
+		assertEquals(0, mGraph.vertices().size());
 	}
 
 	/**
@@ -97,7 +97,7 @@ public abstract class GraphTests {
 	void testAdjacentsExceptions () {
 		Executable adjacentsNull = () -> mGraph.adjacents(null);
 		Executable adjacentsNoSuchElement = () -> mGraph.adjacents(
-			new Node<>(6)
+			new Vertex<>(6)
 		);
 
 		assertThrows(NullPointerException.class, adjacentsNull);
@@ -110,22 +110,22 @@ public abstract class GraphTests {
 	 */
 	@Test
 	void testAdjacents() {
-		final Set<Node<Void>> expectedAdjList = new HashSet<>();
+		final Set<Vertex<Void>> expectedAdjList = new HashSet<>();
 
 		for (int id: Arrays.asList(1, 2, 3, 4, 5))
-			assertTrue(mGraph.insertNode(new Node<>(id)));
+			assertTrue(mGraph.insertVertex(new Vertex<>(id)));
 
-		assertTrue(mGraph.insertEdge(new Node<>(1), new Node<>(2)));
-		assertTrue(mGraph.insertEdge(new Node<>(1), new Node<>(3)));
-		assertTrue(mGraph.insertEdge(new Node<>(1), new Node<>(4)));
-		assertTrue(mGraph.insertEdge(new Node<>(1), new Node<>(5)));
+		assertTrue(mGraph.insertEdge(new Vertex<>(1), new Vertex<>(2)));
+		assertTrue(mGraph.insertEdge(new Vertex<>(1), new Vertex<>(3)));
+		assertTrue(mGraph.insertEdge(new Vertex<>(1), new Vertex<>(4)));
+		assertTrue(mGraph.insertEdge(new Vertex<>(1), new Vertex<>(5)));
 
-		expectedAdjList.add(new Node<>(2));
-		expectedAdjList.add(new Node<>(3));
-		expectedAdjList.add(new Node<>(4));
-		expectedAdjList.add(new Node<>(5));
+		expectedAdjList.add(new Vertex<>(2));
+		expectedAdjList.add(new Vertex<>(3));
+		expectedAdjList.add(new Vertex<>(4));
+		expectedAdjList.add(new Vertex<>(5));
 
-		assertEquals(expectedAdjList, mGraph.adjacents(new Node<>(1)));
+		assertEquals(expectedAdjList, mGraph.adjacents(new Vertex<>(1)));
 	}
 
 	/**
@@ -135,12 +135,12 @@ public abstract class GraphTests {
 	 */
 	@Test
 	void testInsertDeleteEdgeExceptions () {
-		Node<Void> n1 = new Node<>(0), n2 = new Node<>(1);
+		Vertex<Void> n1 = new Vertex<>(0), n2 = new Vertex<>(1);
 
 		Executable insertNoElement = () -> mGraph.insertEdge(n1, n2);
 		Executable deleteNoElement = () -> mGraph.deleteEdge(n1, n2);
-		Executable insertNull = () -> mGraph.insertEdge(null, new Node<>(3));
-		Executable deleteNull = () -> mGraph.deleteEdge(null, new Node<>(3));
+		Executable insertNull = () -> mGraph.insertEdge(null, new Vertex<>(3));
+		Executable deleteNull = () -> mGraph.deleteEdge(null, new Vertex<>(3));
 
 		assertThrows(NoSuchElementException.class, insertNoElement);
 		assertThrows(NoSuchElementException.class, deleteNoElement);
@@ -155,10 +155,10 @@ public abstract class GraphTests {
 	 */
 	@Test
 	void testInsertDeleteEdge() {
-		Node<Void> n1 = new Node<>(0), n2 = new Node<>(1);
+		Vertex<Void> n1 = new Vertex<>(0), n2 = new Vertex<>(1);
 
-		mGraph.insertNode(n1);
-		mGraph.insertNode(n2);
+		mGraph.insertVertex(n1);
+		mGraph.insertVertex(n2);
 
 		assertTrue(mGraph.insertEdge(n1, n2));
 		// From the second time onward we try to insert the same edge,
@@ -176,13 +176,13 @@ public abstract class GraphTests {
 	@Test
 	void testContainsEdgeExceptions () {
 		Executable noSuchElement = () -> mGraph.containsEdge(
-			new Node<>(1), new Node<>(2)
+			new Vertex<>(1), new Vertex<>(2)
 		);
 		Executable nullPointerLeft = () -> mGraph.containsEdge(
-			null, new Node<>(1)
+			null, new Vertex<>(1)
 		);
 		Executable nullPointerRight = () -> mGraph.containsEdge(
-			new Node<>(1), null
+			new Vertex<>(1), null
 		);
 		Executable nullPointerBoth = () -> mGraph.containsEdge(null, null);
 
@@ -198,10 +198,10 @@ public abstract class GraphTests {
 	 */
 	@Test
 	void testContainsEdge () {
-		Node<Void> n1 = new Node<>(0), n2 = new Node<>(1);
+		Vertex<Void> n1 = new Vertex<>(0), n2 = new Vertex<>(1);
 
-		mGraph.insertNode(n1);
-		mGraph.insertNode(n2);
+		mGraph.insertVertex(n1);
+		mGraph.insertVertex(n2);
 
 		mGraph.insertEdge(n1, n2);
 		assertTrue(mGraph.containsEdge(n1, n2));
@@ -216,12 +216,12 @@ public abstract class GraphTests {
 	@Test
 	void testClear () {
 		for (int i = 0; i < 10; i++)
-			mGraph.insertNode(new Node<Void>(i));
+			mGraph.insertVertex(new Vertex<Void>(i));
 
-		assertEquals(mGraph.nodes().size(), 10);
+		assertEquals(mGraph.vertices().size(), 10);
 
 		mGraph.clear();
-		assertEquals(mGraph.nodes().size(), 0);
+		assertEquals(mGraph.vertices().size(), 0);
 	}
 
 	/**

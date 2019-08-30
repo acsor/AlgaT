@@ -3,7 +3,7 @@ package unibo.algat.graph;
 public class MemoryEdgeWeight<T> extends EdgeWeight<T> {
 	private double mWeight;
 
-	public MemoryEdgeWeight(Node<T> a, Node<T> b, double weight) {
+	public MemoryEdgeWeight(Vertex<T> a, Vertex<T> b, double weight) {
 		super(a, b);
 		setWeight(weight);
 	}
