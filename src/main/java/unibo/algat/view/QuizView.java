@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * <p>Graphical component displaying quizzes for a given {@link Lesson}.</p>
  */
-public class QuizView extends VBox {
+class QuizView extends VBox {
 	private Lesson mLesson;
 	private List<Question> mQuestions;
 	/**
@@ -93,7 +93,7 @@ public class QuizView extends VBox {
 		}
 	};
 
-	public QuizView () throws IOException {
+	QuizView () throws IOException {
 		// TODO This class might be implemented by following the Java Properties
 		//  paradigm instead of relying on the huge updateView() method
 		FXMLLoader loader;
@@ -127,7 +127,7 @@ public class QuizView extends VBox {
 	 * @param lesson The {@link Lesson} this {@code QuizView} should display
 	 * quizzes for.
 	 */
-	public void setLesson (Lesson lesson) {
+	void setLesson (Lesson lesson) {
 		mLesson = lesson;
 
 		if (mLesson != null) {
@@ -140,7 +140,7 @@ public class QuizView extends VBox {
 	 * @return The {@link Lesson} this {@code QuizView} is displaying quizzes
 	 * for, {@code null} if there are none.
 	 */
-	public Lesson getLesson () {
+	Lesson getLesson () {
 		return mLesson;
 	}
 
@@ -154,7 +154,7 @@ public class QuizView extends VBox {
 	 * defaults to {@code 0}; if {@code >= questions size}, it is set to the
 	 *                 index of the last question.
 	 */
-	public void setShownQuestion (int index) {
+	void setShownQuestion (int index) {
         if (index < 0) {
 			mCurrQuestion = 0;
 		} else if (mQuestions.size() <= index) {
@@ -174,7 +174,7 @@ public class QuizView extends VBox {
 	 * @return The index associated to the {@link Question} currently shown,
 	 * {@code -1} if none is selected at the time of this calling.
 	 */
-	public int getShownQuestion () {
+	int getShownQuestion () {
 		return mCurrQuestion;
 	}
 
