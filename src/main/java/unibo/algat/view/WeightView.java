@@ -5,16 +5,16 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.Label;
 import unibo.algat.graph.EdgeWeight;
 
-public class WeightView extends Label {
+class WeightView extends Label {
 	private DoubleProperty mWeight;
 	private EdgeView mEdgeView;
 
-	public WeightView(EdgeView edgeView, EdgeWeight<?> weight) {
+	WeightView(EdgeView edgeView, EdgeWeight<?> weight) {
 		mWeight = new SimpleDoubleProperty(this, "weight", 0);
 		mEdgeView = edgeView;
 
 		setWeight(weight);
-		textProperty().bind(mWeight.asString());
+		textProperty().bind(mWeight.asString("%.2f"));
 		// Add a layout offset in such a way to center the weight view
 		translateXProperty().bind(widthProperty().divide(-2.0));
 		translateYProperty().bind(heightProperty().divide(-2.0));
@@ -22,16 +22,16 @@ public class WeightView extends Label {
 		getStyleClass().add("weight-view");
 	}
 
-	public EdgeView getEdgeView () {
+	EdgeView getEdgeView () {
 		return mEdgeView;
 	}
 
-	public void setWeight (EdgeWeight<?> weight) {
+	void setWeight (EdgeWeight<?> weight) {
         if (weight != null)
         	mWeight.bind(weight);
 	}
 
-	public double getWeight () {
+	double getWeight () {
 		return mWeight.get();
 	}
 }

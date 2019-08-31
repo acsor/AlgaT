@@ -1,16 +1,16 @@
 package unibo.algat.tests;
 
 import org.junit.jupiter.api.Test;
-import unibo.algat.graph.Node;
+import unibo.algat.graph.Vertex;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NodeTests {
+class VertexTests {
     @Test
     void testSetGetData () {
         final String expOutput1 = "1234567890";
         final String expOutput2 = "0987654321";
-        Node<String> n = new Node<>(0);
+        Vertex<String> n = new Vertex<>(0);
 
         n.setData(expOutput1);
         assertEquals(expOutput1, n.getData());
@@ -21,8 +21,8 @@ class NodeTests {
 
     @Test
     void testEquals () {
-        Node<Integer> n1 = new Node<>(0, 10), n2 = new Node<>(0, 10),
-                n3 = new Node<>(1, 10);
+        Vertex<Integer> n1 = new Vertex<>(0, 10), n2 = new Vertex<>(0, 10),
+                n3 = new Vertex<>(1, 10);
 
         assertEquals(n1, n2);
         assertNotEquals(n1, n3);
@@ -31,7 +31,7 @@ class NodeTests {
 
     @Test
     void testToString () {
-        Node<Integer> n = new Node<>(0, 10);
+        Vertex<Integer> n = new Vertex<>(0, 10);
 
         assertNotNull(n.toString());
     }

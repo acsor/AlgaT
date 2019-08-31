@@ -1,5 +1,6 @@
 package unibo.algat.lesson;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +13,7 @@ import java.util.regex.Pattern;
  * @see Lesson
  * @see QuestionLoader
  */
-public class LessonLoader {
+public class LessonLoader extends PropertiesLoader {
     /**
      * The base class path pointing to a directory containing {@code
      * .properties} lessons files.
@@ -50,23 +51,18 @@ public class LessonLoader {
      * @return The set of available lessons stored in the specified location.
      */
     public Set<Lesson> lessons () {
-    	// TODO Check for other ways to get a listing of .properties files
-        //  out of a "resource directory"
         final Set<Lesson> lessons = new HashSet<>();
-        final Scanner in = new Scanner(
-            getClass().getResourceAsStream(mBasePath)
-        );
-        Matcher m;
+        final Iterator<Path> paths = listProjectDir(mBasePath);
 
-        while (in.hasNextLine()) {
-            m = FILE_PATTERN.matcher(in.nextLine());
+        while (paths.hasNext()) {
+            Matcher m = FILE_PATTERN.matcher(
+                paths.next().getFileName().toString()
+            );
 
             if (m.matches()) {
                 lessons.add(load(Integer.parseInt(m.group(1))));
             }
         }
-
-        in.close();
 
         return lessons;
     }

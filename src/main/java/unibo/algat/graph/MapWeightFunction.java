@@ -9,10 +9,10 @@ import java.util.NoSuchElementException;
 /**
  * <p>A memory-based weight function, assigning weights to a graph based on
  * stored data.</p>
- * @param <T> Type of the nodes composing the graph.
+ * @param <T> Type of the vertices composing the graph.
  */
 public class MapWeightFunction<T> extends WeightFunction<T> {
-	private Map<Pair<Node<T>, Node<T>>, MemoryEdgeWeight<T>> mWeights;
+	private Map<Pair<Vertex<T>, Vertex<T>>, MemoryEdgeWeight<T>> mWeights;
 	private double mDefault;
 
 	/**
@@ -29,8 +29,8 @@ public class MapWeightFunction<T> extends WeightFunction<T> {
 	}
 
 	@Override
-	public EdgeWeight<T> weight(Node<T> a, Node<T> b) {
-		final Pair<Node<T>, Node<T>> key = new Pair<>(a, b);
+	public EdgeWeight<T> weightBinding(Vertex<T> a, Vertex<T> b) {
+		final Pair<Vertex<T>, Vertex<T>> key = new Pair<>(a, b);
 
 		if (mGraph.containsEdge(a, b)) {
 			MemoryEdgeWeight<T> weight = mWeights.get(key);
@@ -57,7 +57,7 @@ public class MapWeightFunction<T> extends WeightFunction<T> {
 	 * @throws java.lang.NullPointerException if either {@code a} or {@code b
 	 * } was null.
 	 */
-	public MemoryEdgeWeight<T> assign (Node<T> a, Node<T> b, double weight) {
+	public MemoryEdgeWeight<T> assign (Vertex<T> a, Vertex<T> b, double weight) {
 		if (a != null && b != null) {
 			MemoryEdgeWeight<T> oldWeight = mWeights.get(new Pair<>(a, b));
 
@@ -80,7 +80,7 @@ public class MapWeightFunction<T> extends WeightFunction<T> {
 	 * @throws java.lang.NullPointerException if either {@code a} or {@code b
 	 * } was null.
 	 */
-	public void unassign (Node<T> a, Node<T> b) {
+	public void unassign (Vertex<T> a, Vertex<T> b) {
 		if (a != null && b != null) {
 			mWeights.remove(new Pair<>(a, b));
 		} else {

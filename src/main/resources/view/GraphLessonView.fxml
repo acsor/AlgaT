@@ -9,8 +9,10 @@
 	xmlns:fx="http://javafx.com/fxml"
 >
 	<center>
-		<ScrollPane fx:id="mScrollPane" fitToHeight="true" fitToWidth="true">
-            <GraphView fx:id="mGraphView" nodeRadius="25" nodeMargin="30">
+		<ScrollPane
+			fx:id="mScrollPane" vbarPolicy="AS_NEEDED" hbarPolicy="AS_NEEDED"
+		>
+            <GraphView fx:id="mGraphV" vertexRadius="30" vertexMargin="70">
 				<graphLayout><GraphGridLayout columns="4" /></graphLayout>
 			</GraphView>
 		</ScrollPane>

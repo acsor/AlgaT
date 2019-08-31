@@ -1,7 +1,9 @@
 package unibo.algat.view;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import unibo.algat.AlgaTApplication;
@@ -12,6 +14,15 @@ import unibo.algat.lesson.Lesson;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+/**
+ * <p>Top-most abstract base class for algorithm views. {@code LessonView}
+ * holds a reference to a {@link SerialAlgorithm}, whose instantiation is
+ * defined by concrete classes in {@link #algorithmFactory()}.</p>
+ * <p><b>Note:</b> a user giving an implementation of a
+ * {@link SerialAlgorithm} must take care of setting the
+ * {@link SerialAlgorithm#readyProperty() readyProperty} appropriately, allowing
+ * {@code LessonView} and its subclasses behave accordingly.</p>
+ */
 public abstract class LessonView extends BorderPane implements ToolBarUser {
 	protected ObjectProperty<Lesson> mLesson;
 	protected SerialAlgorithm<?> mAlgo;
@@ -31,7 +42,7 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 		mInterface = ResourceBundle.getBundle("Interface");
 		mApp = AlgaTApplication.getInstance();
 
-		// Node that LessonView doesn't load any FXML file -- apparently,
+		// Note that LessonView doesn't load any FXML file -- apparently,
 		// Java FX wasn't making this possible for some reason
 		mTitle = new Label();
 		mQuizView = new QuizView();
@@ -41,11 +52,14 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 
 		setTop(mTitle);
 		setRight(mQuizView);
+		setMargin(mQuizView, new Insets(0, 0, 0, 20));
+
+		mQuizView.prefWidthProperty().bind(widthProperty().multiply(0.25));
 	}
 
 	/**
 	 * @return A {@link SerialAlgorithm} instance defining the behavior of
-	 * the lesson upon running.
+	 * the simulation upon running.
 	 */
 	protected abstract SerialAlgorithm<?> algorithmFactory();
 
@@ -68,23 +82,29 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 
 	@Override
 	public void onAcquireToolBar(AlgaToolBar toolBar) {
+		// Common condition disabling a number of tool bar buttons
+		final BooleanBinding baseStop = mAlgo.readyProperty().not().or(
+			mAlgo.stoppedProperty()
+		);
+
 		toolBar.playingProperty().bind(mExecutor.autoRunningProperty());
 
-		toolBar.getStopButton().disableProperty().bind(mAlgo.stoppedProperty());
-		toolBar.getStopButton().setOnAction(e -> mAlgo.cancel());
+		// Button disable property section
+		toolBar.getStopButton().disableProperty().bind(baseStop);
+		toolBar.getPlayButton().disableProperty().bind(baseStop);
+		toolBar.getNextButton().disableProperty().bind(
+			baseStop.or(mExecutor.autoRunningProperty())
+		);
 
-		toolBar.getPlayButton().disableProperty().bind(mAlgo.stoppedProperty());
+		// Button actions section
+		toolBar.getStopButton().setOnAction(e -> mAlgo.cancel());
 		toolBar.getPlayButton().setOnAction(
 			e -> mExecutor.setAutoRunning(!mExecutor.isAutoRunning())
 		);
-
-		// Disable the next button if it simply cannot execute due to the
-		// background thread or because the auto run feature is on
-		toolBar.getNextButton().disableProperty().bind(
-			mAlgo.stoppedProperty().or(mExecutor.autoRunningProperty())
-		);
 		toolBar.getNextButton().setOnAction(event -> mExecutor.next());
 
+		// TODO This binding should not happen during the toolbar acquisition.
+		//  Another callback method should be defined for intents such as this
 		mApp.statusMessageProperty().bind(mAlgo.messageProperty());
 	}
 

@@ -1,5 +1,6 @@
 package unibo.algat.view;
 
+import javafx.animation.FadeTransition;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
@@ -8,13 +9,15 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.QuadCurveTo;
+import javafx.util.Duration;
 
 /**
  * <p>A class responsible for tracing a parabola curve between two
- * {@link NodeView}s.</p>
+ * {@link VertexView}s.</p>
  */
-public class EdgeView extends Path {
-	private NodeView mU, mV;
+class EdgeView extends Path {
+	private VertexView mU, mV;
+	private final FadeTransition mFadeIn;
 
 	private final ObjectBinding<Point2D> mStart, mEnd;
 	/**
@@ -34,18 +37,22 @@ public class EdgeView extends Path {
 	private final ObjectProperty<Point2D> mTop = new SimpleObjectProperty<>(
 		this, "top"
 	);
-	// The angle formed by the start and end graph nodes
+	// The angle formed by the start and end graph vertex
 	private DoubleProperty mAngle;
 
 	private final ObjectBinding<Point2D> mHeadLeft, mHeadRight;
 
+	private static final Duration FADE_DURATION = Duration.millis(2000);
+	private static final double FADE_START = 0.4;
+
 	/**
-	 * @param u First edge node
-	 * @param v Second edge node
+	 * @param u First edge vertex
+	 * @param v Second edge vertex
 	 */
-	public EdgeView(NodeView u, NodeView v) {
+	EdgeView(VertexView u, VertexView v) {
 		mU = u;
 		mV = v;
+		mFadeIn = new FadeTransition(FADE_DURATION, this);
 
 		mControl = new ObjectBinding<>() {
 			{ bind(u.centerProperty(), v.centerProperty()); }
@@ -162,10 +169,12 @@ public class EdgeView extends Path {
 			);
 		});
 
-        getStyleClass().add("edge-view");
+        mFadeIn.setFromValue(FADE_START);
+
+		getStyleClass().add("edge-view");
 	}
 
-	public ReadOnlyDoubleProperty angleProperty () {
+	ReadOnlyDoubleProperty angleProperty () {
 		if (mAngle == null) {
 			mAngle = new SimpleDoubleProperty(this, "angle");
 
@@ -186,14 +195,25 @@ public class EdgeView extends Path {
 		return mAngle;
 	}
 
-	public Point2D getTop () {
+	Point2D getTop () {
 		return mTop.get();
+	}
+
+
+	/**
+	 * Begins the execution of a fade in animation.
+	 */
+	void fadeIn () {
+		// The target opacity level is not statically set, but changes
+		// according to the current level during invocation time
+		mFadeIn.setToValue(getOpacity());
+		mFadeIn.play();
 	}
 
 	/**
 	 * @return The top point described by this parabola curve.
 	 */
-	public ReadOnlyObjectProperty<Point2D> topProperty () {
+	ReadOnlyObjectProperty<Point2D> topProperty () {
 		return mTop;
 	}
 }

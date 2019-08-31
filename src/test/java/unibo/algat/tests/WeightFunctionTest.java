@@ -2,7 +2,7 @@ package unibo.algat.tests;
 
 import unibo.algat.graph.ALGraph;
 import unibo.algat.graph.Graph;
-import unibo.algat.graph.Node;
+import unibo.algat.graph.Vertex;
 import unibo.algat.util.Pair;
 
 import java.util.Arrays;
@@ -14,28 +14,28 @@ import java.util.List;
  */
 public abstract class WeightFunctionTest {
 	protected final Graph<Integer> mGraph;
-	protected final List<Node<Integer>> mNodes;
-	protected final List<Pair<Node<Integer>, Node<Integer>>> mEdges;
+	protected final List<Vertex<Integer>> mVertices;
+	protected final List<Pair<Vertex<Integer>, Vertex<Integer>>> mEdges;
 
 	public WeightFunctionTest() {
 		mGraph = new ALGraph<>();
-		mNodes = Arrays.asList(
-			new Node<>(0, 10), new Node<>(1, 20), new Node<>(2, 30),
-			new Node<>(3, 40), new Node<>(4, 50)
+		mVertices = Arrays.asList(
+			new Vertex<>(0, 10), new Vertex<>(1, 20), new Vertex<>(2, 30),
+			new Vertex<>(3, 40), new Vertex<>(4, 50)
 		);
 		mEdges = Arrays.asList(
-			new Pair<>(mNodes.get(0), mNodes.get(1)),
-			new Pair<>(mNodes.get(0), mNodes.get(4)),
-			new Pair<>(mNodes.get(1), mNodes.get(2)),
-			new Pair<>(mNodes.get(1), mNodes.get(3)),
-			new Pair<>(mNodes.get(1), mNodes.get(4)),
-			new Pair<>(mNodes.get(4), mNodes.get(0))
+			new Pair<>(mVertices.get(0), mVertices.get(1)),
+			new Pair<>(mVertices.get(0), mVertices.get(4)),
+			new Pair<>(mVertices.get(1), mVertices.get(2)),
+			new Pair<>(mVertices.get(1), mVertices.get(3)),
+			new Pair<>(mVertices.get(1), mVertices.get(4)),
+			new Pair<>(mVertices.get(4), mVertices.get(0))
 		);
 
-		for(Node<Integer> n: mNodes)
-			mGraph.insertNode(n);
+		for(Vertex<Integer> n: mVertices)
+			mGraph.insertVertex(n);
 
-		for (Pair<Node<Integer>, Node<Integer>> edge: mEdges)
+		for (Pair<Vertex<Integer>, Vertex<Integer>> edge: mEdges)
 			mGraph.insertEdge(edge.getFirst(), edge.getSecond());
 	}
 }

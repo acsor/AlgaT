@@ -1,8 +1,9 @@
 package unibo.algat.lesson;
 
+import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
  * path and their file name follows the
  * {@code Question<LessonId>:<QuestionId>_<locale spec>.properties} format.
  */
-public class QuestionLoader {
+public class QuestionLoader extends PropertiesLoader {
 	private final String mBaseRef;
 	private final String mBasePath;
 
@@ -40,14 +41,13 @@ public class QuestionLoader {
 	public Set<Question> questions (Lesson lesson) {
 		// TODO The Lesson and Question classes are too loosely coupled, do
 		//  something to strengthen their relationship
-		// TODO Urgent! Ensure this code works with .jar files, else find
-		//  a workaround to the issue!
 		Set<Question> questions = new HashSet<>();
-		Scanner in = new Scanner(getClass().getResourceAsStream(mBasePath));
-		Matcher m;
+		final Iterator<Path> paths = listProjectDir(mBasePath);
 
-		while (in.hasNextLine()) {
-			m = FILE_PATTERN.matcher(in.nextLine());
+		while (paths.hasNext()) {
+			Matcher m = FILE_PATTERN.matcher(
+				paths.next().getFileName().toString()
+			);
 
 			if (m.matches() && Integer.valueOf(m.group(1)) == lesson.getId()) {
 				questions.add(load(
@@ -56,8 +56,6 @@ public class QuestionLoader {
 				));
 			}
 		}
-
-		in.close();
 
 		return questions;
 	}
@@ -87,7 +85,7 @@ public class QuestionLoader {
 			if (m.matches()) {
 				out.addChoice(
 					new Question.Choice(
-						Integer.valueOf(m.group(1)), r.getString(key)
+						Integer.parseInt(m.group(1)), r.getString(key)
 					)
 				);
 			}
@@ -95,7 +93,7 @@ public class QuestionLoader {
 
 		out.setCorrectChoice(
 			new Question.Choice(
-				Integer.valueOf(correctChoiceId),
+				Integer.parseInt(correctChoiceId),
 				r.getString(String.format(KEY_CHOICE, correctChoiceId))
 			)
 		);

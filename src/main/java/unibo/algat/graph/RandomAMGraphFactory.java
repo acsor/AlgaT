@@ -5,12 +5,12 @@ package unibo.algat.graph;
  * instances.</p>
  */
 public class RandomAMGraphFactory<T> extends RandomGraphFactory<T> {
-	public RandomAMGraphFactory(int nodes, int edges) {
-		super(nodes, edges);
+	public RandomAMGraphFactory(int vertices, int edges) {
+		super(vertices, edges);
 	}
 
 	@Override
 	protected Graph<T> getInstance() {
-		return new AMGraph<>(mNodes);
+		return new AMGraph<>(mVertices);
 	}
 }

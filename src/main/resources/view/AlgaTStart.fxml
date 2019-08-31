@@ -17,11 +17,11 @@
 			<VBox prefHeight="Infinity" id="lessons-tab" prefWidth="Infinity">
 				<TreeView fx:id="mTreeView" />
 
-				<ScrollPane fitToWidth="true" fitToHeight="true">
-					<Label fx:id="mBottomText" text="%gui.algat.welcome"
-						   alignment="CENTER"
-					/>
-				</ScrollPane>
+				<Label fx:id="mBottomText" text="%gui.algat.welcome"
+					   textAlignment="JUSTIFY" wrapText="true"
+				/>
+
+				<Separator orientation="horizontal" />
 
 				<Button
 						fx:id="mStartLesson" text="%gui.algat.startLesson"

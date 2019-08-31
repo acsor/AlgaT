@@ -8,51 +8,52 @@ import java.util.SortedSet;
  */
 public interface Graph<T> {
     /**
-     * @param node Node<T> instance to insert into the current graph. If
+     * @param vertex Vertex<T> instance to insert into the current graph. If
      *             already present, the graph is unaffected.
-	 * @return {@code true} if node was actually inserted into the graph,
+	 * @return {@code true} if vertex was actually inserted into the graph,
      * {@code false} otherwise.
-     * @throws java.lang.NullPointerException if {@code node} happens to be
+     * @throws java.lang.NullPointerException if {@code vertex} happens to be
      * {@code null}.
      */
-    boolean insertNode(Node<T> node);
+    boolean insertVertex(Vertex<T> vertex);
     /**
-     * Deletes a node from the graph (if present) and all the edges that used to
-     * be associated to it.
+     * Deletes a vertex from the graph (if present) and all the edges that used
+     * to be associated to it.
      *
-     * @param node Node<T> instance to delete from the graph. If not present the
-     *             graph is unaffected and thus {@code delete()} is a no-op.
-     * @return {@code true} if node was actually deleted from the graph,
+     * @param vertex Vertex<T> instance to delete from the graph. If not present
+     * the graph is unaffected and thus {@code delete()} is a no-op.
+     * @return {@code true} if vertex was actually deleted from the graph,
      * {@code false} otherwise.
-     * @throws java.lang.NullPointerException if {@code node} happens to be
+     * @throws java.lang.NullPointerException if {@code vertex} happens to be
      * {@code null}.
      */
-    boolean deleteNode(Node<T> node);
+    boolean deleteVertex(Vertex<T> vertex);
     /**
-     * @return {@code true} if {@code needle} is a node of this graph,
+     * @return {@code true} if {@code needle} is a vertex of this graph,
      * {@code false} otherwise.
      * @throws java.lang.NullPointerException if {@code needle} happens to
      * be {@code null}.
      */
-    boolean containsNode(Node<T> needle);
+    boolean containsVertex(Vertex<T> needle);
 
     /**
-     * @return The set of nodes contained in the graph, empty if none are
+     * @return The set of vertices contained in the graph, empty if none are
      * present. This set will be ordered according to the natural ordering of
-     * {@link Node}, i.e. its {@code id} field.
+     * {@link Vertex}, i.e. its {@code id} field.
      */
-    SortedSet<Node<T>> nodes ();
+    SortedSet<Vertex<T>> vertices();
     /**
-     * @param node Node value of which a list of adjacent nodes is queried for.
-     * @return A set of nodes v such that, if u is the current node, then the
-     * {@code (u, v)} edge belongs to the graph. Alternatively, all nodes
-     * reachable from the given one.
-     * @throws java.util.NoSuchElementException if {@code node} is not found
+     * @param vertex Vertex value of which a list of adjacent vertices is
+     * queried for.
+     * @return A set of vertices v such that, if u is the current vertex, then
+     * the {@code (u, v)} edge belongs to the graph. Alternatively, all
+     * vertices reachable from the given one.
+     * @throws java.util.NoSuchElementException if {@code vertex} is not found
      * within the graph.
-     * @throws java.lang.NullPointerException if {@code node} is {@code
+     * @throws java.lang.NullPointerException if {@code vertex} is {@code
      * null}.
      */
-    SortedSet<Node<T>> adjacents(Node<T> node);
+    SortedSet<Vertex<T>> adjacents(Vertex<T> vertex);
 
     /**
      * Inserts an {@code (a, b)} edge into the graph. Produces no change if
@@ -64,7 +65,7 @@ public interface Graph<T> {
      * @throws java.lang.NullPointerException if either {@code a} or
      * {@code b} was {@code null}.
      */
-    boolean insertEdge(Node<T> a, Node<T> b);
+    boolean insertEdge(Vertex<T> a, Vertex<T> b);
     /**
      * Delete the {@code (a, b)} edge from the graph, if present. If not this is
      * a no-op.
@@ -75,7 +76,7 @@ public interface Graph<T> {
      * @throws java.lang.NullPointerException if either {@code a} or
      * {@code b} was {@code null}.
      */
-    boolean deleteEdge(Node<T> a, Node<T> b);
+    boolean deleteEdge(Vertex<T> a, Vertex<T> b);
     /**
      * @return {@code true} if {@code (a, b)} is an edge of this graph,
      * {@code false} otherwise.
@@ -84,5 +85,10 @@ public interface Graph<T> {
      * @throws java.lang.NullPointerException if either {@code a} or
      * {@code b} was {@code null}.
      */
-    boolean containsEdge(Node<T> a, Node<T> b);
+    boolean containsEdge(Vertex<T> a, Vertex<T> b);
+
+    /**
+     * Clears out all vertices and edges contained in this graph.
+     */
+    void clear();
 }

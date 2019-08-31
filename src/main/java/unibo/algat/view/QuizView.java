@@ -36,13 +36,13 @@ public class QuizView extends VBox {
 
 	@FXML private Image mCorrectImage, mWrongImage;
 	@FXML private Label mText;
-	@FXML private Label mEmpty;
 	@FXML private VBox mChoiceView;
 	private ToggleGroup mChoiceGroup;
 	@FXML private ImageView mAnswerIndicator;
 	@FXML private Button mAccept;
 	@FXML private Button mPrev, mNext;
 	@FXML private Label mPos;
+	@FXML private ToolBar mNavigate;
 
 	/**
 	 * Handles reactions to the presses {@link #mPrev} and {@link #mNext}
@@ -205,6 +205,8 @@ public class QuizView extends VBox {
 
             for (Question.Choice c: selected.choices()) {
             	RadioButton option = new RadioButton(c.getText());
+
+            	option.getStyleClass().add("quiz-view-choice");
             	option.setToggleGroup(mChoiceGroup);
             	// Associates the current Question.Choice instance to the
 				// button, to be later retrieved when the user submits their
@@ -231,8 +233,8 @@ public class QuizView extends VBox {
 				mAnswerIndicator.setImage(null);
 			}
 		} else {
-			mChoiceView.getChildren().add(mEmpty);
-			mPos.setText("*/*");
+			mText.setText(mInterface.getString("gui.quizview.empty"));
+			mPos.setText("0/0");
 		}
 	}
 

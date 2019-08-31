@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  * Due to restrictions of the Java generics system, this class {@code weight()}
  * method needs to return {@link Double}, the broadest numeric value available.
  *
- * @param <T> Type of the graph nodes to assign weights to.
+ * @param <T> Type of the graph vertices to assign weights to.
  */
 // TODO Might as well define a ArithmeticWeightFunction
 public class DifferentialWeightFunction<T extends Number>
@@ -20,7 +20,7 @@ public class DifferentialWeightFunction<T extends Number>
 	}
 
 	@Override
-	public DifferentialEdgeWeight<T> weight(Node<T> a, Node<T> b) {
+	public DifferentialEdgeWeight<T> weightBinding(Vertex<T> a, Vertex<T> b) {
 		if (mGraph.containsEdge(a, b))
             return new DifferentialEdgeWeight<>(a, b);
 		else
@@ -32,7 +32,7 @@ public class DifferentialWeightFunction<T extends Number>
 	public static class DifferentialEdgeWeight<T extends Number>
 		extends EdgeWeight<T> {
 
-		public DifferentialEdgeWeight(Node<T> a, Node<T> b) {
+		public DifferentialEdgeWeight(Vertex<T> a, Vertex<T> b) {
 			super(a, b);
 			bind(a.dataProperty(), b.dataProperty());
 		}

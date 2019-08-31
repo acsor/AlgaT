@@ -1,5 +1,6 @@
 package unibo.algat.view;
 
+import javafx.animation.StrokeTransition;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.css.PseudoClass;
@@ -8,26 +9,28 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import unibo.algat.graph.Node;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
+import unibo.algat.graph.Vertex;
 import unibo.algat.util.DragFactory;
 
-class NodeView extends Region {
-	private Node<?> mNode;
+class VertexView extends Region {
+	private Vertex<?> mVertex;
 
 	private final Circle mCircle;
-	private final Label mText;
+	private final Text mText;
+	private final StrokeTransition mStrokeFade;
 
 	private SimpleDoubleProperty mRadius;
 	private SimpleObjectProperty<Point2D> mCenter;
 
-	private static final PseudoClass PSEUDO_CLASS_SELECTED = PseudoClass.
-		getPseudoClass("selected");
+	private static final PseudoClass PSEUDO_CLASS_SELECTED =
+		PseudoClass.getPseudoClass("selected");
 	private BooleanProperty mSelected = new SimpleBooleanProperty(
 		this, "selected"
 	) {
@@ -45,20 +48,27 @@ class NodeView extends Region {
 	private static final double DEFAULT_RADIUS = 4.0;
 	private static final Paint DEFAULT_FILL = Color.rgb(62, 134, 160);
 
-	NodeView(Node<?> node) {
-		mNode = node;
+	private static final double FADE_DURATION = 1500;
+	private static final Color FADE_START = Color.rgb(255, 171, 38, 0.9);
+	private static final Color FADE_END = Color.rgb(255, 255, 255, 0);
+
+	VertexView(Vertex<?> vertex) {
+		mVertex = vertex;
 		mCircle = new Circle(DEFAULT_RADIUS, DEFAULT_FILL);
-		mText = new Label();
+		mText = new Text();
+		mStrokeFade = new StrokeTransition(
+			Duration.millis(FADE_DURATION), mCircle, FADE_START, FADE_END
+		);
 
 		mRadius = new SimpleDoubleProperty();
 		mCenter = new SimpleObjectProperty<>();
 
-		getStyleClass().add("node-view");
-		mCircle.getStyleClass().add("node-view-circle");
-		mText.getStyleClass().add("node-view-text");
+		getStyleClass().add("vertex-view");
+		mCircle.getStyleClass().add("vertex-view-circle");
+		mText.getStyleClass().add("vertex-view-text");
 
 		mRadius.bindBidirectional(mCircle.radiusProperty());
-		mCircle.strokeWidthProperty().bind(mRadius.multiply(0.1));
+		mCircle.strokeWidthProperty().bind(mRadius.multiply(0.15));
 		mCenter.bind(new ObjectBinding<>() {
 			{
 				bind(
@@ -80,13 +90,14 @@ class NodeView extends Region {
 
 		mCircle.setOnMouseClicked(mToggleSelected);
 		mText.setOnMouseClicked(mToggleSelected);
+		mVertex.dataProperty().addListener(o -> mStrokeFade.play());
 		DragFactory.makeDraggable(this, mCircle, mText);
 
 		getChildren().addAll(mCircle, mText);
 	}
 
-	public Node<?> getNode () {
-		return mNode;
+	Vertex<?> getVertex() {
+		return mVertex;
 	}
 
 	Point2D getCenter () {
@@ -101,23 +112,23 @@ class NodeView extends Region {
 		mSelected.set(selected);
 	}
 
-	public boolean isSelected () {
+	boolean isSelected () {
 		return mSelected.get();
 	}
 
-	public BooleanProperty selectedProperty () {
+	BooleanProperty selectedProperty() {
 		return mSelected;
 	}
 
-	public void setText (String text) {
+	void setText (String text) {
 		mText.setText(text);
 	}
 
-	public String getText () {
+	String getText () {
 		return mText.getText();
 	}
 
-	public StringProperty textProperty () {
+	StringProperty textProperty () {
 		return mText.textProperty();
 	}
 
@@ -140,23 +151,23 @@ class NodeView extends Region {
 			mCircle.setStroke(((Color) paint).darker());
 	}
 
-	public Paint getFill () {
+	Paint getFill () {
 		return mCircle.getFill();
 	}
 
-	public ObjectProperty<Paint> fillProperty () {
+	ObjectProperty<Paint> fillProperty () {
 		return mCircle.fillProperty();
 	}
 
-	public void setOutline (Paint outline) {
+	void setOutline (Paint outline) {
 		mCircle.setStroke(outline);
 	}
 
-	public Paint getOutline () {
+	Paint getOutline () {
 		return mCircle.getStroke();
 	}
 
-	public ObjectProperty<Paint> outlineProperty () {
+	ObjectProperty<Paint> outlineProperty () {
 		return mCircle.strokeProperty();
 	}
 

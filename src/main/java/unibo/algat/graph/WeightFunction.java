@@ -24,5 +24,9 @@ public abstract class WeightFunction<T> {
 	 * @throws java.util.NoSuchElementException if the {@code (a, b)} edge
 	 * could not be located within the graph.
 	 */
-	public abstract EdgeWeight<T> weight(Node<T> a, Node<T> b);
+	public abstract EdgeWeight<T> weightBinding(Vertex<T> a, Vertex<T> b);
+
+	public double weight (Vertex<T> a, Vertex<T> b) {
+		return weightBinding(a, b).doubleValue();
+	}
 }

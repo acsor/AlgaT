@@ -3,11 +3,11 @@ package unibo.algat.graph;
 import java.util.EventObject;
 
 public class EdgeChangeEvent<T> extends EventObject {
-	private Node<T> mU, mV;
+	private Vertex<T> mU, mV;
 	private boolean mInserted;
 
 	public EdgeChangeEvent(
-		Object source, Node<T> u, Node<T> v, boolean inserted
+		Object source, Vertex<T> u, Vertex<T> v, boolean inserted
 	) {
 		super(source);
 
@@ -16,11 +16,11 @@ public class EdgeChangeEvent<T> extends EventObject {
 		mInserted = inserted;
 	}
 
-	public Node<T> getFirst () {
+	public Vertex<T> getFirst () {
 		return mU;
 	}
 
-	public Node<T> getSecond () {
+	public Vertex<T> getSecond () {
 		return mV;
 	}
 

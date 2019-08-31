@@ -5,8 +5,8 @@ package unibo.algat.graph;
  * instances.</p>
  */
 public class RandomALGraphFactory<T> extends RandomGraphFactory<T> {
-	public RandomALGraphFactory (int nodes, int edges) {
-		super(nodes, edges);
+	public RandomALGraphFactory (int vertices, int edges) {
+		super(vertices, edges);
 	}
 
 	protected Graph<T> getInstance () {
