@@ -73,10 +73,6 @@
 
 
 /* Style applied to LessonView class */
-.lesson-view {
-    -fx-padding: 14;
-}
-
 .lesson-view-title {
     -fx-font-size: 20;
     -fx-font-weight: bolder;
@@ -119,7 +115,6 @@
 
 /* Style applied to QuizView class */
 .quiz-view {
-    -fx-padding: 0 8 8 8;
     -fx-spacing: 10;
 }
 
