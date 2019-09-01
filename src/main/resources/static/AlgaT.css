@@ -76,19 +76,35 @@
     -fx-font-size: 20;
 }
 
-.unavailable-lesson-view .center {
-    -fx-alignment: center;
-    -fx-padding: 10px;
+
+/* Style applied to LessonInfoView class */
+.lesson-info-body {
+    -fx-background-insets: 0;
 }
 
-.unavailable-lesson-view .center > .label {
-    -fx-font-size: 15px;
-    -fx-alignment: center;
-    -fx-text-alignment: center;
+.lesson-info-body > .vbox {
+    -fx-spacing: 6;
+}
+
+.lesson-info-body .label {
     -fx-wrap-text: true;
-
-    -fx-padding: 20px;
 }
+
+.lesson-info-body .info-title {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+.lesson-info-body .info-description {
+    -fx-font-size: 15;
+    -fx-label-padding: 0 0 10 0;
+}
+
+.lesson-info-body .info-pseudocode {
+    -fx-font-size: 15;
+    -fx-font-family: Monospace;   /* Insert a monospace font */
+}
+
 
 .shortest-path-lesson-view .graph-view {
     -fx-padding: 10px;

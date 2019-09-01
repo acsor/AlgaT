@@ -33,8 +33,11 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 
 	protected Label mTitle;
 	protected QuizView mQuizView;
+	protected LessonInfoView mInfoView;
 
 	public LessonView () throws IOException {
+		// Note that LessonView doesn't load any FXML file -- apparently,
+		// Java FX wasn't making this possible for some reason
 		mLesson = new SimpleObjectProperty<>(this, "lesson");
 		mAlgo = algorithmFactory();
 		mExecutor = new SerialExecutor(mAlgo, 1000);
@@ -42,18 +45,21 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 		mInterface = ResourceBundle.getBundle("Interface");
 		mApp = AlgaTApplication.getInstance();
 
-		// Note that LessonView doesn't load any FXML file -- apparently,
-		// Java FX wasn't making this possible for some reason
+		mInfoView = new LessonInfoView();
 		mTitle = new Label();
 		mQuizView = new QuizView();
 
 		getStyleClass().add("lesson-view");
 		mTitle.getStyleClass().add("lesson-view-title");
 
+		setLeft(mInfoView);
 		setTop(mTitle);
 		setRight(mQuizView);
-		setMargin(mQuizView, new Insets(0, 0, 0, 20));
 
+		setMargin(mInfoView, new Insets(0, 16, 0, 0));
+		setMargin(mTitle, new Insets(0, 0, 20, 0));
+		setMargin(mQuizView, new Insets(0, 0, 0, 16));
+		mInfoView.prefWidthProperty().bind(widthProperty().multiply(0.25));
 		mQuizView.prefWidthProperty().bind(widthProperty().multiply(0.25));
 	}
 
@@ -66,10 +72,9 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 	public void setLesson(Lesson lesson) {
 		mLesson.set(lesson);
 
-		if (lesson != null) {
-			mTitle.setText(lesson.getName());
-			mQuizView.setLesson(lesson);
-		}
+		mInfoView.setLesson(lesson);
+		mTitle.setText(lesson != null ? lesson.getName(): "");
+		mQuizView.setLesson(lesson);
 	}
 
 	public Lesson getLesson() {

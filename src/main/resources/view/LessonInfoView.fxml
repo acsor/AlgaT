@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+
+<?import javafx.scene.layout.Pane?>
+<fx:root type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx"
+		 xmlns:fx="http://javafx.com/fxml" styleClass="lesson-info-view"
+>
+	<fx:define>
+		<ImageView fx:id="mHideGraphic" fitWidth="12" preserveRatio="true">
+			<Image url="@/static/info-hide.png" />
+		</ImageView>
+	</fx:define>
+	<fx:define>
+		<ImageView fx:id="mShowGraphic" fitWidth="12" preserveRatio="true">
+			<Image url="@/static/info-show.png" />
+		</ImageView>
+	</fx:define>
+
+	<ScrollPane fx:id="mBody" fitToWidth="true" styleClass="lesson-info-body">
+		<VBox>
+			<Label fx:id="mHowToTitle" styleClass="info-title" />
+			<Separator />
+			<Label fx:id="mHowTo" styleClass="info-description" />
+
+			<Label fx:id="mDescriptionTitle" styleClass="info-title" />
+			<Separator />
+			<Label fx:id="mDescription" styleClass="info-description" />
+
+			<Label fx:id="mPseudoCodeTitle" styleClass="info-title" />
+			<Separator />
+			<Label
+				fx:id="mPseudoCode" styleClass="info-description,info-pseudocode"
+			/>
+		</VBox>
+	</ScrollPane>
+
+	<Pane HBox.hgrow="ALWAYS" />
+	<Button
+			fx:id="mHideButton" graphic="$mHideGraphic"
+			minWidth="24" maxWidth="24" minHeight="24" maxHeight="24"
+	>
+		<shape><Circle radius="12" /></shape>
+	</Button>
+</fx:root>
