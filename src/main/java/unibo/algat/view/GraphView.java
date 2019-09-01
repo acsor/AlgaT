@@ -225,11 +225,11 @@ public class GraphView<T> extends Region {
 
 			mPrefWidth = Math.max(
 				mPrefWidth, bounds.getLeft() + bounds.getRight() +
-					location.getX() + view.getWidth()
+					location.getX() + view.getTranslateX() + view.getWidth()
 			);
 			mPrefHeight = Math.max(
 				mPrefHeight, bounds.getTop() + bounds.getBottom() +
-					location.getY() + view.getHeight()
+					location.getY() + view.getTranslateY() + view.getHeight()
 			);
 		}
 
