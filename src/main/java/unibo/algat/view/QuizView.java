@@ -132,8 +132,11 @@ class QuizView extends VBox {
 
 		if (mLesson != null) {
 			mQuestions = new ArrayList<>(mQLoader.questions(mLesson));
-			setShownQuestion(0);
+		} else {
+			mQuestions = new ArrayList<>();
 		}
+
+		setShownQuestion(0);
 	}
 
 	/**
@@ -150,7 +153,7 @@ class QuizView extends VBox {
 	 * only if it is allowed to do so, that is all the ones before it have been
 	 * previously answered.</p>
 	 *
-	 * @param index Index of the question to be shown. If {@code < 0}, if
+	 * @param index Index of the question to be shown. If {@code < 0}, it
 	 * defaults to {@code 0}; if {@code >= questions size}, it is set to the
 	 *                 index of the last question.
 	 */
