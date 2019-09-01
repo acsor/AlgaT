@@ -26,6 +26,7 @@ public class LessonLoader extends PropertiesLoader {
     static final String KEY_NAME = "name";
     static final String KEY_DESCRIPTION = "description";
     static final String KEY_TOPICS = "topics";
+    static final String KEY_PSEUDO_CODE = "pseudoCode";
 
     static final String FILE_FORMAT = "Lesson%d";
     static final Pattern FILE_PATTERN = Pattern.compile(
@@ -79,6 +80,7 @@ public class LessonLoader extends PropertiesLoader {
             lessonId,
             r.getString(String.join(".", KEY_PREFIX, KEY_NAME)),
             r.getString(String.join(".", KEY_PREFIX, KEY_DESCRIPTION)),
+            r.getString(String.join(".", KEY_PREFIX, KEY_PSEUDO_CODE)),
             r.getString(String.join(".", KEY_PREFIX, KEY_TOPICS)).split(",")
         );
     }

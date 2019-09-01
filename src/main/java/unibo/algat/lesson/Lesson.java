@@ -8,8 +8,7 @@ import java.util.Queue;
  */
 public class Lesson {
     private int mId;
-    private String mName;
-    private String mDescription;
+    private String mName, mDescription, mPseudoCode;
     /**
      * <p>The nested topic categories this lesson belongs to.</p>
      *
@@ -29,7 +28,10 @@ public class Lesson {
      *               leading and trailing whitespaces.
      * @throws NullPointerException if {@code name} is {@code null}
      */
-    public Lesson(int id, String name, String description, String ... topics) {
+    public Lesson(
+        int id, String name, String description, String pseudoCode,
+        String ... topics
+    ) {
         if (id >= 0)
             mId = id;
         else
@@ -41,6 +43,7 @@ public class Lesson {
             throw new NullPointerException("name argument was null");
 
 		mDescription = description;
+		mPseudoCode = pseudoCode;
         mTopics = new ArrayDeque<>(topics.length);
 
         for (String topic: topics)
@@ -66,6 +69,13 @@ public class Lesson {
      */
     public String getDescription() {
         return mDescription;
+    }
+
+    /**
+     * @return The pseudo code associated to this lesson algorithm.
+     */
+    public String getPseudoCode () {
+        return mPseudoCode;
     }
 
     /**
