@@ -2,7 +2,7 @@ package unibo.algat.view;
 
 import javafx.geometry.Point2D;
 
-public interface GraphLayout {
+interface GraphLayout {
 	/**
 	 * @return A {@link Point2D} object, indicating the coordinates within
 	 * the {@link GraphView} at which position {@code vertex}.

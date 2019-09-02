@@ -85,6 +85,9 @@ public abstract class ShortestPathLessonView extends GraphLessonView<Double> {
 	protected void initialize () {
 		super.initialize();
 
+		mInfoView.setHowToInfo(
+			mInterface.getString("gui.shortestpathlesson.howto")
+		);
 		mGraphV.setGraph(new ALGraph<>());
 		mGraphV.setVertexFormatter(sVertexFormat);
 		mGraphV.mVertexSelection.itemCountProperty().addListener(o -> {

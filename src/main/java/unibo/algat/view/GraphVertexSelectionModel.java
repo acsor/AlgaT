@@ -16,7 +16,7 @@ import java.util.List;
  * GraphView} vertices, where indices correspond to the position assigned
  * by the current {@link GraphLayout}.</p>
  */
-public class GraphVertexSelectionModel extends MultipleSelectionModel<VertexView> {
+class GraphVertexSelectionModel extends MultipleSelectionModel<VertexView> {
 	private GraphView<?> mGraphV;
 
 	private ObservableList<Integer> mIndices;
@@ -36,11 +36,11 @@ public class GraphVertexSelectionModel extends MultipleSelectionModel<VertexView
 		);
 	}
 
-	public int getItemCount () {
+	int getItemCount () {
 		return mItemCount.get();
 	}
 
-	public ReadOnlyIntegerProperty itemCountProperty () {
+	ReadOnlyIntegerProperty itemCountProperty () {
 		return mItemCount;
 	}
 
@@ -118,7 +118,7 @@ public class GraphVertexSelectionModel extends MultipleSelectionModel<VertexView
 		}
 	}
 
-	public void clearSelection (VertexView obj) {
+	void clearSelection (VertexView obj) {
 		if (mItems.contains(obj)) {
 			mItems.remove(obj);
 			mIndices.remove(Integer.valueOf(mGraphV.mLayout.getPosition(obj)));

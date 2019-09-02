@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * <p>Graphical component displaying quizzes for a given {@link Lesson}.</p>
  */
-public class QuizView extends VBox {
+class QuizView extends VBox {
 	private Lesson mLesson;
 	private List<Question> mQuestions;
 	/**
@@ -93,9 +93,11 @@ public class QuizView extends VBox {
 		}
 	};
 
-	public QuizView () throws IOException {
-		// TODO This class might be implemented by following the Java Properties
-		//  paradigm instead of relying on the huge updateView() method
+	QuizView () throws IOException {
+		// TODO This class might be better implemented with a ListView (or
+		//  any fitter control).
+		//  Regardless, updatedView() is unmaintainable due to its size and a
+		//  more flexible solution should be looked for.
 		FXMLLoader loader;
 
 		mQuestions = new ArrayList<>(0);
@@ -127,20 +129,23 @@ public class QuizView extends VBox {
 	 * @param lesson The {@link Lesson} this {@code QuizView} should display
 	 * quizzes for.
 	 */
-	public void setLesson (Lesson lesson) {
+	void setLesson (Lesson lesson) {
 		mLesson = lesson;
 
 		if (mLesson != null) {
 			mQuestions = new ArrayList<>(mQLoader.questions(mLesson));
-			setShownQuestion(0);
+		} else {
+			mQuestions = new ArrayList<>();
 		}
+
+		setShownQuestion(0);
 	}
 
 	/**
 	 * @return The {@link Lesson} this {@code QuizView} is displaying quizzes
 	 * for, {@code null} if there are none.
 	 */
-	public Lesson getLesson () {
+	Lesson getLesson () {
 		return mLesson;
 	}
 
@@ -150,11 +155,11 @@ public class QuizView extends VBox {
 	 * only if it is allowed to do so, that is all the ones before it have been
 	 * previously answered.</p>
 	 *
-	 * @param index Index of the question to be shown. If {@code < 0}, if
+	 * @param index Index of the question to be shown. If {@code < 0}, it
 	 * defaults to {@code 0}; if {@code >= questions size}, it is set to the
 	 *                 index of the last question.
 	 */
-	public void setShownQuestion (int index) {
+	void setShownQuestion (int index) {
         if (index < 0) {
 			mCurrQuestion = 0;
 		} else if (mQuestions.size() <= index) {
@@ -174,7 +179,7 @@ public class QuizView extends VBox {
 	 * @return The index associated to the {@link Question} currently shown,
 	 * {@code -1} if none is selected at the time of this calling.
 	 */
-	public int getShownQuestion () {
+	int getShownQuestion () {
 		return mCurrQuestion;
 	}
 

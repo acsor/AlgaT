@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox ?>
 <?import unibo.algat.view.GraphGridLayout?>
 <?import unibo.algat.view.GraphView?>
 <?import unibo.algat.view.LessonView?>
+
+
 <fx:root
 	type="unibo.algat.view.LessonView" xmlns="http://javafx.com/javafx"
 	xmlns:fx="http://javafx.com/fxml"
@@ -11,6 +14,7 @@
 	<center>
 		<ScrollPane
 			fx:id="mScrollPane" vbarPolicy="AS_NEEDED" hbarPolicy="AS_NEEDED"
+			VBox.vgrow="ALWAYS"
 		>
             <GraphView fx:id="mGraphV" vertexRadius="30" vertexMargin="70">
 				<graphLayout><GraphGridLayout columns="4" /></graphLayout>

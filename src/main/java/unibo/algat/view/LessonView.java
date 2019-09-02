@@ -4,8 +4,10 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.VBox;
 import unibo.algat.AlgaTApplication;
 import unibo.algat.algorithm.SerialAlgorithm;
 import unibo.algat.algorithm.SerialExecutor;
@@ -23,7 +25,7 @@ import java.util.ResourceBundle;
  * {@link SerialAlgorithm#readyProperty() readyProperty} appropriately, allowing
  * {@code LessonView} and its subclasses behave accordingly.</p>
  */
-public abstract class LessonView extends BorderPane implements ToolBarUser {
+public abstract class LessonView extends SplitPane implements ToolBarUser {
 	protected ObjectProperty<Lesson> mLesson;
 	protected SerialAlgorithm<?> mAlgo;
     protected SerialExecutor mExecutor;
@@ -31,10 +33,16 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
     protected AlgaTApplication mApp;
 	protected ResourceBundle mInterface;
 
+	protected LessonInfoView mInfoView;
 	protected Label mTitle;
+	private VBox mCenter;
 	protected QuizView mQuizView;
 
+	private static final double CHILD_PADDING = 14;
+
 	public LessonView () throws IOException {
+		// Note that LessonView doesn't load any FXML file -- apparently,
+		// Java FX wasn't making this possible for some reason
 		mLesson = new SimpleObjectProperty<>(this, "lesson");
 		mAlgo = algorithmFactory();
 		mExecutor = new SerialExecutor(mAlgo, 1000);
@@ -42,19 +50,24 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 		mInterface = ResourceBundle.getBundle("Interface");
 		mApp = AlgaTApplication.getInstance();
 
-		// Note that LessonView doesn't load any FXML file -- apparently,
-		// Java FX wasn't making this possible for some reason
+		mInfoView = new LessonInfoView();
 		mTitle = new Label();
+		mCenter = new VBox(mTitle);
 		mQuizView = new QuizView();
 
 		getStyleClass().add("lesson-view");
 		mTitle.getStyleClass().add("lesson-view-title");
 
-		setTop(mTitle);
-		setRight(mQuizView);
-		setMargin(mQuizView, new Insets(0, 0, 0, 20));
+		getItems().addAll(mInfoView, mCenter, mQuizView);
+		setDividerPositions(.25, .75);
 
-		mQuizView.prefWidthProperty().bind(widthProperty().multiply(0.25));
+		// TODO I'd rather prefer setting this padding with CSS, although I
+		//  wasn't able to exploit smart selectors (because they may be
+		//  missing?)
+		mInfoView.setPadding(new Insets(CHILD_PADDING));
+		mCenter.setPadding(new Insets(CHILD_PADDING));
+		mCenter.setSpacing(10);
+		mQuizView.setPadding(new Insets(CHILD_PADDING));
 	}
 
 	/**
@@ -66,14 +79,31 @@ public abstract class LessonView extends BorderPane implements ToolBarUser {
 	public void setLesson(Lesson lesson) {
 		mLesson.set(lesson);
 
-		if (lesson != null) {
-			mTitle.setText(lesson.getName());
-			mQuizView.setLesson(lesson);
-		}
+		mInfoView.setLesson(lesson);
+		mTitle.setText(lesson != null ? lesson.getName(): "");
+		mQuizView.setLesson(lesson);
 	}
 
 	public Lesson getLesson() {
 		return mLesson.get();
+	}
+
+	public void setCenter (Node node) {
+		final int size = mCenter.getChildren().size();
+
+		if (size == 1) {
+			mCenter.getChildren().add(node);
+		} else if (size == 2) {
+			mCenter.getChildren().set(1, node);
+		} else {
+			throw new IllegalStateException(
+				"The center pane only allows two elements at most"
+			);
+		}
+	}
+
+	public Node getCenter () {
+		return mCenter.getChildren().get(1);
 	}
 
 	public ObjectProperty<Lesson> lessonProperty () {
