@@ -85,7 +85,7 @@
 }
 
 .lesson-info-body > .vbox {
-    -fx-spacing: 6;
+    -fx-spacing: 8;
 }
 
 .lesson-info-body .label {
@@ -119,7 +119,7 @@
 }
 
 .quiz-view-title {
-    -fx-font-size: 18;
+    -fx-font-size: 16;
     -fx-font-weight: bold;
     -fx-alignment: center-left;
     -fx-graphic-text-gap: 15;
@@ -132,9 +132,8 @@
 }
 
 .quiz-view-choices {
-    -fx-spacing: 20;
+    -fx-spacing: 16;
 }
-
 
 .quiz-view-pos {
     -fx-font-size: 16;
@@ -142,6 +141,6 @@
 }
 
 .quiz-view-choice {
-    -fx-font-size: 15px;
+    -fx-font-size: 15;
     -fx-wrap-text: true;
 }
