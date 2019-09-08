@@ -18,7 +18,7 @@
 
 	<Label text="%gui.quizview.title" styleClass="quiz-view-title">
 		<graphic>
-			<ImageView fitWidth="30" preserveRatio="true">
+			<ImageView fitWidth="25" preserveRatio="true">
 				<Image url="@/static/quiz-title.png" />
 			</ImageView>
 		</graphic>
